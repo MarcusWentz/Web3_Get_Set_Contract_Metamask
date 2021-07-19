@@ -1,2 +1,2 @@
 # Project
-Testing basic web development 
+Testing basic web development concepts
