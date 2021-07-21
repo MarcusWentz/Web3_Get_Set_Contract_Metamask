@@ -1,14 +1,15 @@
-//Define button click for opening Metamask
-const ethereumButton = document.querySelector('.enableEthereumButton');
-ethereumButton.addEventListener('click', () => {
-  //Will Start the metamask extension
-  ethereum.request({ method: 'eth_requestAccounts' });
-});
+// //Define button click for opening Metamask
+// const ethereumButton = document.querySelector('.enableEthereumButton');
+// ethereumButton.addEventListener('click', () => {
+//   //Will Start the metamask extension
+//   ethereum.request({ method: 'eth_requestAccounts' });
+// });
 
 //TRY THIS NEXT
 //https://docs.metamask.io/guide/sending-transactions.html#example
 
 const sendEthButton = document.querySelector('.sendEthButton');
+const ethereumButton = document.querySelector('.enableEthereumButton');
 
 let accounts = [];
 
@@ -30,6 +31,11 @@ sendEthButton.addEventListener('click', () => {
     .then((txHash) => console.log(txHash))
     .catch((error) => console.error);
 });
+
+ethereumButton.addEventListener('click', () => {
+  getAccount();
+});
+
 
 async function getAccount() {
   accounts = await ethereum.request({ method: 'eth_requestAccounts' });
