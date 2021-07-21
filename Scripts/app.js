@@ -1,11 +1,14 @@
-//0xc1202e7d42655F23097476f6D48006fE56d38d4f
+//Metamask sending trasactions:
+//https://docs.metamask.io/guide/sending-transactions.html#transaction-parameters
 
 const ethereumButton = document.querySelector('.enableEthereumButton');
 const sendEthButton = document.querySelector('.sendEthButton');
 
 let accounts = [];
 
-//Sending Ethereum to an address
+//Sending Ethereum to an address.
+//Make sure values are in hex or Metamask will fail to load.
+//value = msg.value
 sendEthButton.addEventListener('click', () => {
   ethereum
     .request({
@@ -14,8 +17,8 @@ sendEthButton.addEventListener('click', () => {
         {
           from: accounts[0],
           to: '0xc1202e7d42655F23097476f6D48006fE56d38d4f',
-          value: '0x29a2241af62c',
-          gasPrice: '0xc00000000',
+          value: '0x29a2241af62c0',
+          gasPrice: '0x5F0000000',
           gas: '0x5208',
         },
       ],
