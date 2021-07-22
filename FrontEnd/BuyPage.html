@@ -1,67 +1,78 @@
-<html>
+//Metamask sending trasactions:
+//https://docs.metamask.io/guide/sending-transactions.html#transaction-parameters
 
-<head>
-  <title>Buy</title>
-  <!-- Bootstrap -->
-  <!-- Latest compiled and minified CSS -->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-  <link rel="shortcut icon" type="png" href="../Images/favicon.png">
-</head>
+const ethereumButton = document.querySelector('.enableEthereumButton');
+const sendEthButton = document.querySelector('.sendEthButton');
 
-<body style="background-color:black;">
+let accounts = [];
 
-<div class="container">
-  <div class="row">
-    <div class="col text-center">
-      <button class="enableEthereumButton">Connect to Metamask</button>
-    </div>
-  </div>
-</div>
+//Changing the integer state in a function which will fire off an event.
+//Make sure values are in hex or Metamask will fail to load.
+//DO NOT SET A VALUE UNLESS THE CONTRACT NEEDS IT FOR MSG.VALUE REQUIRE STATEMENTS
+sendEthButton.addEventListener('click', () => {
+  ethereum
+    .request({
+      method: 'eth_sendTransaction',
+      params: [
+        {
+          from: accounts[0],
+          to: '0xc1202e7d42655F23097476f6D48006fE56d38d4f',
+          value: '0x29a2241af62c0',
+          gasPrice: '0x5F0000000',
+          gas: '0x5208',
+        },
+      ],
+    })
+    .then((txHash) => console.log(txHash))
+    .catch((error) => console.error);
+});
 
-<div class="container">
-  <div class="row">
-    <div class="col text-center">
-      <p style="color:white">"get()" uint: </p>
-      <p style="color:white" id="getValueStateSmartContract"></p>
-    </div>
-  </div>
-</div>
+ethereumButton.addEventListener('click', () => {
+  getAccount();
+});
 
-<div class="container">
-  <div class="row">
-    <div class="col text-center">
-      <button class="changeStateInContractEvent">"set(uint x)" Event uint valueChangeEventWenjs to 999 </button>
-    </div>
-  </div>
-</div>
+async function getAccount() {
+  accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+}
 
-<div class="container">
-  <div class="row">
-    <div class="col text-center">
-      <button class="sendEthButton">Donate ETH</button>
-    </div>
-  </div>
-</div>
+// MODIFY CONTRACT STATE WITH SET FUNCTION WITH PREDEFINED DATA FROM WEB3.JS
+const changeStateInContractEvent = document.querySelector('.changeStateInContractEvent');
+changeStateInContractEvent.addEventListener('click', () => {
+  ethereum
+    .request({
+      method: 'eth_sendTransaction',
+      params: [
+        {
+          from: accounts[0],
+          to: '0x6B6a427CaCc6adB23117ff4EFef5e6365617bA94',
+          gasPrice: '2540be400',
+          gas:  'C3500',
+          data: '0x60fe47b100000000000000000000000000000000000000000000000000000000000003e7'
+        },
+      ],
+    })
+    .then((txHash) => console.log(txHash))
+    .catch((error) => console.error);
+});
 
-<div class="container">
-  <div class="row">
-    <div class="col text-center">
-      <form action="AdminSupport.html">
-        <input type="submit" value="Admin control link for support." />
-    </form>
-    </div>
-  </div>
-</div>
+//TESTING WEB3 FOR CALLING INFO /////////////////////////////////////////////////
+//import * as Web3 from 'web3';
+const web3 = new Web3(window.ethereum)
 
-  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-  <!-- Include all compiled plugins (below), or include individual files as needed -->
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-  <!-- WEB3 IMPORT -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.5.0-rc.0/web3.min.js"></script>
-  <!-- Needed to run javascript main library -->
-  <script src="../Scripts/app.js"></script>
+const contractAddress_JS = '0x6B6a427CaCc6adB23117ff4EFef5e6365617bA94'
+const contractABI_JS = //[{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[],"name":"get","outputs":[{"internalType":"uint256","name":"retVal","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"x","type":"uint256"}],"name":"set","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"storedData","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}];
+[{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"uint256","name":"date","type":"uint256"},{"indexed":true,"internalType":"address","name":"from","type":"address"},{"indexed":false,"internalType":"uint256","name":"valueChangeEventWenjs","type":"uint256"}],"name":"setValueUpdatedViaWebjs","type":"event"},{"inputs":[],"name":"get","outputs":[{"internalType":"uint256","name":"retVal","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"x","type":"uint256"}],"name":"set","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"storedData","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}];
+const contractDefined_JS = new web3.eth.Contract(contractABI_JS, contractAddress_JS)
+var balanceRecord
+//
+contractDefined_JS.methods.get().call((err, balance) => {
+  balanceRecord = balance
+ })
 
-</body>
-
-</html>
+//Check if value was set
+if(balanceRecord == 'undefined') {
+  document.getElementById("getValueStateSmartContract").innerHTML =  "INSTALL METAMASK!"
+}
+else{
+  document.getElementById("getValueStateSmartContract").innerHTML =  balanceRecord
+}
