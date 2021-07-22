@@ -60,7 +60,7 @@ changeStateInContractEvent.addEventListener('click', () => {
 try{
 const web3 = new Web3(window.ethereum)
 }
-catch(null){
+catch(error){
   document.getElementById("getValueStateSmartContract").innerHTML =  "INSTALL METAMASK!"
 }
 finally{
