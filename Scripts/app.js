@@ -55,12 +55,11 @@ changeStateInContractEvent.addEventListener('click', () => {
     .catch((error) => console.error);
 });
 
-
+const web3 = new Web3(window.ethereum)
 //Check if value was set
 if (web3.currentProvider.isMetaMask === true) {
   //TESTING WEB3 FOR CALLING INFO /////////////////////////////////////////////////
   //import * as Web3 from 'web3';
-  const web3 = new Web3(window.ethereum)
 
   const contractAddress_JS = '0x6B6a427CaCc6adB23117ff4EFef5e6365617bA94'
   const contractABI_JS = //[{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[],"name":"get","outputs":[{"internalType":"uint256","name":"retVal","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"x","type":"uint256"}],"name":"set","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"storedData","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}];
