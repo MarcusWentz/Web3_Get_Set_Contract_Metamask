@@ -58,13 +58,13 @@ changeStateInContractEvent.addEventListener('click', () => {
 //TESTING WEB3 FOR CALLING INFO /////////////////////////////////////////////////
 //import * as Web3 from 'web3';
 
-try{
-  ethereum.isMetaMask
-}
-catch(error){
-  alert(error)
-  document.getElementById("getValueStateSmartContract").innerHTML =  "INSTALL METAMASK!"
-}
+// try{
+//   ethereum.isMetaMask
+// }
+// catch(error){
+//   alert(error)
+//   document.getElementById("getValueStateSmartContract").innerHTML =  "INSTALL METAMASK!"
+// }
 
 // finally{
 // }
