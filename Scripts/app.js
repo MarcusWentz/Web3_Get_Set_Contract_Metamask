@@ -57,6 +57,7 @@ changeStateInContractEvent.addEventListener('click', () => {
 
 //TESTING WEB3 FOR CALLING INFO /////////////////////////////////////////////////
 //import * as Web3 from 'web3';
+
 try{
   ethereum.isMetaMask
 }
@@ -76,4 +77,4 @@ const contractDefined_JS = new web3.eth.Contract(contractABI_JS, contractAddress
 
   contractDefined_JS.methods.get().call((err, balance) => {
   document.getElementById("getValueStateSmartContract").innerHTML =  balance
-  }
+})
