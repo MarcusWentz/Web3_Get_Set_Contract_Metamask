@@ -57,7 +57,7 @@ changeStateInContractEvent.addEventListener('click', () => {
 
 
 //Check if value was set
-if (typeof window.ethereum !== 'undefined') {
+if (web3.currentProvider.isMetaMask === true) {
   //TESTING WEB3 FOR CALLING INFO /////////////////////////////////////////////////
   //import * as Web3 from 'web3';
   const web3 = new Web3(window.ethereum)
