@@ -71,4 +71,5 @@ finally{
 
     contractDefined_JS.methods.get().call((err, balance) => {
     document.getElementById("getValueStateSmartContract").innerHTML =  balance
+   }
 }
