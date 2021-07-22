@@ -31,7 +31,16 @@
 <div class="container">
   <div class="row">
     <div class="col text-center">
-      <button class="changeStateInContractEvent">Set uint value valueChangeEventWenjs to 999</button>
+      <p style="color:white">"get()" uint: </p>
+      <p style="color:white" id="getValueStateSmartContract"></p>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col text-center">
+      <button class="changeStateInContractEvent">"set(uint x)" Event uint valueChangeEventWenjs to 999 </button>
     </div>
   </div>
 </div>
@@ -54,12 +63,17 @@
   </div>
 </div>
 
+
+
   <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
   <!-- Include all compiled plugins (below), or include individual files as needed -->
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <!-- Needed to run javascript main library -->
   <script src="../Scripts/app.js"></script>
-
+  <!-- WEB3 IMPORT -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.5.0-rc.0/web3.min.js">
+  </script>
 <!--
   //METAMASK NEEDS A WEB SERVER TO CONNECT TO CANNOT LOCALLY USE
   //https://stackoverflow.com/questions/53936076/problems-with-metamask-web3-connection
