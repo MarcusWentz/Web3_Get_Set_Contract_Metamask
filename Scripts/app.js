@@ -55,15 +55,11 @@ changeStateInContractEvent.addEventListener('click', () => {
     .catch((error) => console.error);
 });
 
-//
-
-
 try{
    ethereum.isMetaMask
 }
 catch(error) {
-   alert("INSTALL METAMASK BEFORE ENTERING THEN REFRESH PAGE! Error log: " + error)
-//   document.getElementById("getValueStateSmartContract").innerHTML =  "INSTALL METAMASK!"
+   alert("Metamask not detected in browser! Install Metamask browser extension, then refresh page! Error log: " + error)
 }
 
 // finally{
