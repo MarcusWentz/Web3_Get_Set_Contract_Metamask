@@ -64,6 +64,6 @@ const contractDefined_JS = new web3.eth.Contract(contractABI_JS, contractAddress
 
 //Check if value was set
 
-// contractDefined_JS.methods.get().call((err, balance) => {
-//   document.getElementById("getValueStateSmartContract").innerHTML =  balance
-// })
+contractDefined_JS.methods.get().call((err, balance) => {
+   document.getElementById("getValueStateSmartContract").innerHTML =  balance
+})
