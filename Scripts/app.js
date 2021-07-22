@@ -1,16 +1,3 @@
-
-// try{
-//   ethereum.isMetaMask
-// }
-// catch(error){
-//   alert(error)
-//   document.getElementById("getValueStateSmartContract").innerHTML =  "INSTALL METAMASK!"
-// }
-
-// finally{
-// }
-
-
 //Metamask sending trasactions:
 //https://docs.metamask.io/guide/sending-transactions.html#transaction-parameters
 
@@ -67,6 +54,20 @@ changeStateInContractEvent.addEventListener('click', () => {
     .then((txHash) => console.log(txHash))
     .catch((error) => console.error);
 });
+
+//
+
+
+try{
+   ethereum.isMetaMask
+}
+catch(error) {
+   alert(error)
+//   document.getElementById("getValueStateSmartContract").innerHTML =  "INSTALL METAMASK!"
+}
+
+// finally{
+// }
 
 //TESTING WEB3 FOR CALLING INFO /////////////////////////////////////////////////
 //import * as Web3 from 'web3';
