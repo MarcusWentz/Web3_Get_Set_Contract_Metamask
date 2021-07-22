@@ -65,11 +65,11 @@ const contractABI_JS = //[{"inputs":[],"stateMutability":"nonpayable","type":"co
 const contractDefined_JS = new web3.eth.Contract(contractABI_JS, contractAddress_JS)
 
 //Check if value was set
-try{
-contractDefined_JS.methods.get().call((err, balance) => {
+if(ethereum.isMetaMask == true) {
+   contractDefined_JS.methods.get().call((err, balance) => {
   document.getElementById("getValueStateSmartContract").innerHTML =  balance
-})
+   })
 }
-catch(error){
-  document.getElementById("getValueStateSmartContract").innerHTML =  "error"
+else{
+  document.getElementById("getValueStateSmartContract").innerHTML =  "INSTALL METAMASK!"
 }
