@@ -62,8 +62,7 @@ try{
    ethereum.isMetaMask
 }
 catch(error) {
-   alert("INSTALL METAMASK BEFORE ENTERING THEN REFRESH PAGE!")
-   alert(error)
+   alert("INSTALL METAMASK BEFORE ENTERING THEN REFRESH PAGE! Error log: " + error)
 //   document.getElementById("getValueStateSmartContract").innerHTML =  "INSTALL METAMASK!"
 }
 
