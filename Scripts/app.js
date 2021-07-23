@@ -85,7 +85,7 @@ contractDefined_JS.methods.get().call((err, balance) => {
  //    () => console.log(`Saw MyEvent`);
  // );
 
- contractABI_JS.events.setValueUpdatedViaWebjs({
+ contractDefined_JS.events.setValueUpdatedViaWebjs({
      filter: {}, // Using an array means OR: e.g. 20 or 23
      fromBlock: 0
  }, function(error, event){})
