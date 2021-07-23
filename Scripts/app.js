@@ -90,7 +90,12 @@ contractDefined_JS.methods.get().call((err, balance) => {
      fromBlock: 0
  }, function(error, eventResult){})
  .on('data', function(eventResult){
-   document.getElementById("getValueStateSmartContract").innerHTML =  eventResult.events.setValueUpdatedViaWebjs.returnValues['valueChangeEventWenjs']
+   console.log(eventResult)
+   //TEMP FIX FIND A WAY TO PARSE INFO FROM EVENT LOG ITSELF JUST A TEST
+   contractDefined_JS.methods.get().call((err, balance) => {
+     document.getElementById("getValueStateSmartContract").innerHTML =  balance
+   })
+   //
  })
  .on('changed', function(eventResult){
      // remove event from local database
