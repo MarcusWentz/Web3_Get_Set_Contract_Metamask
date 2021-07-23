@@ -88,11 +88,11 @@ contractDefined_JS.methods.get().call((err, balance) => {
  contractDefined_JS.events.setValueUpdatedViaWebjs({
      filter: {}, // Using an array means OR: e.g. 20 or 23
      fromBlock: 0
- }, function(error, event){})
- .on('data', function(event){
-   document.getElementById("getValueStateSmartContract").innerHTML =  event.events.numberSaved.returnValues['valueChangeEventWenjs']
+ }, function(error, eventResult){})
+ .on('data', function(eventResult){
+   document.getElementById("getValueStateSmartContract").innerHTML =  eventResult.events.setValueUpdatedViaWebjs.returnValues['valueChangeEventWenjs']
  })
- .on('changed', function(event){
+ .on('changed', function(eventResult){
      // remove event from local database
  })
  .on('error', console.error);
