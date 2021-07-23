@@ -90,7 +90,7 @@ contractDefined_JS.methods.get().call((err, balance) => {
      fromBlock: 0
  }, function(error, event){})
  .on('data', function(event){
-   document.getElementById("getValueStateSmartContract").innerHTML =  balance
+   document.getElementById("getValueStateSmartContract").innerHTML =  event
  })
  .on('changed', function(event){
      // remove event from local database
