@@ -62,11 +62,6 @@ catch(error) {
    alert("Metamask not detected in browser! Install Metamask browser extension, then refresh page! Error log: " + error)
 }
 
-// finally{
-// }
-
-//TESTING WEB3 FOR CALLING INFO /////////////////////////////////////////////////
-//import * as Web3 from 'web3';
 const web3 = new Web3(window.ethereum)
 
 const contractAddress_JS = '0x6B6a427CaCc6adB23117ff4EFef5e6365617bA94'
@@ -78,3 +73,26 @@ const contractDefined_JS = new web3.eth.Contract(contractABI_JS, contractAddress
 contractDefined_JS.methods.get().call((err, balance) => {
   document.getElementById("getValueStateSmartContract").innerHTML =  balance
 })
+
+////////////TEST
+// // https://ethereum.stackexchange.com/questions/91646/mycontract-events-myevent-vs-web3-eth-subscribelogs
+ // web3.eth.subscribe(
+ //    'logs',
+ //    {
+ //       address: contractAddress_JS,
+ //       topics:  [Keccak-256 hash(MyEvent(null, null, returnValueFromContract))]
+ //    },
+ //    () => console.log(`Saw MyEvent`);
+ // );
+
+ contractABI_JS.events.setValueUpdatedViaWebjs({
+     filter: {}, // Using an array means OR: e.g. 20 or 23
+     fromBlock: 0
+ }, function(error, event){})
+ .on('data', function(event){
+   document.getElementById("getValueStateSmartContract").innerHTML =  balance
+ })
+ .on('changed', function(event){
+     // remove event from local database
+ })
+ .on('error', console.error);
