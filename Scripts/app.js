@@ -37,7 +37,8 @@ async function getAccount() {
 
 // MODIFY CONTRACT STATE WITH SET FUNCTION WITH PREDEFINED DATA FROM WEB3.JS
 const changeStateInContractEvent = document.querySelector('.changeStateInContractEvent');
-var inputContractText =  document.getElementById("setValueSmartContract").value;
+//uint cannot be negative, force to absolute value.
+var inputContractText =  Math.abs(document.getElementById("setValueSmartContract").value);
 changeStateInContractEvent.addEventListener('click', () => {
   ethereum
     .request({
