@@ -47,7 +47,7 @@ changeStateInContractEvent.addEventListener('click', () => {
           to: '0x6B6a427CaCc6adB23117ff4EFef5e6365617bA94',
           gasPrice: '2540be400',
           gas:  'C3500',
-          data: contractDefined_JS.methods.set(storedInputStateForContract).encodeABI()
+          data: contractDefined_JS.methods.set(setValueSmartContract).encodeABI()
         },
       ],
     })
