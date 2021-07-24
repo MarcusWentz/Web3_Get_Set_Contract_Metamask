@@ -36,8 +36,8 @@ async function getAccount() {
 }
 
 // MODIFY CONTRACT STATE WITH SET FUNCTION WITH PREDEFINED DATA FROM WEB3.JS
-var inputContractText =  document.getElementById("setValueSmartContract").value;
 const changeStateInContractEvent = document.querySelector('.changeStateInContractEvent');
+var inputContractText =  document.getElementById("setValueSmartContract").value;
 changeStateInContractEvent.addEventListener('click', () => {
   ethereum
     .request({
