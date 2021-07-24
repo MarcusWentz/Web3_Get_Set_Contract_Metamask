@@ -36,6 +36,7 @@ async function getAccount() {
 }
 
 // MODIFY CONTRACT STATE WITH SET FUNCTION WITH PREDEFINED DATA FROM WEB3.JS
+var inputContractText =  document.getElementById("setValueSmartContract").value;
 const changeStateInContractEvent = document.querySelector('.changeStateInContractEvent');
 changeStateInContractEvent.addEventListener('click', () => {
   ethereum
@@ -47,7 +48,7 @@ changeStateInContractEvent.addEventListener('click', () => {
           to: '0x6B6a427CaCc6adB23117ff4EFef5e6365617bA94',
           gasPrice: '2540be400',
           gas:  'C3500',
-          data: '0x60fe47b100000000000000000000000000000000000000000000000000000000000003e7'
+          data: contractDefined_JS.methods.set(inputContractText).encodeABI()
         },
       ],
     })
