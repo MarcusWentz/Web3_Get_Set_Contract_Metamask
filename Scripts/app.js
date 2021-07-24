@@ -35,13 +35,6 @@ async function getAccount() {
   accounts = await ethereum.request({ method: 'eth_requestAccounts' });
 }
 
-//Save state for input form to pass to function data creation
-function storeInputValueFunction()
- {
-   var unsavedContractText =  document.getElementById("setValueSmartContract").value;
-   document.getElementById("storedInputStateForContract").value = unsavedContractText;
- }
-
 // MODIFY CONTRACT STATE WITH SET FUNCTION WITH PREDEFINED DATA FROM WEB3.JS
 const changeStateInContractEvent = document.querySelector('.changeStateInContractEvent');
 changeStateInContractEvent.addEventListener('click', () => {
