@@ -87,17 +87,20 @@ contractDefined_JS.methods.get().call((err, balance) => {
  //    () => console.log(`Saw MyEvent`);
  // );
 
- contractDefined_JS.events.setValueUpdatedViaWebjs({
+ var resultsContract = contractDefined_JS.events.setValueUpdatedViaWebjs({
      filter: {}, // Using an array means OR: e.g. 20 or 23
      fromBlock: 'latest'
  }, function(error, eventResult){})
  .on('data', function(eventResult){
    console.log(eventResult)
    //TEMP FIX FIND A WAY TO PARSE INFO FROM EVENT LOG ITSELF JUST A TEST
-   contractDefined_JS.methods.get().call((err, balance) => {
-     document.getElementById("getValueStateSmartContract").innerHTML =  balance
-   })
-   //
+   // contractDefined_JS.methods.get().call((err, balance) => {
+   //   document.getElementById("getValueStateSmartContract").innerHTML =  balance
+   // })
+   document.getElementById("getValueStateSmartContract").innerHTML =  resultsContract.events.setValueUpdatedViaWebjs.returnValueFromContract.valueChangeEventWenjs
+   //See if the value will come through now.
+
+
  })
  .on('changed', function(eventResult){
      // remove event from local database
