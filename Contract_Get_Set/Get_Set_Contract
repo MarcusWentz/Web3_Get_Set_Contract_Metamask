@@ -1,0 +1,24 @@
+pragma solidity >=0.4.22 <0.7.0;
+
+contract SimpleStorage {
+    uint public storedData;
+    
+    event setValueUpdatedViaWebjs(
+        uint indexed date,
+        address indexed from,
+        uint valueChangeEventWenjs
+    );
+
+    constructor() public {
+        storedData = 100;
+    }
+
+    function set(uint x) public {
+        storedData = x;
+        emit setValueUpdatedViaWebjs(now, msg.sender, x);
+    }
+
+    function get() public view returns (uint retVal) {
+        return storedData;
+    }
+}
