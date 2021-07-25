@@ -3,7 +3,6 @@
 
 const ethereumButton = document.querySelector('.enableEthereumButton');
 const sendEthButton = document.querySelector('.sendEthButton');
-
 let accounts = [];
 
 //Changing the integer state in a function which will fire off an event.
@@ -57,6 +56,7 @@ changeStateInContractEvent.addEventListener('click', () => {
     .catch((error) => console.error);
 });
 
+//If Metamask is not detected the user will be told to install Metamask.
 try{
    ethereum.isMetaMask
 }
@@ -64,44 +64,30 @@ catch(error) {
    alert("Metamask not detected in browser! Install Metamask browser extension, then refresh page! Error log: " + error)
 }
 
+//Make Metamask the client side Web3 provider.
 const web3 = new Web3(window.ethereum)
-
+//Now build the contract with Web3.
 const contractAddress_JS = '0x6B6a427CaCc6adB23117ff4EFef5e6365617bA94'
-const contractABI_JS = //[{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[],"name":"get","outputs":[{"internalType":"uint256","name":"retVal","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"x","type":"uint256"}],"name":"set","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"storedData","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}];
+const contractABI_JS =
 [{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"uint256","name":"date","type":"uint256"},{"indexed":true,"internalType":"address","name":"from","type":"address"},{"indexed":false,"internalType":"uint256","name":"valueChangeEventWenjs","type":"uint256"}],"name":"setValueUpdatedViaWebjs","type":"event"},{"inputs":[],"name":"get","outputs":[{"internalType":"uint256","name":"retVal","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"x","type":"uint256"}],"name":"set","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"storedData","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}];
 const contractDefined_JS = new web3.eth.Contract(contractABI_JS, contractAddress_JS)
 
-//Check if value was set
+//Get the latest value.
 contractDefined_JS.methods.get().call((err, balance) => {
   document.getElementById("getValueStateSmartContract").innerHTML =  balance
 })
 
-////////////TEST
-// // https://ethereum.stackexchange.com/questions/91646/mycontract-events-myevent-vs-web3-eth-subscribelogs
- // web3.eth.subscribe(
- //    'logs',
- //    {
- //       address: contractAddress_JS,
- //       topics:  [Keccak-256 hash(MyEvent(null, null, returnValueFromContract))]
- //    },
- //    () => console.log(`Saw MyEvent`);
- // );
-
- var resultsContract = contractDefined_JS.events.setValueUpdatedViaWebjs({
-     filter: {}, // Using an array means OR: e.g. 20 or 23
+//Get the latest event. Once the event is triggered, website will update value.
+contractDefined_JS.events.setValueUpdatedViaWebjs({
      fromBlock: 'latest'
  }, function(error, eventResult){})
  .on('data', function(eventResult){
    console.log(eventResult)
-   //TEMP FIX FIND A WAY TO PARSE INFO FROM EVENT LOG ITSELF JUST A TEST
-   // contractDefined_JS.methods.get().call((err, balance) => {
-   //   document.getElementById("getValueStateSmartContract").innerHTML =  balance
-   // })
-   document.getElementById("getValueStateSmartContract").innerHTML =  resultsContract.events.setValueUpdatedViaWebjs.returnValueFromContract.valueChangeEventWenjs
-   //See if the value will come through now.
-
-
- })
+   //Call the get function to get the most accurate present state for the value.
+   contractDefined_JS.methods.get().call((err, balance) => {
+      document.getElementById("getValueStateSmartContract").innerHTML =  balance
+     })
+   })
  .on('changed', function(eventResult){
      // remove event from local database
  })
