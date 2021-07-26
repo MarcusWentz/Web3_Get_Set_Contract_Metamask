@@ -2,3 +2,5 @@ Test website with Metamask and Web3 which can [DEPLOY CONTRACT VIA WEB3 JS NOT R
   -Send Ethereum to an address\
   -Get value from a contract with Metamask as Web3 client provider\
   -Set custom uint value for a contract [negative values forced to absoulte value]\
+  Try the project here:\
+  https://marcuswentz.github.io/Web3_Get_Set_Contract_Metamask/\
