@@ -6,11 +6,13 @@ let accounts = [];
 document.getElementById("getCurrentAccountConnected").innerHTML =  "None. Please click the top button to connect."
 
 //If Metamask is not detected the user will be told to install Metamask.
-try{
-   ethereum.isMetaMask
-}
-catch(missingMetamask) {
-   alert("Metamask not detected in browser! Install Metamask browser extension, then refresh page! Error log: " + missingMetamask)
+function detectMetamaskInstalled(){
+  try{
+     ethereum.isMetaMask
+  }
+  catch(missingMetamask) {
+     alert("Metamask not detected in browser! Install Metamask browser extension, then refresh page! Error log: " + missingMetamask)
+  }
 }
 
 //Alert user to connect their Metamask address to the site before doing any transactions.
@@ -30,9 +32,13 @@ function enableMetamaskOnRinkeby() {
   }
 }
 
+//When the page is opened check for error handling issues.
+detectMetamaskInstalled()
+
 //Connect to Metamask.
 const ethereumButton = document.querySelector('.enableEthereumButton');
 ethereumButton.addEventListener('click', () => {
+    detectMetamaskInstalled()
     enableMetamaskOnRinkeby()
 });
 
