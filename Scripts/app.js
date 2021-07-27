@@ -13,6 +13,7 @@ catch(error) {
    alert("Metamask not detected in browser! Install Metamask browser extension, then refresh page! Error log: " + error)
 }
 
+//Function called for getting Metamask accounts on Rinkeby. Used in every button in case the user forgets to click the top button.
 function enableMetamaskOnRinkeby() {
   //Get account details from Metamask wallet.
   getAccount();
@@ -35,6 +36,7 @@ async function getAccount() {
 //Make sure values are in hex or Metamask will fail to load.
 //DO NOT SET A VALUE UNLESS THE CONTRACT NEEDS IT FOR MSG.VALUE REQUIRE STATEMENTS
 sendEthButton.addEventListener('click', () => {
+  enableMetamaskOnRinkeby()
   ethereum
     .request({
       method: 'eth_sendTransaction',
@@ -55,6 +57,7 @@ sendEthButton.addEventListener('click', () => {
 // MODIFY CONTRACT STATE WITH SET FUNCTION WITH PREDEFINED DATA FROM WEB3.JS
 const changeStateInContractEvent = document.querySelector('.changeStateInContractEvent');
 changeStateInContractEvent.addEventListener('click', () => {
+  enableMetamaskOnRinkeby()
   //uint cannot be negative, force to absolute value.
   var inputContractText =  Math.abs(document.getElementById("setValueSmartContract").value);
   ethereum
@@ -74,7 +77,7 @@ changeStateInContractEvent.addEventListener('click', () => {
     .catch((error) => console.error);
 });
 
-//Make Metamask the client side Web3 provider.
+//Make Metamask the client side Web3 provider. Needed for tracking live contract events.
 const web3 = new Web3(window.ethereum)
 //Now build the contract with Web3.
 const contractAddress_JS = '0x6B6a427CaCc6adB23117ff4EFef5e6365617bA94'
