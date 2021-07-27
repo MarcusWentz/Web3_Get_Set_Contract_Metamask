@@ -5,6 +5,21 @@ const ethereumButton = document.querySelector('.enableEthereumButton');
 const sendEthButton = document.querySelector('.sendEthButton');
 let accounts = [];
 
+//Test
+console.log(accounts)
+
+ethereumButton.addEventListener('click', () => {
+  getAccount();
+  //Check if user is on the Rinkeby testnet. If not, alert them to change to Rinkeby.
+  if(window.ethereum.networkVersion != 4){
+    alert("You are not on the Rinkeby Testnet! Please switch to Rinkeby and refresh page.")
+  }
+});
+
+async function getAccount() {
+  accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+}
+
 //Changing the integer state in a function which will fire off an event.
 //Make sure values are in hex or Metamask will fail to load.
 //DO NOT SET A VALUE UNLESS THE CONTRACT NEEDS IT FOR MSG.VALUE REQUIRE STATEMENTS
@@ -25,19 +40,6 @@ sendEthButton.addEventListener('click', () => {
     .then((txHash) => console.log(txHash))
     .catch((error) => console.error);
 });
-
-ethereumButton.addEventListener('click', () => {
-  getAccount();
-  //Check if user is on the Rinkeby testnet. If not, alert them to change to Rinkeby.
-  if(window.ethereum.networkVersion != 4){
-    alert("You are not on the Rinkeby Testnet! Please switch to Rinkeby and refresh page.")
-    console.log(window.ethereum.networkVersion)
-  }
-});
-
-async function getAccount() {
-  accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-}
 
 // MODIFY CONTRACT STATE WITH SET FUNCTION WITH PREDEFINED DATA FROM WEB3.JS
 const changeStateInContractEvent = document.querySelector('.changeStateInContractEvent');
