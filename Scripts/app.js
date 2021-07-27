@@ -28,6 +28,11 @@ sendEthButton.addEventListener('click', () => {
 
 ethereumButton.addEventListener('click', () => {
   getAccount();
+  //Check if user is on the Rinkeby testnet. If not, alert them to change to Rinkeby.
+  if(window.ethereum.networkVersion != 4){
+    alert("You are not on the Rinkeby Testnet! Please switch to Rinkeby and refresh page.")
+    console.log(window.ethereum.networkVersion)
+  }
 });
 
 async function getAccount() {
@@ -64,11 +69,6 @@ catch(error) {
    alert("Metamask not detected in browser! Install Metamask browser extension, then refresh page! Error log: " + error)
 }
 
-//Check if user is on the Rinkeby testnet. If not, alert them to change to Rinkeby.
-if(window.ethereum.networkVersion != 4){
-  alert("You are not on the Rinkeby Testnet! Please switch to Rinkeby and refresh page.")
-  console.log(window.ethereum.networkVersion)
-}
 
 //Make Metamask the client side Web3 provider.
 const web3 = new Web3(window.ethereum)
