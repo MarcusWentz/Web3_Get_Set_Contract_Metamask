@@ -8,8 +8,18 @@ let accounts = [];
 try{
    ethereum.isMetaMask
 }
-catch(error) {
-   alert("Metamask not detected in browser! Install Metamask browser extension, then refresh page! Error log: " + error)
+catch(missingMetamask) {
+   alert("Metamask not detected in browser! Install Metamask browser extension, then refresh page! Error log: " + missingMetamask)
+}
+
+//Alert user to connect their Metamask address to the site before doing any transactions.
+function transationErrorCheckAddressMissing() {
+  try{
+    console.log(accounts);
+  }
+  catch(missingAddress) {
+    alert("No address found. Click the top button to connect your Metamask account then try again without refreshing the page. Error: " + missingAddress)
+  }
 }
 
 //Function called for getting Metamask accounts on Rinkeby. Used in every button in case the user forgets to click the top button.
@@ -38,7 +48,7 @@ async function getAccount() {
 //DO NOT SET A VALUE UNLESS THE CONTRACT NEEDS IT FOR MSG.VALUE REQUIRE STATEMENTS
 const sendEthButton = document.querySelector('.sendEthButton');
 sendEthButton.addEventListener('click', () => {
-  enableMetamaskOnRinkeby()
+  transationErrorCheckAddressMissing()
   ethereum
     .request({
       method: 'eth_sendTransaction',
@@ -59,7 +69,7 @@ sendEthButton.addEventListener('click', () => {
 // MODIFY CONTRACT STATE WITH SET FUNCTION WITH PREDEFINED DATA FROM WEB3.JS
 const changeStateInContractEvent = document.querySelector('.changeStateInContractEvent');
 changeStateInContractEvent.addEventListener('click', () => {
-  enableMetamaskOnRinkeby()
+  transationErrorCheckAddressMissing()
   //uint cannot be negative, force to absolute value.
   var inputContractText =  Math.abs(document.getElementById("setValueSmartContract").value);
   ethereum
