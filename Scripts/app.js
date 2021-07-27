@@ -13,20 +13,18 @@ catch(error) {
    alert("Metamask not detected in browser! Install Metamask browser extension, then refresh page! Error log: " + error)
 }
 
-//If Metamask is installed but
-try {
-  console.log(accounts)
-}
-catch(error) {
-  alert.log("Welcome. Metamask is installed but not connected yet. Please click the top button to connect Metamask to this site. Account error: " + error)
-}
-
-ethereumButton.addEventListener('click', () => {
+function enableMetamaskOnRinkeby() {
+  //Get account details from Metamask wallet.
   getAccount();
   //Check if user is on the Rinkeby testnet. If not, alert them to change to Rinkeby.
   if(window.ethereum.networkVersion != 4){
     alert("You are not on the Rinkeby Testnet! Please switch to Rinkeby and refresh page.")
   }
+}
+
+//Connect to Metamask.
+ethereumButton.addEventListener('click', () => {
+    enableMetamaskOnRinkeby()
 });
 
 async function getAccount() {
