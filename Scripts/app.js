@@ -1,9 +1,6 @@
 //Metamask sending trasactions:
 //https://docs.metamask.io/guide/sending-transactions.html#transaction-parameters
 
-//Empty array to be filled once Metamask is called.
-let accounts = [];
-
 //If Metamask is not detected the user will be told to install Metamask.
 try{
    ethereum.isMetaMask
@@ -29,6 +26,7 @@ ethereumButton.addEventListener('click', () => {
 });
 
 async function getAccount() {
+  let accounts = [];
   accounts = await ethereum.request({ method: 'eth_requestAccounts' });
 }
 
