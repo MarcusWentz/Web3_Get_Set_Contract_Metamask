@@ -71,7 +71,7 @@ changeStateInContractEvent.addEventListener('click', () => {
   //uint cannot be negative, force to absolute value.
   var inputContractText =  Math.abs(document.getElementById("setValueSmartContract").value);
   //Check if value is an integer. If not throw an error.
-  if(console.log(Number.isInteger(inputContractText)) == false){
+  if(Number.isInteger(inputContractText) == false){
     alert("Input value is not an integer! Only put an integer for input.")
   }
   ethereum
