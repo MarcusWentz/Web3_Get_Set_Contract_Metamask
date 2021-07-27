@@ -16,7 +16,7 @@ catch(error) {
 //If Metamask is installed but
 try {
   console.log(accounts)
-{
+}
 catch(error) {
   alert.log("Welcome. Metamask is installed but not connected yet. Please click the top button to connect Metamask to this site. Account error: " + error)
 }
