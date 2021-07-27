@@ -14,10 +14,7 @@ catch(missingMetamask) {
 
 //Alert user to connect their Metamask address to the site before doing any transactions.
 function transationErrorCheckAddressMissing() {
-  try{
-    console.log(accounts);
-  }
-  catch(missingAddress) {
+  if(accounts.length == 0) {
     alert("No address found. Click the top button to connect your Metamask account then try again without refreshing the page. Error: " + missingAddress)
   }
 }
