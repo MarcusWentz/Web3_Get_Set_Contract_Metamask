@@ -5,8 +5,21 @@ const ethereumButton = document.querySelector('.enableEthereumButton');
 const sendEthButton = document.querySelector('.sendEthButton');
 let accounts = [];
 
-//Test
-console.log(accounts)
+//If Metamask is not detected the user will be told to install Metamask.
+try{
+   ethereum.isMetaMask
+}
+catch(error) {
+   alert("Metamask not detected in browser! Install Metamask browser extension, then refresh page! Error log: " + error)
+}
+
+//If Metamask is installed but
+try {
+  console.log(accounts)
+{
+catch(error) {
+  alert.log("Welcome. Metamask is installed but not connected yet. Please click the top button to connect Metamask to this site. Account error: " + error)
+}
 
 ethereumButton.addEventListener('click', () => {
   getAccount();
@@ -62,15 +75,6 @@ changeStateInContractEvent.addEventListener('click', () => {
     .then((txHash) => console.log(txHash))
     .catch((error) => console.error);
 });
-
-//If Metamask is not detected the user will be told to install Metamask.
-try{
-   ethereum.isMetaMask
-}
-catch(error) {
-   alert("Metamask not detected in browser! Install Metamask browser extension, then refresh page! Error log: " + error)
-}
-
 
 //Make Metamask the client side Web3 provider.
 const web3 = new Web3(window.ethereum)
