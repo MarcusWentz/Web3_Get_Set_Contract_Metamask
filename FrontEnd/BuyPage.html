@@ -1,81 +1,99 @@
-<html>
+//Metamask sending trasactions:
+//https://docs.metamask.io/guide/sending-transactions.html#transaction-parameters
 
-<head>
-  <title>Buy</title>
-  <!-- Bootstrap -->
-  <!-- Latest compiled and minified CSS -->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-  <link rel="shortcut icon" type="png" href="../Images/favicon.png">
-  <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
-  <meta content="utf-8" http-equiv="encoding">
-  <!-- Helps objects scale to mobile devices -->
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-</head>
+const ethereumButton = document.querySelector('.enableEthereumButton');
+const sendEthButton = document.querySelector('.sendEthButton');
+let accounts = [];
 
-<body style="background-color:black;">
+//Changing the integer state in a function which will fire off an event.
+//Make sure values are in hex or Metamask will fail to load.
+//DO NOT SET A VALUE UNLESS THE CONTRACT NEEDS IT FOR MSG.VALUE REQUIRE STATEMENTS
+sendEthButton.addEventListener('click', () => {
+  ethereum
+    .request({
+      method: 'eth_sendTransaction',
+      params: [
+        {
+          from: accounts[0],
+          to: '0xc1202e7d42655F23097476f6D48006fE56d38d4f',
+          value: '0x29a2241af62c0',
+          gasPrice: '0x5F0000000',
+          gas: '0x5208',
+        },
+      ],
+    })
+    .then((txHash) => console.log(txHash))
+    .catch((error) => console.error);
+});
 
-<div class="container">
-  <div style="height:30%">
-  <div class="row">
-    <div class="col text-center">
-      <button class="enableEthereumButton btn btn-outline-light">Connect to Metamask and Ethereum on Refresh [Rinkeby Testnet Deployed Contract]</button>
-    </div>
-  </div>
- </div>
-</div>
+ethereumButton.addEventListener('click', () => {
+  getAccount();
+});
 
-<div class="container">
-<div style="height:20%">
-  <div class="row">
-    <div class="col text-center">
-      <p style="color:white">"get()" uint: </p>
-      <p style="color:white" id="getValueStateSmartContract"></p>
-    </div>
-  </div>
- </div>
-</div>
+async function getAccount() {
+  accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+}
 
+// MODIFY CONTRACT STATE WITH SET FUNCTION WITH PREDEFINED DATA FROM WEB3.JS
+const changeStateInContractEvent = document.querySelector('.changeStateInContractEvent');
+changeStateInContractEvent.addEventListener('click', () => {
+  //uint cannot be negative, force to absolute value.
+  var inputContractText =  Math.abs(document.getElementById("setValueSmartContract").value);
+  ethereum
+    .request({
+      method: 'eth_sendTransaction',
+      params: [
+        {
+          from: accounts[0],
+          to: '0x6B6a427CaCc6adB23117ff4EFef5e6365617bA94',
+          gasPrice: '2540be400',
+          gas:  'C3500',
+          data: contractDefined_JS.methods.set(inputContractText).encodeABI()
+        },
+      ],
+    })
+    .then((txHash) => console.log(txHash))
+    .catch((error) => console.error);
+});
 
-<div class="container">
-<div style="height:35%">
-  <div class="row">
-    <div class="col text-center">
-      <button class="changeStateInContractEvent btn btn-outline-light">"set(uint x)" Event uint valueChangeEventWenjs to absolute value: </button>
-    </div>
-  </div>
-    <div class="row">
-      <div class="col text-center">
-        <input type="text" style="text-align:center" id="setValueSmartContract" placeholder="input uint value">
-      </div>
-    </div>
-  </div>
-</div>
+//If Metamask is not detected the user will be told to install Metamask.
+try{
+   ethereum.isMetaMask
+}
+catch(error) {
+   alert("Metamask not detected in browser! Install Metamask browser extension, then refresh page! Error log: " + error)
+}
 
-<div class="container">
-  <div class="row">
-    <div class="col text-center">
-      <button class="sendEthButton btn btn-outline-light">Donate Ethereum</button>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col text-center">
-      <form action="AdminSupport.html">
-        <input type="submit" class="btn btn-outline-light" value="Admin control link for support." />
-    </form>
-    </div>
-  </div>
-</div>
+//Check if user is on the Rinkeby testnet. If not, alert them to change to Rinkeby.
+if(window.ethereum.networkVersion != 4){
+  alert("You are not on the Rinkeby Testnet! Please switch to Rinkeby and refresh page.")
+}
 
+//Make Metamask the client side Web3 provider.
+const web3 = new Web3(window.ethereum)
+//Now build the contract with Web3.
+const contractAddress_JS = '0x6B6a427CaCc6adB23117ff4EFef5e6365617bA94'
+const contractABI_JS =
+[{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"uint256","name":"date","type":"uint256"},{"indexed":true,"internalType":"address","name":"from","type":"address"},{"indexed":false,"internalType":"uint256","name":"valueChangeEventWenjs","type":"uint256"}],"name":"setValueUpdatedViaWebjs","type":"event"},{"inputs":[],"name":"get","outputs":[{"internalType":"uint256","name":"retVal","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"x","type":"uint256"}],"name":"set","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"storedData","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}];
+const contractDefined_JS = new web3.eth.Contract(contractABI_JS, contractAddress_JS)
 
-  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-  <!-- Include all compiled plugins (below), or include individual files as needed -->
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-  <!-- WEB3 IMPORT -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.5.0-rc.0/web3.min.js"></script>
-  <!-- Needed to run javascript main library -->
-  <script src="../Scripts/app.js"></script>
+//Get the latest value.
+contractDefined_JS.methods.get().call((err, balance) => {
+  document.getElementById("getValueStateSmartContract").innerHTML =  balance
+})
 
-</body>
-
-</html>
+//Get the latest event. Once the event is triggered, website will update value.
+contractDefined_JS.events.setValueUpdatedViaWebjs({
+     fromBlock: 'latest'
+ }, function(error, eventResult){})
+ .on('data', function(eventResult){
+   console.log(eventResult)
+   //Call the get function to get the most accurate present state for the value.
+   contractDefined_JS.methods.get().call((err, balance) => {
+      document.getElementById("getValueStateSmartContract").innerHTML =  balance
+     })
+   })
+ .on('changed', function(eventResult){
+     // remove event from local database
+ })
+ .on('error', console.error);
