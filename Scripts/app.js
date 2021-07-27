@@ -3,6 +3,7 @@
 
 //Empty array to be filled once Metamask is called.
 let accounts = [];
+document.getElementById("getCurrentAccountConnected").innerHTML =  "None. Please click the top button to connect."
 
 //If Metamask is not detected the user will be told to install Metamask.
 try{
@@ -36,8 +37,8 @@ ethereumButton.addEventListener('click', () => {
 });
 
 async function getAccount() {
-
   accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+  document.getElementById("getCurrentAccountConnected").innerHTML = accounts[0]
 }
 
 //Changing the integer state in a function which will fire off an event.
