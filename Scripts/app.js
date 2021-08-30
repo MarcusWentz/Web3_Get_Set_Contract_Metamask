@@ -106,7 +106,7 @@ const contractABI_JS =
 const contractDefined_JS = new web3.eth.Contract(contractABI_JS, contractAddress_JS)
 
 //Get the latest value.
-contractDefined_JS.methods.get().call((err, balance) => {
+contractDefined_JS.methods.storedData().call((err, balance) => {
   if(balance === undefined){
     document.getElementById("getValueStateSmartContract").innerHTML =  "Install Metamask and select Rinkeby Testnet to have a Web3 provider to read blockchain data."
   }
@@ -122,7 +122,7 @@ contractDefined_JS.events.setValueUpdatedViaWebjs({
  .on('data', function(eventResult){
    console.log(eventResult)
    //Call the get function to get the most accurate present state for the value.
-   contractDefined_JS.methods.get().call((err, balance) => {
+   contractDefined_JS.methods.storedData().call((err, balance) => {
       document.getElementById("getValueStateSmartContract").innerHTML =  balance
      })
    })
