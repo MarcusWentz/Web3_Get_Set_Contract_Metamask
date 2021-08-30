@@ -11,7 +11,7 @@ function detectMetamaskInstalled(){
      ethereum.isMetaMask
   }
   catch(missingMetamask) {
-     alert("Metamask not detected in browser! Install Metamask browser extension, then refresh page! Error log: " + missingMetamask)
+     alert("Metamask not detected in browser! Install Metamask browser extension, then refresh page!")
   }
 }
 
