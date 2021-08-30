@@ -1,7 +1,7 @@
-pragma solidity >=0.4.22 <0.7.0;
+pragma solidity ^0.5.2;
 
 contract SimpleStorage {
-    uint public storedData;
+    uint public storedData; //Default 0. Do not set manually it wastes gas!
     
     event setValueUpdatedViaWebjs(
         uint indexed date,
@@ -9,16 +9,9 @@ contract SimpleStorage {
         uint valueChangeEventWenjs
     );
 
-    constructor() public {
-        storedData = 100;
-    }
-
     function set(uint x) public {
         storedData = x;
         emit setValueUpdatedViaWebjs(now, msg.sender, x);
     }
-
-    function get() public view returns (uint retVal) {
-        return storedData;
-    }
+    
 }
