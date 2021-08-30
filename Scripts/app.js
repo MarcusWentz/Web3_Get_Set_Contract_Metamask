@@ -47,56 +47,6 @@ async function getAccount() {
   document.getElementById("getCurrentAccountConnected").innerHTML = accounts[0]
 }
 
-//Changing the integer state in a function which will fire off an event.
-//Make sure values are in hex or Metamask will fail to load.
-//DO NOT SET A VALUE UNLESS THE CONTRACT NEEDS IT FOR MSG.VALUE REQUIRE STATEMENTS
-const sendEthButton = document.querySelector('.sendEthButton');
-sendEthButton.addEventListener('click', () => {
-  checkAddressMissingMetamask()
-  ethereum
-    .request({
-      method: 'eth_sendTransaction',
-      params: [
-        {
-          from: accounts[0],
-          to: '0xc1202e7d42655F23097476f6D48006fE56d38d4f',
-          value: '0x29a2241af62c0',
-          gasPrice: '0x5F0000000',
-          gas: '0x5208',
-        },
-      ],
-    })
-    .then((txHash) => console.log(txHash))
-    .catch((error) => console.error);
-});
-
-// MODIFY CONTRACT STATE WITH SET FUNCTION WITH PREDEFINED DATA FROM WEB3.JS
-const changeStateInContractEvent = document.querySelector('.changeStateInContractEvent');
-changeStateInContractEvent.addEventListener('click', () => {
-  checkAddressMissingMetamask()
-  //uint cannot be negative, force to absolute value.
-  var inputContractText =  Math.abs(document.getElementById("setValueSmartContract").value);
-  //Check if value is an integer. If not throw an error.
-  if(Number.isInteger(inputContractText) == false){
-    alert("Input value is not an integer! Only put an integer for input.")
-  }
-  ethereum
-    .request({
-      method: 'eth_sendTransaction',
-      params: [
-        {
-          from: accounts[0],
-          to: '0x6B6a427CaCc6adB23117ff4EFef5e6365617bA94',
-          gasPrice: '2540be400',
-          gas:  'C3500',
-          data: contractDefined_JS.methods.set(inputContractText).encodeABI()
-        },
-      ],
-    })
-    .then((txHash) => console.log(txHash))
-    .catch((error) => console.error);
-});
-
 //Make Metamask the client side Web3 provider. Needed for tracking live events.
 const web3 = new Web3(window.ethereum)
 //Now build the contract with Web3.
@@ -116,6 +66,33 @@ contractDefined_JS.methods.storedData().call((err, balance) => {
   }
 })
 
+// MODIFY CONTRACT STATE WITH SET FUNCTION WITH PREDEFINED DATA FROM WEB3.JS
+const changeStateInContractEvent = document.querySelector('.changeStateInContractEvent');
+changeStateInContractEvent.addEventListener('click', () => {
+  checkAddressMissingMetamask()
+  //uint cannot be negative, force to absolute value.
+  var inputContractText =  Math.abs(document.getElementById("setValueSmartContract").value);
+  //Check if value is an integer. If not throw an error.
+  if(Number.isInteger(inputContractText) == false){
+    alert("Input value is not an integer! Only put an integer for input.")
+  }
+  ethereum
+    .request({
+      method: 'eth_sendTransaction',
+      params: [
+        {
+          from: accounts[0],
+          to: contractAddress_JS,
+          gasPrice: '2540be400',
+          gas:  'C3500',
+          data: contractDefined_JS.methods.set(inputContractText).encodeABI()
+        },
+      ],
+    })
+    .then((txHash) => console.log(txHash))
+    .catch((error) => console.error);
+});
+
 //Get the latest event. Once the event is triggered, website will update value.
 contractDefined_JS.events.setValueUpdatedViaWebjs({
      fromBlock: 'latest'
@@ -131,3 +108,26 @@ contractDefined_JS.events.setValueUpdatedViaWebjs({
      // remove event from local database
  })
  .on('error', console.error);
+
+ //Changing the integer state in a function which will fire off an event.
+ //Make sure values are in hex or Metamask will fail to load.
+ //DO NOT SET A VALUE UNLESS THE CONTRACT NEEDS IT FOR MSG.VALUE REQUIRE STATEMENTS
+ const sendEthButton = document.querySelector('.sendEthButton');
+ sendEthButton.addEventListener('click', () => {
+   checkAddressMissingMetamask()
+   ethereum
+     .request({
+       method: 'eth_sendTransaction',
+       params: [
+         {
+           from: accounts[0],
+           to: '0xc1202e7d42655F23097476f6D48006fE56d38d4f',
+           value: '0x29a2241af62c0',
+           gasPrice: '0x5F0000000',
+           gas: '0x5208',
+         },
+       ],
+     })
+     .then((txHash) => console.log(txHash))
+     .catch((error) => console.error);
+ });
