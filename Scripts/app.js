@@ -50,10 +50,8 @@ async function getAccount() {
 //Make Metamask the client side Web3 provider. Needed for tracking live events.
 const web3 = new Web3(window.ethereum)
 //Now build the contract with Web3.
-const contractAddress_JS = '0x167a6D482086d47F595546F6c5772908f7535c5b'
-const contractABI_JS =
-[{"anonymous": false,"inputs": [{"indexed": true,"internalType": "uint256","name": "date","type": "uint256"},{"indexed": true,"internalType": "address","name": "from","type": "address"},{"indexed": false,"internalType": "uint256",
-"name": "valueChangeEventWenjs","type": "uint256"}],"name": "setValueUpdatedViaWebjs","type": "event"},{"constant": false,"inputs": [{"internalType": "uint256","name": "x","type": "uint256"}],"name": "set","outputs": [],"payable": false,"stateMutability": "nonpayable","type": "function"},{"constant": true,"inputs": [],"name": "storedData","outputs": [{"internalType": "uint256","name": "","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"}];
+const contractAddress_JS = '0xaf3310ec212eCBA069149239F954F1281fDa836B'
+const contractABI_JS = [{"anonymous":false,"inputs":[{"indexed":true,"internalType":"uint256","name":"date","type":"uint256"},{"indexed":true,"internalType":"address","name":"from","type":"address"},{"indexed":false,"internalType":"uint256","name":"valueChangeEventWenjs","type":"uint256"}],"name":"setValueUpdatedViaWebjs","type":"event"},{"inputs":[{"internalType":"uint256","name":"x","type":"uint256"}],"name":"set","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"storedData","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}]
 const contractDefined_JS = new web3.eth.Contract(contractABI_JS, contractAddress_JS)
 
 //Get the latest value.
