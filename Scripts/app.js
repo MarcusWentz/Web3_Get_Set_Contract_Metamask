@@ -81,8 +81,6 @@ changeStateInContractEvent.addEventListener('click', () => {
         {
           from: accounts[0],
           to: contractAddress_JS,
-          gasPrice: '2540be400',
-          gas:  'C3500',
           data: contractDefined_JS.methods.set(inputContractText).encodeABI()
         },
       ],
@@ -121,8 +119,6 @@ contractDefined_JS.events.setValueUpdatedViaWebjs({
            from: accounts[0],
            to: '0xc1202e7d42655F23097476f6D48006fE56d38d4f',
            value: '0x29a2241af62c0',
-           gasPrice: '0x5F0000000',
-           gas: '0x5208',
          },
        ],
      })
