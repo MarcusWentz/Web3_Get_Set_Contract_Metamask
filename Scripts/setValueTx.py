@@ -27,7 +27,7 @@ tx = {
     'to': Contract_At_Address, #WORKS WITH REGULAR WALLETS BUT CANNOT SEND TO CONTRACT FOR SOME REASON?
     'gas': 30000, #WORKS WITH 1000000. If not try : Remix > deploy and run transactions
     'gasPrice': web3.toWei('10', 'gwei'), # https://etherscan.io/gastracker
-    'data': contract_Call.encodeABI(fn_name='set', args=[999]) #METAMASK SET DATA. YOU CAN GENERATE THIS IN WEB3.PY AS WELL.
+    'data': contract_Call.encodeABI(fn_name='set', args=[999])
 }
 signed_tx = web3.eth.account.signTransaction(tx, devTestnetPrivateKey)
 print(web3.toHex(web3.eth.sendRawTransaction(signed_tx.rawTransaction)))
