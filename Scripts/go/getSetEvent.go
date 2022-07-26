@@ -39,7 +39,7 @@ func main() {
            log.Fatal(err)
      }
 
-     fmt.Println(storedData)
+     fmt.Println("storedData:", storedData)
 
      //Set new value for smart contract uint storage slot.
      privateKey, err := crypto.HexToECDSA(os.Getenv("devTestnetPrivateKey"))
@@ -48,7 +48,6 @@ func main() {
       }
 
       publicKey := privateKey.Public()
-      fmt.Println(publicKey)
       publicKeyECDSA, ok := publicKey.(*ecdsa.PublicKey)
       if !ok {
           log.Fatal("error casting public key to ECDSA")
@@ -65,21 +64,19 @@ func main() {
           log.Fatal(err)
       }
 
-      fmt.Println(nonce)
-      fmt.Println(gasPrice)
-
       auth := bind.NewKeyedTransactor(privateKey)
       auth.Nonce = big.NewInt(int64(nonce))
       auth.Value = big.NewInt(0)     // in wei
       auth.GasLimit = uint64(300000) // in units
       auth.GasPrice = gasPrice
 
-      tx, err := contract.Set(auth, big.NewInt(555))
+      setUintValue := big.NewInt(555)
+      tx, err := contract.Set(auth, setUintValue)
       if err != nil {
           log.Fatal(err)
       }
 
-      fmt.Printf("tx sent: %s", tx.Hash().Hex()) // tx sent
+      fmt.Printf("Tx hash: %s", tx.Hash().Hex()) // tx sent
 
      //Subscribe to events from smart contract address.
      query := ethereum.FilterQuery{
@@ -103,7 +100,7 @@ func main() {
                    log.Fatal(err)
              }
 
-             fmt.Println(storedData)
+             fmt.Println("storedData:", storedData)
          }
      }
 }
