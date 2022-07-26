@@ -30,8 +30,8 @@ var (
 
 // MainMetaData contains all meta data concerning the Main contract.
 var MainMetaData = &bind.MetaData{
-	ABI: "[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"date\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"valueChangeEventWenjs\",\"type\":\"uint256\"}],\"name\":\"setValueUpdatedViaWebjs\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"x\",\"type\":\"uint256\"}],\"name\":\"set\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"storedData\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"}]",
-	Bin: "0x608060405234801561001057600080fd5b5061019c806100206000396000f3fe608060405234801561001057600080fd5b50600436106100365760003560e01c80632a1afcd91461003b57806360fe47b114610059575b600080fd5b610043610075565b60405161005091906100ed565b60405180910390f35b610073600480360381019061006e9190610139565b61007b565b005b60005481565b806000819055503373ffffffffffffffffffffffffffffffffffffffff16437f23b4b512eee3e56a602299265da2e1ae5bf14e71a1b31985c23465515f321c9c836040516100c991906100ed565b60405180910390a350565b6000819050919050565b6100e7816100d4565b82525050565b600060208201905061010260008301846100de565b92915050565b600080fd5b610116816100d4565b811461012157600080fd5b50565b6000813590506101338161010d565b92915050565b60006020828403121561014f5761014e610108565b5b600061015d84828501610124565b9150509291505056fea2646970667358221220bfb64af67f2019a8266452e98b8333295e5cf1992883ba2972b290b28176d7b464736f6c634300080f0033",
+	ABI: "[{\"anonymous\":false,\"inputs\":[],\"name\":\"setEvent\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"x\",\"type\":\"uint256\"}],\"name\":\"set\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"storedData\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"}]",
+	Bin: "0x608060405234801561001057600080fd5b50610179806100206000396000f3fe608060405234801561001057600080fd5b50600436106100365760003560e01c80632a1afcd91461003b57806360fe47b114610059575b600080fd5b610043610075565b60405161005091906100ca565b60405180910390f35b610073600480360381019061006e9190610116565b61007b565b005b60005481565b806000819055507f24a4f809cc1bf5b0f3c16b615535b56a0b583b1630e06e32b46b759b8088a95d60405160405180910390a150565b6000819050919050565b6100c4816100b1565b82525050565b60006020820190506100df60008301846100bb565b92915050565b600080fd5b6100f3816100b1565b81146100fe57600080fd5b50565b600081359050610110816100ea565b92915050565b60006020828403121561012c5761012b6100e5565b5b600061013a84828501610101565b9150509291505056fea26469706673582212200da6f6eb2a25a6a0fd086c77d3b6178d214c0f751d04d94854b7e5f38a20760864736f6c634300080f0033",
 }
 
 // MainABI is the input ABI used to generate the binding from.
@@ -253,9 +253,9 @@ func (_Main *MainTransactorSession) Set(x *big.Int) (*types.Transaction, error) 
 	return _Main.Contract.Set(&_Main.TransactOpts, x)
 }
 
-// MainSetValueUpdatedViaWebjsIterator is returned from FilterSetValueUpdatedViaWebjs and is used to iterate over the raw logs and unpacked data for SetValueUpdatedViaWebjs events raised by the Main contract.
-type MainSetValueUpdatedViaWebjsIterator struct {
-	Event *MainSetValueUpdatedViaWebjs // Event containing the contract specifics and raw log
+// MainSetEventIterator is returned from FilterSetEvent and is used to iterate over the raw logs and unpacked data for SetEvent events raised by the Main contract.
+type MainSetEventIterator struct {
+	Event *MainSetEvent // Event containing the contract specifics and raw log
 
 	contract *bind.BoundContract // Generic contract to use for unpacking event data
 	event    string              // Event name to use for unpacking event data
@@ -269,7 +269,7 @@ type MainSetValueUpdatedViaWebjsIterator struct {
 // Next advances the iterator to the subsequent event, returning whether there
 // are any more events found. In case of a retrieval or parsing error, false is
 // returned and Error() can be queried for the exact failure.
-func (it *MainSetValueUpdatedViaWebjsIterator) Next() bool {
+func (it *MainSetEventIterator) Next() bool {
 	// If the iterator failed, stop iterating
 	if it.fail != nil {
 		return false
@@ -278,7 +278,7 @@ func (it *MainSetValueUpdatedViaWebjsIterator) Next() bool {
 	if it.done {
 		select {
 		case log := <-it.logs:
-			it.Event = new(MainSetValueUpdatedViaWebjs)
+			it.Event = new(MainSetEvent)
 			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
 				it.fail = err
 				return false
@@ -293,7 +293,7 @@ func (it *MainSetValueUpdatedViaWebjsIterator) Next() bool {
 	// Iterator still in progress, wait for either a data or an error event
 	select {
 	case log := <-it.logs:
-		it.Event = new(MainSetValueUpdatedViaWebjs)
+		it.Event = new(MainSetEvent)
 		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
 			it.fail = err
 			return false
@@ -309,61 +309,40 @@ func (it *MainSetValueUpdatedViaWebjsIterator) Next() bool {
 }
 
 // Error returns any retrieval or parsing error occurred during filtering.
-func (it *MainSetValueUpdatedViaWebjsIterator) Error() error {
+func (it *MainSetEventIterator) Error() error {
 	return it.fail
 }
 
 // Close terminates the iteration process, releasing any pending underlying
 // resources.
-func (it *MainSetValueUpdatedViaWebjsIterator) Close() error {
+func (it *MainSetEventIterator) Close() error {
 	it.sub.Unsubscribe()
 	return nil
 }
 
-// MainSetValueUpdatedViaWebjs represents a SetValueUpdatedViaWebjs event raised by the Main contract.
-type MainSetValueUpdatedViaWebjs struct {
-	Date                  *big.Int
-	From                  common.Address
-	ValueChangeEventWenjs *big.Int
-	Raw                   types.Log // Blockchain specific contextual infos
+// MainSetEvent represents a SetEvent event raised by the Main contract.
+type MainSetEvent struct {
+	Raw types.Log // Blockchain specific contextual infos
 }
 
-// FilterSetValueUpdatedViaWebjs is a free log retrieval operation binding the contract event 0x23b4b512eee3e56a602299265da2e1ae5bf14e71a1b31985c23465515f321c9c.
+// FilterSetEvent is a free log retrieval operation binding the contract event 0x24a4f809cc1bf5b0f3c16b615535b56a0b583b1630e06e32b46b759b8088a95d.
 //
-// Solidity: event setValueUpdatedViaWebjs(uint256 indexed date, address indexed from, uint256 valueChangeEventWenjs)
-func (_Main *MainFilterer) FilterSetValueUpdatedViaWebjs(opts *bind.FilterOpts, date []*big.Int, from []common.Address) (*MainSetValueUpdatedViaWebjsIterator, error) {
+// Solidity: event setEvent()
+func (_Main *MainFilterer) FilterSetEvent(opts *bind.FilterOpts) (*MainSetEventIterator, error) {
 
-	var dateRule []interface{}
-	for _, dateItem := range date {
-		dateRule = append(dateRule, dateItem)
-	}
-	var fromRule []interface{}
-	for _, fromItem := range from {
-		fromRule = append(fromRule, fromItem)
-	}
-
-	logs, sub, err := _Main.contract.FilterLogs(opts, "setValueUpdatedViaWebjs", dateRule, fromRule)
+	logs, sub, err := _Main.contract.FilterLogs(opts, "setEvent")
 	if err != nil {
 		return nil, err
 	}
-	return &MainSetValueUpdatedViaWebjsIterator{contract: _Main.contract, event: "setValueUpdatedViaWebjs", logs: logs, sub: sub}, nil
+	return &MainSetEventIterator{contract: _Main.contract, event: "setEvent", logs: logs, sub: sub}, nil
 }
 
-// WatchSetValueUpdatedViaWebjs is a free log subscription operation binding the contract event 0x23b4b512eee3e56a602299265da2e1ae5bf14e71a1b31985c23465515f321c9c.
+// WatchSetEvent is a free log subscription operation binding the contract event 0x24a4f809cc1bf5b0f3c16b615535b56a0b583b1630e06e32b46b759b8088a95d.
 //
-// Solidity: event setValueUpdatedViaWebjs(uint256 indexed date, address indexed from, uint256 valueChangeEventWenjs)
-func (_Main *MainFilterer) WatchSetValueUpdatedViaWebjs(opts *bind.WatchOpts, sink chan<- *MainSetValueUpdatedViaWebjs, date []*big.Int, from []common.Address) (event.Subscription, error) {
+// Solidity: event setEvent()
+func (_Main *MainFilterer) WatchSetEvent(opts *bind.WatchOpts, sink chan<- *MainSetEvent) (event.Subscription, error) {
 
-	var dateRule []interface{}
-	for _, dateItem := range date {
-		dateRule = append(dateRule, dateItem)
-	}
-	var fromRule []interface{}
-	for _, fromItem := range from {
-		fromRule = append(fromRule, fromItem)
-	}
-
-	logs, sub, err := _Main.contract.WatchLogs(opts, "setValueUpdatedViaWebjs", dateRule, fromRule)
+	logs, sub, err := _Main.contract.WatchLogs(opts, "setEvent")
 	if err != nil {
 		return nil, err
 	}
@@ -373,8 +352,8 @@ func (_Main *MainFilterer) WatchSetValueUpdatedViaWebjs(opts *bind.WatchOpts, si
 			select {
 			case log := <-logs:
 				// New log arrived, parse the event and forward to the user
-				event := new(MainSetValueUpdatedViaWebjs)
-				if err := _Main.contract.UnpackLog(event, "setValueUpdatedViaWebjs", log); err != nil {
+				event := new(MainSetEvent)
+				if err := _Main.contract.UnpackLog(event, "setEvent", log); err != nil {
 					return err
 				}
 				event.Raw = log
@@ -395,12 +374,12 @@ func (_Main *MainFilterer) WatchSetValueUpdatedViaWebjs(opts *bind.WatchOpts, si
 	}), nil
 }
 
-// ParseSetValueUpdatedViaWebjs is a log parse operation binding the contract event 0x23b4b512eee3e56a602299265da2e1ae5bf14e71a1b31985c23465515f321c9c.
+// ParseSetEvent is a log parse operation binding the contract event 0x24a4f809cc1bf5b0f3c16b615535b56a0b583b1630e06e32b46b759b8088a95d.
 //
-// Solidity: event setValueUpdatedViaWebjs(uint256 indexed date, address indexed from, uint256 valueChangeEventWenjs)
-func (_Main *MainFilterer) ParseSetValueUpdatedViaWebjs(log types.Log) (*MainSetValueUpdatedViaWebjs, error) {
-	event := new(MainSetValueUpdatedViaWebjs)
-	if err := _Main.contract.UnpackLog(event, "setValueUpdatedViaWebjs", log); err != nil {
+// Solidity: event setEvent()
+func (_Main *MainFilterer) ParseSetEvent(log types.Log) (*MainSetEvent, error) {
+	event := new(MainSetEvent)
+	if err := _Main.contract.UnpackLog(event, "setEvent", log); err != nil {
 		return nil, err
 	}
 	event.Raw = log
