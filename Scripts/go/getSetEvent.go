@@ -1,6 +1,8 @@
-//Step 1: Create abi and bin files.
-//Step 2: Generate Go contract interaction file by running:  abigen --bin=Store_sol_Store.bin --abi=Store_sol_Store.abi --pkg=main --out=Store.g
-//Step 3: Run: StoreTest.go Store.go
+//Step 1: Create abi file by running: solc --abi Store.sol > Store_sol_Store.abi
+//Step 2: Create bin file by running: solc --bin Store.sol > Store_sol_Store.bin
+//Step 3: Remove comments above the abi and bin files.
+//Step 4: Generate Go contract interaction file by running:  abigen --bin=Store_sol_Store.bin --abi=Store_sol_Store.abi --pkg=main --out=Store.g
+//Step 5: Run: StoreTest.go Store.go
 package main
 
 import (
@@ -26,7 +28,7 @@ func main() {
         log.Fatal(err)
     }
 
-     contractAddress := common.HexToAddress("0x8bAC6b3B0E8989496b0Fa7C242d52908AeeDcC36")
+     contractAddress := common.HexToAddress("0xdbaA7dfBd9125B7a43457D979B1f8a1Bd8687f37")
 
      contract, err := NewMain(contractAddress, client)
      if err != nil {
