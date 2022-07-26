@@ -1,4 +1,6 @@
-//go run StoreTest.go Store.go
+//Step 1: Create abi and bin files.
+//Step 2: Generate Go contract interaction file by running:  abigen --bin=Store_sol_Store.bin --abi=Store_sol_Store.abi --pkg=main --out=Store.g
+//Step 3: Run: StoreTest.go Store.go
 package main
 
 import (
@@ -26,7 +28,7 @@ func main() {
 
      contractAddress := common.HexToAddress("0x8bAC6b3B0E8989496b0Fa7C242d52908AeeDcC36")
 
-     contract, err := NewStore(contractAddress, client)
+     contract, err := NewMain(contractAddress, client)
      if err != nil {
          log.Fatal(err)
      }
@@ -70,7 +72,7 @@ func main() {
       auth.GasLimit = uint64(300000) // in units
       auth.GasPrice = gasPrice
 
-      setUintValue := big.NewInt(111)
+      setUintValue := big.NewInt(555555)
       tx, err := contract.Set(auth, setUintValue)
       if err != nil {
           log.Fatal(err)
