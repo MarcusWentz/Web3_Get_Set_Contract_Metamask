@@ -19,12 +19,12 @@ import (
 
 func main() {
     //Get smart contract starting state.
-    client, err := ethclient.Dial(os.Getenv("rinkebyWebSocketSecureEventsInfuraAPIKey"))
+    client, err := ethclient.Dial(os.Getenv("goerliWebSocketSecureEventsInfuraAPIKey"))
     if err != nil {
         log.Fatal(err)
     }
 
-     contractAddress := common.HexToAddress("0xaf3310ec212eCBA069149239F954F1281fDa836B")
+     contractAddress := common.HexToAddress("0x8bAC6b3B0E8989496b0Fa7C242d52908AeeDcC36")
 
      contract, err := NewStore(contractAddress, client)
      if err != nil {
@@ -70,13 +70,13 @@ func main() {
       auth.GasLimit = uint64(300000) // in units
       auth.GasPrice = gasPrice
 
-      setUintValue := big.NewInt(44)
+      setUintValue := big.NewInt(111)
       tx, err := contract.Set(auth, setUintValue)
       if err != nil {
           log.Fatal(err)
       }
 
-      fmt.Printf("Tx hash: %s", tx.Hash().Hex()) // tx sent
+      fmt.Println("Tx hash:", tx.Hash().Hex()) // tx sent
 
      //Subscribe to events from smart contract address.
      query := ethereum.FilterQuery{
@@ -94,7 +94,7 @@ func main() {
          case err := <-sub.Err():
              log.Fatal(err)
          case vLog := <-logs:
-             fmt.Println(vLog) // pointer to event log
+             fmt.Println("New Event Log:", vLog) // pointer to event log
              storedData, err := contract.StoredData(&bind.CallOpts{})
                if err != nil {
                    log.Fatal(err)
