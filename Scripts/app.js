@@ -90,7 +90,7 @@ changeStateInContractEvent.addEventListener('click', () => {
 });
 
 //Get the latest event. Once the event is triggered, website will update value.
-contractDefined_JS.events.setValueUpdatedViaWebjs({
+contractDefined_JS.events.setEvent({
      fromBlock: 'latest'
  }, function(error, eventResult){})
  .on('data', function(eventResult){
