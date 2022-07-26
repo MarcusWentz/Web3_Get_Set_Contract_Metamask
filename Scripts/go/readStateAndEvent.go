@@ -16,21 +16,13 @@ import (
 )
 
 func main() {
+    //Get smart contract starting state.
     client, err := ethclient.Dial(os.Getenv("rinkebyWebSocketSecureEventsInfuraAPIKey"))
     if err != nil {
         log.Fatal(err)
     }
 
-    contractAddress := common.HexToAddress("0xaf3310ec212eCBA069149239F954F1281fDa836B")
-     query := ethereum.FilterQuery{
-         Addresses: []common.Address{contractAddress},
-     }
-
-     logs := make(chan types.Log)
-     sub, err := client.SubscribeFilterLogs(context.Background(), query, logs)
-     if err != nil {
-         log.Fatal(err)
-     }
+     contractAddress := common.HexToAddress("0xaf3310ec212eCBA069149239F954F1281fDa836B")
 
      contract, err := NewStore(contractAddress, client)
      if err != nil {
@@ -46,6 +38,17 @@ func main() {
      }
 
      fmt.Println(storedData)
+
+     //Subscribe to events from smart contract address.
+     query := ethereum.FilterQuery{
+         Addresses: []common.Address{contractAddress},
+     }
+
+     logs := make(chan types.Log)
+     sub, err := client.SubscribeFilterLogs(context.Background(), query, logs)
+     if err != nil {
+         log.Fatal(err)
+     }
 
      for {
          select {
