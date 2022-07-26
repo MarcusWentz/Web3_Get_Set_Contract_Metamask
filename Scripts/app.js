@@ -22,11 +22,11 @@ function checkAddressMissingMetamask() {
   }
 }
 
-//Function called for getting Metamask accounts on Rinkeby. Used in every button in case the user forgets to click the top button.
-function enableMetamaskOnRinkeby() {
+//Function called for getting Metamask accounts on Goerli. Used in every button in case the user forgets to click the top button.
+function enableMetamaskOnGoerli() {
   //Get account details from Metamask wallet.
   getAccount();
-  //Check if user is on the Rinkeby testnet. If not, alert them to change to Rinkeby.
+  //Check if user is on the Goerli testnet. If not, alert them to change to Goerli.
   if(window.ethereum.networkVersion != 5){
     alert("You are not on the Goerli Testnet! Please switch to Goerli and refresh page.")
   }
@@ -39,7 +39,7 @@ detectMetamaskInstalled()
 const ethereumButton = document.querySelector('.enableEthereumButton');
 ethereumButton.addEventListener('click', () => {
     detectMetamaskInstalled()
-    enableMetamaskOnRinkeby()
+    enableMetamaskOnGoerli()
 });
 
 async function getAccount() {
@@ -57,7 +57,7 @@ const contractDefined_JS = new web3.eth.Contract(contractABI_JS, contractAddress
 //Get the latest value.
 contractDefined_JS.methods.storedData().call((err, balance) => {
   if(balance === undefined){
-    document.getElementById("getValueStateSmartContract").innerHTML =  "Install Metamask and select Rinkeby Testnet to have a Web3 provider to read blockchain data."
+    document.getElementById("getValueStateSmartContract").innerHTML =  "Install Metamask and select Goerli Testnet to have a Web3 provider to read blockchain data."
   }
   else{
     document.getElementById("getValueStateSmartContract").innerHTML =  balance
