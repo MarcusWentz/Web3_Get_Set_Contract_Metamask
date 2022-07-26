@@ -70,7 +70,7 @@ func main() {
       auth.GasLimit = uint64(300000) // in units
       auth.GasPrice = gasPrice
 
-      setUintValue := big.NewInt(555)
+      setUintValue := big.NewInt(44)
       tx, err := contract.Set(auth, setUintValue)
       if err != nil {
           log.Fatal(err)
