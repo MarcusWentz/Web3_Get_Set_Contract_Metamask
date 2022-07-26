@@ -27,8 +27,8 @@ function enableMetamaskOnRinkeby() {
   //Get account details from Metamask wallet.
   getAccount();
   //Check if user is on the Rinkeby testnet. If not, alert them to change to Rinkeby.
-  if(window.ethereum.networkVersion != 4){
-    alert("You are not on the Rinkeby Testnet! Please switch to Rinkeby and refresh page.")
+  if(window.ethereum.networkVersion != 5){
+    alert("You are not on the Goerli Testnet! Please switch to Goerli and refresh page.")
   }
 }
 
@@ -50,7 +50,7 @@ async function getAccount() {
 //Make Metamask the client side Web3 provider. Needed for tracking live events.
 const web3 = new Web3(window.ethereum)
 //Now build the contract with Web3.
-const contractAddress_JS = '0xaf3310ec212eCBA069149239F954F1281fDa836B'
+const contractAddress_JS = '0x8bAC6b3B0E8989496b0Fa7C242d52908AeeDcC36'
 const contractABI_JS = [{"anonymous":false,"inputs":[{"indexed":true,"internalType":"uint256","name":"date","type":"uint256"},{"indexed":true,"internalType":"address","name":"from","type":"address"},{"indexed":false,"internalType":"uint256","name":"valueChangeEventWenjs","type":"uint256"}],"name":"setValueUpdatedViaWebjs","type":"event"},{"inputs":[{"internalType":"uint256","name":"x","type":"uint256"}],"name":"set","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"storedData","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}]
 const contractDefined_JS = new web3.eth.Contract(contractABI_JS, contractAddress_JS)
 
