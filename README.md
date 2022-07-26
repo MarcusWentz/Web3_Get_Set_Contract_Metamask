@@ -1,6 +1,6 @@
 Test website with Metamask.
 
-Scripts used to control frontend and backend smart contract logic (in web3.js,web3.py,and Geth (Go Ethereum)). :\
+Scripts used to control frontend and backend smart contract logic (in web3.js,web3.py,and Geth) :\
   -Send Ethereum to an address\
   -Get value from a contract with Metamask as Web3 client provider\
   -Set custom uint value for a contract [negative values forced to absoulte value]\
