@@ -1,3 +1,4 @@
+//go run StoreTest.go Store.go
 package main
 
 import (
