@@ -28,21 +28,23 @@ func main() {
         log.Fatal(err)
     }
 
-     contractAddress := common.HexToAddress("0xdbaA7dfBd9125B7a43457D979B1f8a1Bd8687f37")
+    chainID, err := client.NetworkID(context.Background())
+     if err != nil {
+         log.Fatal(err)
+     }
+     fmt.Println("Chain id: ", chainID)
 
+     contractAddress := common.HexToAddress("0xdbaA7dfBd9125B7a43457D979B1f8a1Bd8687f37")
      contract, err := NewMain(contractAddress, client)
      if err != nil {
          log.Fatal(err)
      }
-
-     fmt.Println("contract is loaded")
-     _ = contract
+     fmt.Println("Contract is loaded at address", contractAddress)
 
      storedData, err := contract.StoredData(&bind.CallOpts{})
        if err != nil {
            log.Fatal(err)
      }
-
      fmt.Println("storedData:", storedData)
 
      //Set new value for smart contract uint storage slot.
@@ -74,12 +76,11 @@ func main() {
       auth.GasLimit = uint64(300000) // in units
       auth.GasPrice = gasPrice
 
-      setUintValue := big.NewInt(555555)
+      setUintValue := big.NewInt(2222222)
       tx, err := contract.Set(auth, setUintValue)
       if err != nil {
           log.Fatal(err)
       }
-
       fmt.Println("Tx hash:", tx.Hash().Hex()) // tx sent
 
      //Subscribe to events from smart contract address.
@@ -99,11 +100,11 @@ func main() {
              log.Fatal(err)
          case vLog := <-logs:
              fmt.Println("New Event Log:", vLog) // pointer to event log
+
              storedData, err := contract.StoredData(&bind.CallOpts{})
                if err != nil {
                    log.Fatal(err)
              }
-
              fmt.Println("storedData:", storedData)
          }
      }
