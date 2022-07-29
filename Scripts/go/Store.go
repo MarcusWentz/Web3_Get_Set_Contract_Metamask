@@ -23,7 +23,9 @@ import (
 
 func main() {
     //Get smart contract starting state.
-    client, err := ethclient.Dial("wss://ws.rpc.l16.lukso.network")
+
+    client, err := ethclient.Dial(os.Getenv("goerliWebSocketSecureEventsInfuraAPIKey"))
+    // client, err := ethclient.Dial("wss://ws.rpc.l16.lukso.network")
     if err != nil {
         log.Fatal(err)
     }
@@ -34,7 +36,8 @@ func main() {
      }
      fmt.Println("Chain id: ", chainID)
 
-     contractAddress := common.HexToAddress("0x50684c64F4b80b5687d0891c9339De8fFE281A33")
+     contractAddress := common.HexToAddress("0xdbaA7dfBd9125B7a43457D979B1f8a1Bd8687f37")
+     // contractAddress := common.HexToAddress("0x50684c64F4b80b5687d0891c9339De8fFE281A33")
      contract, err := NewMain(contractAddress, client)
      if err != nil {
          log.Fatal(err)
@@ -80,7 +83,7 @@ func main() {
       auth.GasLimit = uint64(300000) // in units
       auth.GasPrice = gasPrice
 
-      setUintValue := big.NewInt(111)
+      setUintValue := big.NewInt(1111111)
       tx, err := contract.Set(auth, setUintValue)
       if err != nil {
           log.Fatal(err)
