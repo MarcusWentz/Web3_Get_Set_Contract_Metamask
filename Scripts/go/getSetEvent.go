@@ -1,7 +1,7 @@
 //Step 1: Create abi file by running: solc --abi Store.sol > Store_sol_Store.abi
 //Step 2: Create bin file by running: solc --bin Store.sol > Store_sol_Store.bin
 //Step 3: Remove comments above the abi and bin files.
-//Step 4: Generate Go contract interaction file by running:  abigen --bin=Store_sol_Store.bin --abi=Store_sol_Store.abi --pkg=main --out=Store.g
+//Step 4: Generate Go contract interaction file by running:  abigen --bin=Store_sol_Store.bin --abi=Store_sol_Store.abi --pkg=main --out=Store.go
 //Step 5: Run: StoreTest.go Store.go
 package main
 
