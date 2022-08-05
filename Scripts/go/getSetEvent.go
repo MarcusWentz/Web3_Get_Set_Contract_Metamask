@@ -72,9 +72,9 @@ func main() {
 
       auth := bind.NewKeyedTransactor(privateKey)
       auth.Nonce = big.NewInt(int64(nonce))
-      auth.Value = big.NewInt(0)     // in wei
       auth.GasLimit = uint64(300000) // in units
       auth.GasPrice = gasPrice
+      auth.Value = big.NewInt(0)     // in wei
 
       setUintValue := big.NewInt(2222222)
       tx, err := contract.Set(auth, setUintValue)
