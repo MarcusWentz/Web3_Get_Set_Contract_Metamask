@@ -11,5 +11,3 @@ Try the project via GitHub pages:\
   https://ipfs.fleek.co/ipfs/QmSe46cjBo3Cacz5d9rCce4yvGqMELUB6tvF3RB91WiykB/index.html? \
   Contract deployed and verified on Goerli testnet: \
   https://goerli.etherscan.io/address/0xdbaa7dfbd9125b7a43457d979b1f8a1bd8687f37#code
-
-test
