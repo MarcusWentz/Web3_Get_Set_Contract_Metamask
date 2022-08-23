@@ -68,12 +68,10 @@ contractDefined_JS.methods.storedData().call((err, balance) => {
 const changeStateInContractEvent = document.querySelector('.changeStateInContractEvent');
 changeStateInContractEvent.addEventListener('click', () => {
   checkAddressMissingMetamask()
-  //uint cannot be negative, force to absolute value.
-  var inputContractText =  Math.abs(document.getElementById("setValueSmartContract").value);
-  //Check if value is an integer. If not throw an error.
-  if(Number.isInteger(inputContractText) == false){
-    alert("Input value is not an integer! Only put an integer for input.")
-  }
+  
+  //Take input as a string to handle bigNumber values.
+  var inputContractText = document.getElementById("setValueSmartContract").value.toString();
+    
   ethereum
     .request({
       method: 'eth_sendTransaction',
