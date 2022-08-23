@@ -71,7 +71,23 @@ changeStateInContractEvent.addEventListener('click', () => {
   
   //Take input as a string to handle bigNumber values.
   var inputContractText = document.getElementById("setValueSmartContract").value.toString();
-    
+ 
+  if (inputContractText[0] == "-") {
+    alert("Cannot accept negative value.")
+  }
+  
+  if (inputContractText.includes(".")) {
+    alert("Cannot accept float value.")
+  }
+  
+  if (inputContractText.includes(".")) {
+    alert("Cannot accept float value.")
+  }
+  
+  if (/[a-zA-Z]/.test(inputContractText) == true){
+    alert("Cannot accept inputs with letters.")  
+  }
+ 
   ethereum
     .request({
       method: 'eth_sendTransaction',
