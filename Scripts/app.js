@@ -72,39 +72,25 @@ changeStateInContractEvent.addEventListener('click', () => {
   //Take input as a string to handle bigNumber values.
   var inputContractText = document.getElementById("setValueSmartContract").value.toString();
  
-  if(!/[~`!#$%\^&*+=\-\[\]\\';,/{}|\\":<>\?]/g.test(inputContractText)){
-    alert("Cannot accept special characters.")
-  } else{ 
-       if (inputContractText[0] == "-") {
-        alert("Cannot accept negative value.")
-      } else{
-               if (inputContractText.includes(".")) {
-                  alert("Cannot accept float value.")
-               }
-               else{
-                      if (/[a-zA-Z]/.test(inputContractText) == true){
-                        alert("Cannot accept inputs with letters.")  
-                      } else {
-                                ethereum
-                                  .request({
-                                    method: 'eth_sendTransaction',
-                                    params: [
-                                      {
-                                        from: accounts[0],
-                                        to: contractAddress_JS,
-                                        data: contractDefined_JS.methods.set(inputContractText).encodeABI()
-                                      },
-                                    ],
-                                  })
-                                  .then((txHash) => console.log(txHash))
-                                  .catch((error) => console.error);
-
-                      }
-               }
-      }
+  if(/^\d+$/.test(inputContractText)) {
+      ethereum
+      .request({
+        method: 'eth_sendTransaction',
+        params: [
+          {
+            from: accounts[0],
+            to: contractAddress_JS,
+            data: contractDefined_JS.methods.set(inputContractText).encodeABI()
+          },
+        ],
+      })
+      .then((txHash) => console.log(txHash))
+      .catch((error) => console.error);
+  } else {
+      alert("Can only accept numeric characters.")
   }
+
   
-     
     
 });
 
