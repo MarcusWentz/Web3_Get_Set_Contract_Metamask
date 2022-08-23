@@ -74,33 +74,32 @@ changeStateInContractEvent.addEventListener('click', () => {
  
   if (inputContractText[0] == "-") {
     alert("Cannot accept negative value.")
+  } else{
+           if (inputContractText.includes(".")) {
+              alert("Cannot accept float value.")
+           }
+           else{
+                  if (/[a-zA-Z]/.test(inputContractText) == true){
+                    alert("Cannot accept inputs with letters.")  
+                  } else {
+                            ethereum
+                              .request({
+                                method: 'eth_sendTransaction',
+                                params: [
+                                  {
+                                    from: accounts[0],
+                                    to: contractAddress_JS,
+                                    data: contractDefined_JS.methods.set(inputContractText).encodeABI()
+                                  },
+                                ],
+                              })
+                              .then((txHash) => console.log(txHash))
+                              .catch((error) => console.error);
+                    
+                  }
+           }
   }
-  
-  if (inputContractText.includes(".")) {
-    alert("Cannot accept float value.")
-  }
-  
-  if (inputContractText.includes(".")) {
-    alert("Cannot accept float value.")
-  }
-  
-  if (/[a-zA-Z]/.test(inputContractText) == true){
-    alert("Cannot accept inputs with letters.")  
-  }
- 
-  ethereum
-    .request({
-      method: 'eth_sendTransaction',
-      params: [
-        {
-          from: accounts[0],
-          to: contractAddress_JS,
-          data: contractDefined_JS.methods.set(inputContractText).encodeABI()
-        },
-      ],
-    })
-    .then((txHash) => console.log(txHash))
-    .catch((error) => console.error);
+    
 });
 
 //Get the latest event. Once the event is triggered, website will update value.
