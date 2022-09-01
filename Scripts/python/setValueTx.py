@@ -9,12 +9,12 @@ web3 = Web3(Web3.HTTPProvider(infura_goerli_testnet_url_API))
 print("Connected to Web3? ")
 print(web3.isConnected())
 
-# print("Chain ID? ")
-# print(web3.eth.chain_id())
+print("Chain ID? ")
+print(web3.eth.chain_id) 
 
-# # Read information from the blockchain.
-# print("Current block? ")
-# print(web3.eth.blockNumber)
+# Read information from the blockchain.
+print("Current block? ")
+print(web3.eth.blockNumber)
 
 balance = web3.eth.getBalance("0xc1202e7d42655F23097476f6D48006fE56d38d4f")
 print("Balance [Goerli ether]" )
