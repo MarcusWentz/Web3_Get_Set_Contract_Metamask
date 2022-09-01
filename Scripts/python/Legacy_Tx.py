@@ -10,7 +10,7 @@ print("Connected to Web3? ")
 print(web3.isConnected())
 
 print("Chain ID? ")
-print(web3.eth.chain_id) 
+print(web3.eth.chain_id)
 
 # Read information from the blockchain.
 print("Current block? ")
@@ -32,5 +32,6 @@ tx = {
     'gasPrice': web3.toWei('10', 'gwei'), # https://etherscan.io/gastracker
     'data': contract_Call.encodeABI(fn_name='set', args=[999])
 }
+
 signed_tx = web3.eth.account.signTransaction(tx, devTestnetPrivateKey)
 print(web3.toHex(web3.eth.sendRawTransaction(signed_tx.rawTransaction)))
