@@ -22,92 +22,140 @@ import (
 )
 
 func main() {
-    //Get smart contract starting state.
-    client, err := ethclient.Dial(os.Getenv("goerliWebSocketSecureEventsInfuraAPIKey"))
-    // client, err := ethclient.Dial("http://localhost/8545")
 
-    if err != nil {
-        log.Fatal(err)
-    }
+     // Use this endpoint when you are running your own node on a specific chain (no events)
+     // client, chainID := clientSetup(os.Getenv("http://localhost/8545"))
 
-    chainID, err := client.NetworkID(context.Background())
-     if err != nil {
-         log.Fatal(err)
-     }
-     fmt.Println("Chain id: ", chainID)
+     // Use this endpoint when you are running your own node on a specific chain (events allowed)
+     // client, chainID := clientSetup(os.Getenv("ws://localhost/8546"))
+
+     client, chainID := clientSetup(os.Getenv("goerliWebSocketSecureEventsInfuraAPIKey"))
+     fmt.Println("chainID: ", chainID)
 
      contractAddress := common.HexToAddress("0xdbaA7dfBd9125B7a43457D979B1f8a1Bd8687f37")
-     contract, err := NewStore(contractAddress, client)
-     if err != nil {
-         log.Fatal(err)
-     }
-     fmt.Println("Contract is loaded at address", contractAddress)
+     contract := connectContractAddress(client,contractAddress)
 
-     storedData, err := contract.StoredData(&bind.CallOpts{})
-       if err != nil {
-           log.Fatal(err)
-     }
+     auth, fromAddress := connectWallet(os.Getenv("devTestnetPrivateKey"),client,chainID)
+
+     storedData := getstoredData(contract)
      fmt.Println("storedData:", storedData)
 
-     //Set new value for smart contract uint storage slot.
-     privateKey, err := crypto.HexToECDSA(os.Getenv("devTestnetPrivateKey"))
-      if err != nil {
+     setUintValue := big.NewInt(777)
+     SetStoredDataTx(setUintValue,client,auth,fromAddress,contract);
+
+     ListenForEvents(client, contractAddress, contract)
+
+}
+
+func clientSetup(wssConnectionURL string) (client *ethclient.Client, chainID *big.Int) {
+
+  client, err := ethclient.Dial(wssConnectionURL)
+  if err != nil {
+      log.Fatal(err)
+  }
+
+  chainID, err = client.NetworkID(context.Background())
+  if err != nil {
+     log.Fatal(err)
+  }
+  return
+}
+
+func connectContractAddress(client *ethclient.Client, contractAddress common.Address) (contract *Store) {
+
+  contract, err := NewStore(contractAddress, client)
+  if err != nil {
+      log.Fatal(err)
+  }
+  return
+}
+
+func connectWallet(privateKeyString string, client *ethclient.Client, chainID *big.Int) (auth *bind.TransactOpts, fromAddress common.Address) {
+
+   privateKey, err := crypto.HexToECDSA(privateKeyString)
+   if err != nil {
+       log.Fatal(err)
+   }
+
+   publicKey := privateKey.Public()
+   publicKeyECDSA, ok := publicKey.(*ecdsa.PublicKey)
+   if !ok {
+       log.Fatal("error casting public key to ECDSA")
+   }
+
+   fromAddress = crypto.PubkeyToAddress(*publicKeyECDSA)
+
+   auth, err = bind.NewKeyedTransactorWithChainID(privateKey, chainID)
+   if err != nil {
+       log.Fatal(err)
+   }
+
+   return
+
+}
+
+func getstoredData(contract *Store) (storedData *big.Int) {
+
+  storedData, err := contract.StoredData(&bind.CallOpts{})
+  if err != nil {
+        log.Fatal(err)
+  }
+  return
+
+}
+
+func SetStoredDataTx(setUintValue *big.Int, client *ethclient.Client, auth *bind.TransactOpts, fromAddress common.Address, contract *Store) {
+
+  gasPrice, err := client.SuggestGasPrice(context.Background())
+  if err != nil {
+      log.Fatal(err)
+  }
+
+  nonce, err := client.PendingNonceAt(context.Background(), fromAddress)
+  if err != nil {
+      log.Fatal(err)
+  }
+
+  auth.Nonce = big.NewInt(int64(nonce))
+  auth.GasLimit = uint64(300000) // in units
+  auth.GasPrice = gasPrice
+  auth.Value = big.NewInt(0)     // in wei
+
+  tx, err := contract.Set(auth, setUintValue)
+  if err != nil {
+      log.Fatal(err)
+  }
+  fmt.Println("Tx hash:", tx.Hash().Hex()) // tx sent
+
+  return
+}
+
+func ListenForEvents(client *ethclient.Client, contractAddress common.Address, contract *Store) {
+  //Subscribe to events from smart contract address.
+  query := ethereum.FilterQuery{
+      Addresses: []common.Address{contractAddress},
+  }
+
+  logs := make(chan types.Log)
+  sub, err := client.SubscribeFilterLogs(context.Background(), query, logs)
+  if err != nil {
+      log.Fatal(err)
+  }
+
+  for {
+      select {
+      case err := <-sub.Err():
           log.Fatal(err)
+      case vLog := <-logs:
+          fmt.Println("New Event Log:", vLog) // pointer to event log
+
+          storedData, err := contract.StoredData(&bind.CallOpts{})
+            if err != nil {
+                log.Fatal(err)
+          }
+          fmt.Println("storedData:", storedData)
       }
+  }
 
-      publicKey := privateKey.Public()
-      publicKeyECDSA, ok := publicKey.(*ecdsa.PublicKey)
-      if !ok {
-          log.Fatal("error casting public key to ECDSA")
-      }
-
-      fromAddress := crypto.PubkeyToAddress(*publicKeyECDSA)
-      nonce, err := client.PendingNonceAt(context.Background(), fromAddress)
-      if err != nil {
-          log.Fatal(err)
-      }
-
-      gasPrice, err := client.SuggestGasPrice(context.Background())
-      if err != nil {
-          log.Fatal(err)
-      }
-
-      auth := bind.NewKeyedTransactor(privateKey)
-      auth.Nonce = big.NewInt(int64(nonce))
-      auth.GasLimit = uint64(300000) // in units
-      auth.GasPrice = gasPrice
-      auth.Value = big.NewInt(0)     // in wei
-
-      setUintValue := big.NewInt(2222222)
-      tx, err := contract.Set(auth, setUintValue)
-      if err != nil {
-          log.Fatal(err)
-      }
-      fmt.Println("Tx hash:", tx.Hash().Hex()) // tx sent
-
-     //Subscribe to events from smart contract address.
-     query := ethereum.FilterQuery{
-         Addresses: []common.Address{contractAddress},
-     }
-
-     logs := make(chan types.Log)
-     sub, err := client.SubscribeFilterLogs(context.Background(), query, logs)
-     if err != nil {
-         log.Fatal(err)
-     }
-
-     for {
-         select {
-         case err := <-sub.Err():
-             log.Fatal(err)
-         case vLog := <-logs:
-             fmt.Println("New Event Log:", vLog) // pointer to event log
-
-             storedData, err := contract.StoredData(&bind.CallOpts{})
-               if err != nil {
-                   log.Fatal(err)
-             }
-             fmt.Println("storedData:", storedData)
-         }
-     }
+  return
 }
