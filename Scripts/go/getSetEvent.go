@@ -24,6 +24,8 @@ import (
 func main() {
     //Get smart contract starting state.
     client, err := ethclient.Dial(os.Getenv("goerliWebSocketSecureEventsInfuraAPIKey"))
+    // client, err := ethclient.Dial("http://localhost/8545")
+
     if err != nil {
         log.Fatal(err)
     }
@@ -35,7 +37,7 @@ func main() {
      fmt.Println("Chain id: ", chainID)
 
      contractAddress := common.HexToAddress("0xdbaA7dfBd9125B7a43457D979B1f8a1Bd8687f37")
-     contract, err := NewMain(contractAddress, client)
+     contract, err := NewStore(contractAddress, client)
      if err != nil {
          log.Fatal(err)
      }
