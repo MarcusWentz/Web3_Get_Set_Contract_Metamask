@@ -40,10 +40,10 @@ func main() {
      storedData := getstoredData(contract)
      fmt.Println("storedData:", storedData)
 
-     setUintValue := big.NewInt(777)
+     setUintValue := big.NewInt(77777)
      SetStoredDataTx(setUintValue,client,auth,fromAddress,contract);
 
-     ListenForEvents(client, contractAddress, contract)
+     SubscribeToEvents(client, contractAddress, contract)
 
 }
 
@@ -130,7 +130,7 @@ func SetStoredDataTx(setUintValue *big.Int, client *ethclient.Client, auth *bind
   return
 }
 
-func ListenForEvents(client *ethclient.Client, contractAddress common.Address, contract *Store) {
+func SubscribeToEvents(client *ethclient.Client, contractAddress common.Address, contract *Store) {
   //Subscribe to events from smart contract address.
   query := ethereum.FilterQuery{
       Addresses: []common.Address{contractAddress},
