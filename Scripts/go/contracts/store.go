@@ -1,7 +1,7 @@
 // Code generated - DO NOT EDIT.
 // This file is a generated binding and any manual changes will be lost.
 
-package main
+package store
 
 import (
 	"errors"
@@ -30,12 +30,34 @@ var (
 
 // StoreMetaData contains all meta data concerning the Store contract.
 var StoreMetaData = &bind.MetaData{
-	ABI: "[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"date\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"valueChangeEventWenjs\",\"type\":\"uint256\"}],\"name\":\"setValueUpdatedViaWebjs\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"x\",\"type\":\"uint256\"}],\"name\":\"set\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"storedData\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"}]",
+	ABI: "[{\"anonymous\":false,\"inputs\":[],\"name\":\"setEvent\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"x\",\"type\":\"uint256\"}],\"name\":\"set\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"storedData\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"}]",
+	Bin: "0x608060405234801561001057600080fd5b50610179806100206000396000f3fe608060405234801561001057600080fd5b50600436106100365760003560e01c80632a1afcd91461003b57806360fe47b114610059575b600080fd5b610043610075565b60405161005091906100ca565b60405180910390f35b610073600480360381019061006e9190610116565b61007b565b005b60005481565b806000819055507f24a4f809cc1bf5b0f3c16b615535b56a0b583b1630e06e32b46b759b8088a95d60405160405180910390a150565b6000819050919050565b6100c4816100b1565b82525050565b60006020820190506100df60008301846100bb565b92915050565b600080fd5b6100f3816100b1565b81146100fe57600080fd5b50565b600081359050610110816100ea565b92915050565b60006020828403121561012c5761012b6100e5565b5b600061013a84828501610101565b9150509291505056fea2646970667358221220a05b36e46442a589828aa3e1c78ad063b710d76f93f4420692e792c47f223b3664736f6c634300080f0033",
 }
 
 // StoreABI is the input ABI used to generate the binding from.
 // Deprecated: Use StoreMetaData.ABI instead.
 var StoreABI = StoreMetaData.ABI
+
+// StoreBin is the compiled bytecode used for deploying new contracts.
+// Deprecated: Use StoreMetaData.Bin instead.
+var StoreBin = StoreMetaData.Bin
+
+// DeployStore deploys a new Ethereum contract, binding an instance of Store to it.
+func DeployStore(auth *bind.TransactOpts, backend bind.ContractBackend) (common.Address, *types.Transaction, *Store, error) {
+	parsed, err := StoreMetaData.GetAbi()
+	if err != nil {
+		return common.Address{}, nil, nil, err
+	}
+	if parsed == nil {
+		return common.Address{}, nil, nil, errors.New("GetABI returned nil")
+	}
+
+	address, tx, contract, err := bind.DeployContract(auth, *parsed, common.FromHex(StoreBin), backend)
+	if err != nil {
+		return common.Address{}, nil, nil, err
+	}
+	return address, tx, &Store{StoreCaller: StoreCaller{contract: contract}, StoreTransactor: StoreTransactor{contract: contract}, StoreFilterer: StoreFilterer{contract: contract}}, nil
+}
 
 // Store is an auto generated Go binding around an Ethereum contract.
 type Store struct {
@@ -231,9 +253,9 @@ func (_Store *StoreTransactorSession) Set(x *big.Int) (*types.Transaction, error
 	return _Store.Contract.Set(&_Store.TransactOpts, x)
 }
 
-// StoreSetValueUpdatedViaWebjsIterator is returned from FilterSetValueUpdatedViaWebjs and is used to iterate over the raw logs and unpacked data for SetValueUpdatedViaWebjs events raised by the Store contract.
-type StoreSetValueUpdatedViaWebjsIterator struct {
-	Event *StoreSetValueUpdatedViaWebjs // Event containing the contract specifics and raw log
+// StoreSetEventIterator is returned from FilterSetEvent and is used to iterate over the raw logs and unpacked data for SetEvent events raised by the Store contract.
+type StoreSetEventIterator struct {
+	Event *StoreSetEvent // Event containing the contract specifics and raw log
 
 	contract *bind.BoundContract // Generic contract to use for unpacking event data
 	event    string              // Event name to use for unpacking event data
@@ -247,7 +269,7 @@ type StoreSetValueUpdatedViaWebjsIterator struct {
 // Next advances the iterator to the subsequent event, returning whether there
 // are any more events found. In case of a retrieval or parsing error, false is
 // returned and Error() can be queried for the exact failure.
-func (it *StoreSetValueUpdatedViaWebjsIterator) Next() bool {
+func (it *StoreSetEventIterator) Next() bool {
 	// If the iterator failed, stop iterating
 	if it.fail != nil {
 		return false
@@ -256,7 +278,7 @@ func (it *StoreSetValueUpdatedViaWebjsIterator) Next() bool {
 	if it.done {
 		select {
 		case log := <-it.logs:
-			it.Event = new(StoreSetValueUpdatedViaWebjs)
+			it.Event = new(StoreSetEvent)
 			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
 				it.fail = err
 				return false
@@ -271,7 +293,7 @@ func (it *StoreSetValueUpdatedViaWebjsIterator) Next() bool {
 	// Iterator still in progress, wait for either a data or an error event
 	select {
 	case log := <-it.logs:
-		it.Event = new(StoreSetValueUpdatedViaWebjs)
+		it.Event = new(StoreSetEvent)
 		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
 			it.fail = err
 			return false
@@ -287,61 +309,40 @@ func (it *StoreSetValueUpdatedViaWebjsIterator) Next() bool {
 }
 
 // Error returns any retrieval or parsing error occurred during filtering.
-func (it *StoreSetValueUpdatedViaWebjsIterator) Error() error {
+func (it *StoreSetEventIterator) Error() error {
 	return it.fail
 }
 
 // Close terminates the iteration process, releasing any pending underlying
 // resources.
-func (it *StoreSetValueUpdatedViaWebjsIterator) Close() error {
+func (it *StoreSetEventIterator) Close() error {
 	it.sub.Unsubscribe()
 	return nil
 }
 
-// StoreSetValueUpdatedViaWebjs represents a SetValueUpdatedViaWebjs event raised by the Store contract.
-type StoreSetValueUpdatedViaWebjs struct {
-	Date                  *big.Int
-	From                  common.Address
-	ValueChangeEventWenjs *big.Int
-	Raw                   types.Log // Blockchain specific contextual infos
+// StoreSetEvent represents a SetEvent event raised by the Store contract.
+type StoreSetEvent struct {
+	Raw types.Log // Blockchain specific contextual infos
 }
 
-// FilterSetValueUpdatedViaWebjs is a free log retrieval operation binding the contract event 0x23b4b512eee3e56a602299265da2e1ae5bf14e71a1b31985c23465515f321c9c.
+// FilterSetEvent is a free log retrieval operation binding the contract event 0x24a4f809cc1bf5b0f3c16b615535b56a0b583b1630e06e32b46b759b8088a95d.
 //
-// Solidity: event setValueUpdatedViaWebjs(uint256 indexed date, address indexed from, uint256 valueChangeEventWenjs)
-func (_Store *StoreFilterer) FilterSetValueUpdatedViaWebjs(opts *bind.FilterOpts, date []*big.Int, from []common.Address) (*StoreSetValueUpdatedViaWebjsIterator, error) {
+// Solidity: event setEvent()
+func (_Store *StoreFilterer) FilterSetEvent(opts *bind.FilterOpts) (*StoreSetEventIterator, error) {
 
-	var dateRule []interface{}
-	for _, dateItem := range date {
-		dateRule = append(dateRule, dateItem)
-	}
-	var fromRule []interface{}
-	for _, fromItem := range from {
-		fromRule = append(fromRule, fromItem)
-	}
-
-	logs, sub, err := _Store.contract.FilterLogs(opts, "setValueUpdatedViaWebjs", dateRule, fromRule)
+	logs, sub, err := _Store.contract.FilterLogs(opts, "setEvent")
 	if err != nil {
 		return nil, err
 	}
-	return &StoreSetValueUpdatedViaWebjsIterator{contract: _Store.contract, event: "setValueUpdatedViaWebjs", logs: logs, sub: sub}, nil
+	return &StoreSetEventIterator{contract: _Store.contract, event: "setEvent", logs: logs, sub: sub}, nil
 }
 
-// WatchSetValueUpdatedViaWebjs is a free log subscription operation binding the contract event 0x23b4b512eee3e56a602299265da2e1ae5bf14e71a1b31985c23465515f321c9c.
+// WatchSetEvent is a free log subscription operation binding the contract event 0x24a4f809cc1bf5b0f3c16b615535b56a0b583b1630e06e32b46b759b8088a95d.
 //
-// Solidity: event setValueUpdatedViaWebjs(uint256 indexed date, address indexed from, uint256 valueChangeEventWenjs)
-func (_Store *StoreFilterer) WatchSetValueUpdatedViaWebjs(opts *bind.WatchOpts, sink chan<- *StoreSetValueUpdatedViaWebjs, date []*big.Int, from []common.Address) (event.Subscription, error) {
+// Solidity: event setEvent()
+func (_Store *StoreFilterer) WatchSetEvent(opts *bind.WatchOpts, sink chan<- *StoreSetEvent) (event.Subscription, error) {
 
-	var dateRule []interface{}
-	for _, dateItem := range date {
-		dateRule = append(dateRule, dateItem)
-	}
-	var fromRule []interface{}
-	for _, fromItem := range from {
-		fromRule = append(fromRule, fromItem)
-	}
-
-	logs, sub, err := _Store.contract.WatchLogs(opts, "setValueUpdatedViaWebjs", dateRule, fromRule)
+	logs, sub, err := _Store.contract.WatchLogs(opts, "setEvent")
 	if err != nil {
 		return nil, err
 	}
@@ -351,8 +352,8 @@ func (_Store *StoreFilterer) WatchSetValueUpdatedViaWebjs(opts *bind.WatchOpts, 
 			select {
 			case log := <-logs:
 				// New log arrived, parse the event and forward to the user
-				event := new(StoreSetValueUpdatedViaWebjs)
-				if err := _Store.contract.UnpackLog(event, "setValueUpdatedViaWebjs", log); err != nil {
+				event := new(StoreSetEvent)
+				if err := _Store.contract.UnpackLog(event, "setEvent", log); err != nil {
 					return err
 				}
 				event.Raw = log
@@ -373,12 +374,12 @@ func (_Store *StoreFilterer) WatchSetValueUpdatedViaWebjs(opts *bind.WatchOpts, 
 	}), nil
 }
 
-// ParseSetValueUpdatedViaWebjs is a log parse operation binding the contract event 0x23b4b512eee3e56a602299265da2e1ae5bf14e71a1b31985c23465515f321c9c.
+// ParseSetEvent is a log parse operation binding the contract event 0x24a4f809cc1bf5b0f3c16b615535b56a0b583b1630e06e32b46b759b8088a95d.
 //
-// Solidity: event setValueUpdatedViaWebjs(uint256 indexed date, address indexed from, uint256 valueChangeEventWenjs)
-func (_Store *StoreFilterer) ParseSetValueUpdatedViaWebjs(log types.Log) (*StoreSetValueUpdatedViaWebjs, error) {
-	event := new(StoreSetValueUpdatedViaWebjs)
-	if err := _Store.contract.UnpackLog(event, "setValueUpdatedViaWebjs", log); err != nil {
+// Solidity: event setEvent()
+func (_Store *StoreFilterer) ParseSetEvent(log types.Log) (*StoreSetEvent, error) {
+	event := new(StoreSetEvent)
+	if err := _Store.contract.UnpackLog(event, "setEvent", log); err != nil {
 		return nil, err
 	}
 	event.Raw = log

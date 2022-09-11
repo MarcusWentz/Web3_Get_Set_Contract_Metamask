@@ -1,8 +1,8 @@
-//Step 1: Create abi file by running: solc --abi Store.sol > Store_sol_Store.abi
-//Step 2: Create bin file by running: solc --bin Store.sol > Store_sol_Store.bin
+//Step 1: Create abi file by running: solc --abi Store.sol > store.abi
+//Step 2: Create bin file by running: solc --bin Store.sol > store.bin
 //Step 3: Remove comments above the abi and bin files.
-//Step 4: Generate Go contract interaction file by running:  abigen --bin=Store_sol_Store.bin --abi=Store_sol_Store.abi --pkg=main --out=Store.go
-//Step 5: Run: getSetEvent.go Store.go
+//Step 4: Generate Go contract interaction file by running:  abigen --bin=store.bin --abi=store.abi --pkg=store --out=store.go
+//Step 5: Run: getSetEvent.go
 package main
 
 import (
@@ -12,6 +12,8 @@ import (
     "context"
     "crypto/ecdsa"
     "math/big"
+
+    store "storeProject/contracts" //LOOK AT "go.mod" FOR YOUR RELATIVE PROJECT PATH TO FIND CONTRACT INTERFACE!
 
     "github.com/ethereum/go-ethereum"
     "github.com/ethereum/go-ethereum/accounts/abi/bind"
@@ -34,13 +36,16 @@ func main() {
 
      contractAddress := common.HexToAddress("0xdbaA7dfBd9125B7a43457D979B1f8a1Bd8687f37")
      contract := connectContractAddress(client,contractAddress)
+     fmt.Println("contract type object: ")
+     fmt.Printf("%T",contract)
+     fmt.Println("")
 
      auth, fromAddress := connectWallet(os.Getenv("devTestnetPrivateKey"),client,chainID)
 
      storedData := getstoredData(contract)
      fmt.Println("storedData:", storedData)
 
-     setUintValue := big.NewInt(77777)
+     setUintValue := big.NewInt(444)
      SetStoredDataTx(setUintValue,client,auth,fromAddress,contract);
 
      SubscribeToEvents(client, contractAddress, contract)
@@ -61,9 +66,9 @@ func clientSetup(wssConnectionURL string) (client *ethclient.Client, chainID *bi
   return
 }
 
-func connectContractAddress(client *ethclient.Client, contractAddress common.Address) (contract *Store) {
+func connectContractAddress(client *ethclient.Client, contractAddress common.Address) (contract *store.Store) {
 
-  contract, err := NewStore(contractAddress, client)
+  contract, err := store.NewStore(contractAddress, client)
   if err != nil {
       log.Fatal(err)
   }
@@ -94,7 +99,7 @@ func connectWallet(privateKeyString string, client *ethclient.Client, chainID *b
 
 }
 
-func getstoredData(contract *Store) (storedData *big.Int) {
+func getstoredData(contract *store.Store) (storedData *big.Int) {
 
   storedData, err := contract.StoredData(&bind.CallOpts{})
   if err != nil {
@@ -104,7 +109,7 @@ func getstoredData(contract *Store) (storedData *big.Int) {
 
 }
 
-func SetStoredDataTx(setUintValue *big.Int, client *ethclient.Client, auth *bind.TransactOpts, fromAddress common.Address, contract *Store) {
+func SetStoredDataTx(setUintValue *big.Int, client *ethclient.Client, auth *bind.TransactOpts, fromAddress common.Address, contract *store.Store) {
 
   gasPrice, err := client.SuggestGasPrice(context.Background())
   if err != nil {
@@ -130,7 +135,7 @@ func SetStoredDataTx(setUintValue *big.Int, client *ethclient.Client, auth *bind
   return
 }
 
-func SubscribeToEvents(client *ethclient.Client, contractAddress common.Address, contract *Store) {
+func SubscribeToEvents(client *ethclient.Client, contractAddress common.Address, contract *store.Store) {
   //Subscribe to events from smart contract address.
   query := ethereum.FilterQuery{
       Addresses: []common.Address{contractAddress},
