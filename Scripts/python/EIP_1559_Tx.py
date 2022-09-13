@@ -30,8 +30,8 @@ EIP_1559_tx = {
     'to': Contract_At_Address, #WORKS WITH REGULAR WALLETS BUT CANNOT SEND TO CONTRACT FOR SOME REASON?
     'gas': 2100000, #GAS LIMIT. REMOVED FIXED GAS PRICE. NOW DYNAMIC.
     # 'gasPrice': web3.toWei('50', 'gwei'), # https://etherscan.io/gastracker
-    'maxFeePerGas': web3.toWei(60, 'gwei'),
-    'maxPriorityFeePerGas': web3.toWei(50, 'gwei'),
+    'maxFeePerGas': web3.toWei(30, 'gwei'),
+    'maxPriorityFeePerGas': web3.toWei(20, 'gwei'),
     'chainId' : web3.eth.chain_id,
     'data' : contract_Call.encodeABI(fn_name='set', args=[23131])
 }

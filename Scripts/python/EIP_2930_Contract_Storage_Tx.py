@@ -30,11 +30,12 @@ EIP_2930_tx = {
     'to': Contract_At_Address, #WORKS WITH REGULAR WALLETS BUT CANNOT SEND TO CONTRACT FOR SOME REASON?
     'gas': 2000000, #WORKS WITH 1000000. If not try : Remix > deploy and run transactions
     # 'gasPrice': web3.toWei('50', 'gwei'), # https://etherscan.io/gastracker
-    'maxFeePerGas': web3.toWei(65, 'gwei'),
-    'maxPriorityFeePerGas':  web3.toWei(55, 'gwei'),
+    'maxFeePerGas': web3.toWei(30, 'gwei'),
+    'maxPriorityFeePerGas':  web3.toWei(20, 'gwei'),
     'chainId' : web3.eth.chain_id,
     'data' : contract_Call.encodeABI(fn_name='set', args=[999]) ,
-    'accessList' :               [
+    'accessList' :
+                [
                     {
                         "address" : Contract_At_Address,
                         "storageKeys": [
@@ -42,7 +43,6 @@ EIP_2930_tx = {
                         ]
                     }
                 ]
-
 }
 
 signed_tx = web3.eth.account.signTransaction(EIP_2930_tx, devTestnetPrivateKey)
