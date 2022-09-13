@@ -3,8 +3,9 @@ import json
 import os
 
 infura_goerli_testnet_url_API = str(os.environ['goerliHTTPS_InfuraAPIKey']);
-devTestnetPrivateKey = str(os.environ['devTestnetPrivateKey']);
 web3 = Web3(Web3.HTTPProvider(infura_goerli_testnet_url_API))
+
+devTestnetPrivateKey = str(os.environ['devTestnetPrivateKey']);
 
 print("Connected to Web3? ")
 print(web3.isConnected())
@@ -26,7 +27,7 @@ weiMsgValueToSend = 1
 EIP_2930_tx = {
     'nonce':  web3.eth.getTransactionCount("0xc1202e7d42655F23097476f6D48006fE56d38d4f")       ,
     'to': walletAddressSentMsgValueTo, #WORKS WITH REGULAR WALLETS BUT CANNOT SEND TO CONTRACT FOR SOME REASON?
-    'gas': 2000000, #WORKS WITH 1000000. If not try : Remix > deploy and run transactions
+    'gas': 2100000, #WORKS WITH 1000000. If not try : Remix > deploy and run transactions
     'maxFeePerGas': web3.toWei(30, 'gwei'),
     'maxPriorityFeePerGas':  web3.toWei(20, 'gwei'),
     'chainId' : web3.eth.chain_id,

@@ -3,8 +3,9 @@ import json
 import os
 
 infura_goerli_testnet_url_API = str(os.environ['goerliHTTPS_InfuraAPIKey']);
-devTestnetPrivateKey = str(os.environ['devTestnetPrivateKey']);
 web3 = Web3(Web3.HTTPProvider(infura_goerli_testnet_url_API))
+
+devTestnetPrivateKey = str(os.environ['devTestnetPrivateKey']);
 
 print("Connected to Web3? ")
 print(web3.isConnected())
@@ -28,7 +29,7 @@ print(contract_Call.functions.storedData().call());
 EIP_1559_tx = {
     'nonce':  web3.eth.getTransactionCount("0xc1202e7d42655F23097476f6D48006fE56d38d4f")       ,
     'to': Contract_At_Address, #WORKS WITH REGULAR WALLETS BUT CANNOT SEND TO CONTRACT FOR SOME REASON?
-    'gas': 2100000, #GAS LIMIT. REMOVED FIXED GAS PRICE. NOW DYNAMIC.
+    'gas': 2000000, #GAS LIMIT. REMOVED FIXED GAS PRICE. NOW DYNAMIC.
     # 'gasPrice': web3.toWei('50', 'gwei'), # https://etherscan.io/gastracker
     'maxFeePerGas': web3.toWei(30, 'gwei'),
     'maxPriorityFeePerGas': web3.toWei(20, 'gwei'),
