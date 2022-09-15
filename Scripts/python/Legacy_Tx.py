@@ -7,6 +7,8 @@ web3 = Web3(Web3.HTTPProvider(infura_goerli_testnet_url_API))
 
 devTestnetPrivateKey = str(os.environ['devTestnetPrivateKey']);
 
+userWallet = "0xc1202e7d42655F23097476f6D48006fE56d38d4f"
+
 print("Connected to Web3? ")
 print(web3.isConnected())
 
@@ -17,7 +19,7 @@ print(web3.eth.chain_id)
 print("Current block? ")
 print(web3.eth.blockNumber)
 
-balance = web3.eth.getBalance("0xc1202e7d42655F23097476f6D48006fE56d38d4f")
+balance = web3.eth.getBalance(userWallet)
 print("Balance [Goerli ether]" )
 print(web3.fromWei(balance, "ether") )
 
@@ -27,7 +29,7 @@ contract_Call = web3.eth.contract(address = Contract_At_Address , abi = abi_Cont
 print(contract_Call.functions.storedData().call());
 
 tx = {
-    'nonce':  web3.eth.getTransactionCount("0xc1202e7d42655F23097476f6D48006fE56d38d4f")       ,
+    'nonce':  web3.eth.getTransactionCount(userWallet)       ,
     'to': Contract_At_Address, #WORKS WITH REGULAR WALLETS BUT CANNOT SEND TO CONTRACT FOR SOME REASON?
     'gas': 2100000, #WORKS WITH 1000000. If not try : Remix > deploy and run transactions
     'gasPrice': web3.toWei('30', 'gwei'), # https://etherscan.io/gastracker

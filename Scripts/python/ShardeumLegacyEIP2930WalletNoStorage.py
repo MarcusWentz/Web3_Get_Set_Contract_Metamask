@@ -21,7 +21,7 @@ print(web3.eth.chain_id)
 print("Current block? ")
 print(web3.eth.blockNumber)
 
-balance = web3.eth.getBalance("0xc1202e7d42655F23097476f6D48006fE56d38d4f")
+balance = web3.eth.getBalance(userWallet)
 print("Balance [Shardeum SHM]" )
 print(web3.fromWei(balance, "ether") )
 
