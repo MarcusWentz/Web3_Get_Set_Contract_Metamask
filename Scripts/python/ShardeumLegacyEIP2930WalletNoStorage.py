@@ -9,6 +9,8 @@ web3 = Web3(Web3.HTTPProvider(ShardeumConnectionHTTPS))
 
 devTestnetPrivateKey = str(os.environ['devTestnetPrivateKey']);
 
+userWallet = "0xc1202e7d42655F23097476f6D48006fE56d38d4f"
+
 print("Connected to Web3? ")
 print(web3.isConnected())
 
@@ -20,7 +22,7 @@ print("Current block? ")
 print(web3.eth.blockNumber)
 
 balance = web3.eth.getBalance("0xc1202e7d42655F23097476f6D48006fE56d38d4f")
-print("Balance [Goerli ether]" )
+print("Balance [Shardeum SHM]" )
 print(web3.fromWei(balance, "ether") )
 
 # Contract_At_Address= web3.toChecksumAddress("0xdbaA7dfBd9125B7a43457D979B1f8a1Bd8687f37");
@@ -32,7 +34,7 @@ weiMsgValueToSend = 1
 
 tx = {
     'chainId' : web3.eth.chain_id,
-    'nonce':  web3.eth.getTransactionCount("0xc1202e7d42655F23097476f6D48006fE56d38d4f")       ,
+    'nonce':  web3.eth.getTransactionCount(userWallet)       ,
     'to': walletAddressSentMsgValueTo, #WORKS WITH REGULAR WALLETS BUT CANNOT SEND TO CONTRACT FOR SOME REASON?
     'gas': 30000, #WORKS WITH 1000000. If not try : Remix > deploy and run transactions
     'gasPrice': web3.toWei('10', 'gwei'), # https://etherscan.io/gastracker
