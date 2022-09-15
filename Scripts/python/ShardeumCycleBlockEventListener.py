@@ -14,7 +14,7 @@ print("Chain ID? ")
 print(web3.eth.chain_id)
 
 while True:
-    print("Current cycle (1 cycle = 10 blocks) ")
-    cycle =  (math.floor(web3.eth.blockNumber/10))  #Divide current block number by 10, then round down to get cycle.
+    print("Current cycle (1 cycle = 10 blocks [bundles]) ")
+    cycle =  (math.floor(web3.eth.blockNumber/10))  #Divide current bundle [block] by 10, then round down to get cycle.
     print(cycle)
     time.sleep(60)   #1 cycle roughly every 60 seconds based on explorer: https://explorer.liberty20.shardeum.org/cycle
