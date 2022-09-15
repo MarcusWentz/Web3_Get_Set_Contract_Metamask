@@ -7,7 +7,8 @@ web3 = Web3(Web3.HTTPProvider(infura_goerli_testnet_url_API))
 
 devTestnetPrivateKey = str(os.environ['devTestnetPrivateKey']);
 
-userWallet = "0xc1202e7d42655F23097476f6D48006fE56d38d4f"
+userWallet = (web3.eth.account.from_key(devTestnetPrivateKey)).address
+print(userWallet)
 
 print("Connected to Web3? ")
 print(web3.isConnected())
