@@ -43,6 +43,12 @@ EIP_2930_tx = {
     'accessList' :
                 [
                     {
+                        "address" : Contract_At_Address,
+                        "storageKeys": [
+                            "0x0000000000000000000000000000000000000000000000000000000000000002",
+                        ]
+                    },
+                    {
                         "address" : ContractOneAddress,
                         "storageKeys": [
                             "0x0000000000000000000000000000000000000000000000000000000000000000",
@@ -52,12 +58,6 @@ EIP_2930_tx = {
                         "address" : ContractTwoAddress,
                         "storageKeys": [
                             "0x0000000000000000000000000000000000000000000000000000000000000001",
-                        ]
-                    },
-                    {
-                        "address" : Contract_At_Address,
-                        "storageKeys": [
-                            "0x0000000000000000000000000000000000000000000000000000000000000002",
                         ]
                     }
                 ]
