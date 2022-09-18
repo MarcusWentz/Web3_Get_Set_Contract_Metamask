@@ -44,8 +44,6 @@ function readJSONLoop(totalTransactions) {
 			res.on('end', function() {
 
 				json_data = JSON.parse(data);
-				// totalTransactions = json_data.totalTransactions
-				// console.log(totalTransactions);
 				console.log(json_data);
 		    let pageIndex = 1;
 

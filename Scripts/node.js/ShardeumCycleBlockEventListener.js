@@ -14,19 +14,23 @@ function timeout(ms) {
 	return new Promise(resolve => setTimeout(resolve,ms));
 }
 
-while (true){
+async function listForCycle() {
+  while (true){
 
+    console.log("Current cycle (1 cycle = 10 blocks [bundles]) ")
+    let cycle = await web3.eth.getBlockNumber();
+    console.log(cycle)
+    console.log(Math.floor(cycle/10))
 
+    await timeout(1*timeMilliSec)
 
-  timeout(60*timeMilliSec)
-
+  }
 }
+
+listForCycle()
+
 /////////////////////////////////////PYTHON:
 
-    // print("Current cycle (1 cycle = 10 blocks [bundles]) ")
-    // cycle =  (math.floor(web3.eth.blockNumber/10))  #Divide current bundle [block] by 10, then round down to get cycle.
-    // print(cycle)
-    //
     // transactionsInCycleRangeUrlString = "https://explorer.liberty10.shardeum.org/api/transaction?startCycle=" + str(cycle) + "&endCycle=" + str(cycle) + "&address=" + addressToSubscribeTo
     // print(transactionsInCycleRangeUrlString)
     // transactionsInCycleRangeUrlOpened = urlopen(transactionsInCycleRangeUrlString)
