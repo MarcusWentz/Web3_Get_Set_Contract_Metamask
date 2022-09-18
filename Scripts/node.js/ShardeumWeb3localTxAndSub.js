@@ -39,7 +39,15 @@ function createAndSendTx() {
         gasLimit: web3.utils.toHex(300000), // Raise the gas limit to a much higher amount
         gasPrice: web3.utils.toHex(web3.utils.toWei('30', 'gwei')),
         to: contractAddress_JS,
-        data: contractDefined_JS.methods.set(unixTIme).encodeABI()
+        data: contractDefined_JS.methods.set(unixTIme).encodeABI(),
+        accessList: [
+          {
+            address: contractAddress_JS,
+            storageKeys: [
+              "0x0000000000000000000000000000000000000000000000000000000000000000",
+            ],
+          },
+        ],
     }
     // Sign the transaction
     const tx = new Tx(txObject, {chain:'Shardeum'})
