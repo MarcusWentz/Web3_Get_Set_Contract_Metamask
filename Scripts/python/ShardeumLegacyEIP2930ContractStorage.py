@@ -26,10 +26,10 @@ balance = web3.eth.getBalance(userWallet)
 print("Balance [Shardeum SHM]" )
 print(web3.fromWei(balance, "ether") )
 
-Contract_At_Address= web3.toChecksumAddress("0x50684c64F4b80b5687d0891c9339De8fFE281A33");
-abi_Contract = json.loads('[{"anonymous":false,"inputs":[],"name":"setEvent","type":"event"},{"inputs":[{"internalType":"uint256","name":"x","type":"uint256"}],"name":"set","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"storedData","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}]');
+Contract_At_Address= web3.toChecksumAddress("0xE8eb488bEe284ed5b9657D5fc928f90F40BC2d57");
+abi_Contract = json.loads('[{"inputs":[{"internalType":"uint256","name":"x","type":"uint256"}],"name":"set","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"slot0","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}]')
 contract_Call = web3.eth.contract(address = Contract_At_Address , abi = abi_Contract);
-print(contract_Call.functions.storedData().call());
+print(contract_Call.functions.slot0().call());
 
 EIP_2930_tx = {
     'chainId' : web3.eth.chain_id,

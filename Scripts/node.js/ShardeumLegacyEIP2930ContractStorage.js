@@ -10,13 +10,13 @@ web3.eth.getChainId().then(console.log);
 const devTestnetPrivateKey = Buffer.from(process.env.devTestnetPrivateKey, 'hex')
 const devWalletAddress = web3.eth.accounts.privateKeyToAccount(process.env.devTestnetPrivateKey).address;
 
-const contractAddress_JS = '0x50684c64F4b80b5687d0891c9339De8fFE281A33'
-const contractABI_JS = [{"anonymous":false,"inputs":[],"name":"setEvent","type":"event"},{"inputs":[{"internalType":"uint256","name":"x","type":"uint256"}],"name":"set","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"storedData","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}]
+const contractAddress_JS = '0xE8eb488bEe284ed5b9657D5fc928f90F40BC2d57'
+const contractABI_JS = [{"inputs":[{"internalType":"uint256","name":"x","type":"uint256"}],"name":"set","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"slot0","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}]
 
 const contractDefined_JS = new web3.eth.Contract(contractABI_JS, contractAddress_JS)
 
 function checkValueLatest() {
-  contractDefined_JS.methods.storedData().call((err, balance) => {
+  contractDefined_JS.methods.slot0().call((err, balance) => {
     console.log({ err, balance })
   })
 }
@@ -36,9 +36,9 @@ function createAndSendTx() {
             address: contractAddress_JS,
             storageKeys: [
               "0x0000000000000000000000000000000000000000000000000000000000000000",
-            ],
-          },
-        ],
+            ]
+          }
+        ]
     }
     // Sign the transaction
     const tx = new Tx(txObject, {chain:'Shardeum'})

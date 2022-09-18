@@ -11,7 +11,6 @@ contract contractToCall {
 }
 
 contract Multicall {
-    uint public slot0;  //uint is 32 bytes and fills a 32 byte slot. //Do not set 0 manually it wastes gas!
 
     contractToCall public callContractToCall;
 
@@ -20,7 +19,6 @@ contract Multicall {
     }
 
     function multiCall(uint x) public {
-        slot0 = x;                      //Multicall slot2.
         callContractToCall.set(x);
     }
 
