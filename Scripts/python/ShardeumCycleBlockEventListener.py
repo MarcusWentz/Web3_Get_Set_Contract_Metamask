@@ -1,5 +1,4 @@
 from web3 import Web3
-import os
 import time
 import math
 from urllib.request import urlopen
