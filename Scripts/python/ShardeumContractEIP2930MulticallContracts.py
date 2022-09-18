@@ -26,7 +26,7 @@ balance = web3.eth.getBalance(userWallet)
 print("Balance [Shardeum SHM]" )
 print(web3.fromWei(balance, "ether") )
 
-Contract_At_Address= web3.toChecksumAddress("0x7053af6475b2a11Bff65E697E349d66e6580d371");
+Contract_At_Address= web3.toChecksumAddress("0xfE854EB335786037aDb33C36936f679CA127C3CD");
 abi_Contract = json.loads('[{"inputs":[{"internalType":"uint256","name":"x","type":"uint256"}],"name":"multiCall","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"setCallOne","type":"address"},{"internalType":"address","name":"setCallTwo","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[],"name":"callContractOne","outputs":[{"internalType":"contractOne","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"callContractTwo","outputs":[{"internalType":"contractTwo","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"slot0","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"slot1","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"slot2","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}]')
 contract_Call = web3.eth.contract(address = Contract_At_Address , abi = abi_Contract);
 

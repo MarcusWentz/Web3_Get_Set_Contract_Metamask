@@ -4,8 +4,8 @@
 //sudo npm install web3
 
 //RPC LOCAL [LIKE GANACHE], TESTNET [ACTUAL BLOCKCHAIN TO CONNECT TO LIKE GOERLI]
-var Tx = require("ethereumjs-tx")
 const Web3 = require('web3')
+var Tx = require("ethereumjs-tx")
 
 const rpcURL = process.env.goerliWebSocketSecureEventsInfuraAPIKey// Your RPC URL goes here
 const web3 = new Web3(rpcURL)

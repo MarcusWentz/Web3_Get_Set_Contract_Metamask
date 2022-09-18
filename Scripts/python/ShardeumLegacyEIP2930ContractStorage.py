@@ -26,7 +26,7 @@ balance = web3.eth.getBalance(userWallet)
 print("Balance [Shardeum SHM]" )
 print(web3.fromWei(balance, "ether") )
 
-Contract_At_Address= web3.toChecksumAddress("0x82Fa8539F40F7317CEd662130d1F98eE1DE687a2");
+Contract_At_Address= web3.toChecksumAddress("0x50684c64F4b80b5687d0891c9339De8fFE281A33");
 abi_Contract = json.loads('[{"anonymous":false,"inputs":[],"name":"setEvent","type":"event"},{"inputs":[{"internalType":"uint256","name":"x","type":"uint256"}],"name":"set","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"storedData","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}]');
 contract_Call = web3.eth.contract(address = Contract_At_Address , abi = abi_Contract);
 print(contract_Call.functions.storedData().call());
