@@ -10,7 +10,7 @@ web3.eth.getChainId().then(console.log);
 const devTestnetPrivateKey = Buffer.from(process.env.devTestnetPrivateKey, 'hex')
 const devWalletAddress = web3.eth.accounts.privateKeyToAccount(process.env.devTestnetPrivateKey).address;
 
-const contractAddress_JS = '0xfE854EB335786037aDb33C36936f679CA127C3CD'
+const contractAddress_JS = '0xCcc41c8E5BeE781FAe36Af0a801C1eA523067c6F'
 const contractABI_JS = [{"inputs":[{"internalType":"uint256","name":"x","type":"uint256"}],"name":"multiCall","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"setCallOne","type":"address"},{"internalType":"address","name":"setCallTwo","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[],"name":"callContractOne","outputs":[{"internalType":"contractOne","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"callContractTwo","outputs":[{"internalType":"contractTwo","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"slot0","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"slot1","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"slot2","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}]
 
 const contractDefined_JS = new web3.eth.Contract(contractABI_JS, contractAddress_JS)
@@ -43,7 +43,12 @@ function createAndSendTx() {
         gasPrice: web3.utils.toHex(web3.utils.toWei('30', 'gwei')),
         to: contractAddress_JS,
         data: contractDefined_JS.methods.multiCall(unixTIme).encodeABI(),
+        type: 1,
         accessList: [
+          {
+              address : devWalletAddress,
+              storageKeys: []
+          },
           {
             address: contractAddress_JS,
             storageKeys: [
