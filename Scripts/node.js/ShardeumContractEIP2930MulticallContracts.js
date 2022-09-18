@@ -10,61 +10,55 @@ web3.eth.getChainId().then(console.log);
 const devTestnetPrivateKey = Buffer.from(process.env.devTestnetPrivateKey, 'hex')
 const devWalletAddress = web3.eth.accounts.privateKeyToAccount(process.env.devTestnetPrivateKey).address;
 
-const contractAddress_JS = '0xCcc41c8E5BeE781FAe36Af0a801C1eA523067c6F'
-const contractABI_JS = [{"inputs":[{"internalType":"uint256","name":"x","type":"uint256"}],"name":"multiCall","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"setCallOne","type":"address"},{"internalType":"address","name":"setCallTwo","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[],"name":"callContractOne","outputs":[{"internalType":"contractOne","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"callContractTwo","outputs":[{"internalType":"contractTwo","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"slot0","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"slot1","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"slot2","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}]
+const contractAddress_JS = '0x04df04092eb180ff6e23622795b68c868bb8b7cd'
+const contractABI_JS = [{"inputs":[{"internalType":"address","name":"setCallOne","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[],"name":"callContractToCall","outputs":[{"internalType":"contractcontractToCall","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"x","type":"uint256"}],"name":"multiCall","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"slot0","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}]
 
 const contractDefined_JS = new web3.eth.Contract(contractABI_JS, contractAddress_JS)
 
 function checkValueLatest() {
-  contractDefined_JS.methods.slot2().call((err, balance) => {
+  contractDefined_JS.methods.slot0().call((err, balance) => {
     console.log({ err, balance })
   })
 }
 
 function createAndSendTx() {
     let contractOneAddress;
-    let contractTwoAddress;
+    // let contractTwoAddress;
 
-    contractDefined_JS.methods.callContractOne().call((err, getcallContractOne) => {
-      console.log({ err, getcallContractOne })
-      contractOneAddress = getcallContractOne;
+    contractDefined_JS.methods.callContractToCall().call((err, getCallContractToCall) => {
+      console.log({ err, getCallContractToCall })
+      contractOneAddress = getCallContractToCall;
     })
 
-    contractDefined_JS.methods.callContractTwo().call((err, getcallContractTwo) => {
-      console.log({ err, getcallContractTwo })
-      contractTwoAddress = getcallContractTwo;
-    })
+    // contractDefined_JS.methods.callContractTwo().call((err, getcallContractTwo) => {
+    //   console.log({ err, getcallContractTwo })
+    //   contractTwoAddress = getcallContractTwo;
+    // })
 
     const unixTIme = Date.now();
     web3.eth.getTransactionCount(devWalletAddress, (err, txCount) => {
       const txObject = {
         nonce:    web3.utils.toHex(txCount),
-        gasLimit: web3.utils.toHex(300000), // Raise the gas limit to a much higher amount
-        gasPrice: web3.utils.toHex(web3.utils.toWei('30', 'gwei')),
+        gasLimit: web3.utils.toHex(3000000), // Raise the gas limit to a much higher amount
+        gasPrice: web3.utils.toHex(web3.utils.toWei('300', 'gwei')),
         to: contractAddress_JS,
         data: contractDefined_JS.methods.multiCall(unixTIme).encodeABI(),
         type: 1,
         accessList: [
           {
               address : devWalletAddress,
-              storageKeys: []
+              storageKeys: [],
           },
           {
             address: contractAddress_JS,
             storageKeys: [
-              "0x0000000000000000000000000000000000000000000000000000000000000002",
+              "0x0000000000000000000000000000000000000000000000000000000000000000",
             ],
           },
           {
             address: contractOneAddress,
             storageKeys: [
               "0x0000000000000000000000000000000000000000000000000000000000000000",
-            ],
-          },
-          {
-            address: contractTwoAddress,
-            storageKeys: [
-              "0x0000000000000000000000000000000000000000000000000000000000000001",
             ],
           },
         ],
