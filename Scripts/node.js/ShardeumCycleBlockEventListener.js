@@ -23,7 +23,8 @@ async function listenForCycle() {
     console.log(Math.floor(cycle/10))
 
     let totalTransactions = ""
-    let baseUrlCycleAddress = "https://explorer.liberty10.shardeum.org/api/transaction?startCycle=" + cycle + "&endCycle=" + cycle + "&address=" + addressToSubscribeTo
+    let baseUrlCycleAddress = "https://explorer.liberty20.shardeum.org/api/transaction?startCycle=" + cycle + "&endCycle=" + cycle + "&address=" + addressToSubscribeTo
+    console.log(baseUrlCycleAddress)
 
     let req = https.get(baseUrlCycleAddress, function(res) {
       let data = '',

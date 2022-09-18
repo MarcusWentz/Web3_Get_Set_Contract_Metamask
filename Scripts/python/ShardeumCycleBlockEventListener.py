@@ -20,7 +20,7 @@ while True:
     cycle =  (math.floor(web3.eth.blockNumber/10))  #Divide current bundle [block] by 10, then round down to get cycle.
     print(cycle)
 
-    transactionsInCycleRangeUrlString = "https://explorer.liberty10.shardeum.org/api/transaction?startCycle=" + str(cycle) + "&endCycle=" + str(cycle) + "&address=" + addressToSubscribeTo
+    transactionsInCycleRangeUrlString = "https://explorer.liberty20.shardeum.org/api/transaction?startCycle=" + str(cycle) + "&endCycle=" + str(cycle) + "&address=" + addressToSubscribeTo
     print(transactionsInCycleRangeUrlString)
     transactionsInCycleRangeUrlOpened = urlopen(transactionsInCycleRangeUrlString)
     transactionsInCycleRangeUrlJSON = json.loads(transactionsInCycleRangeUrlOpened.read())

@@ -1,7 +1,7 @@
 from urllib.request import urlopen
 import json
 
-transactionsInCycleRangeUrlString = "https://explorer.liberty10.shardeum.org/api/transaction?startCycle=0&endCycle=3000&address=0x0000000000000000000000000000000000000000"
+transactionsInCycleRangeUrlString = "https://explorer.liberty20.shardeum.org/api/transaction?startCycle=0&endCycle=1000&address=0x0000000000000000000000000000000000000000"
 transactionsInCycleRangeUrlOpened = urlopen(transactionsInCycleRangeUrlString)
 transactionsInCycleRangeUrlJSON = json.loads(transactionsInCycleRangeUrlOpened.read())
 totalTransactions = transactionsInCycleRangeUrlJSON["totalTransactions"]
