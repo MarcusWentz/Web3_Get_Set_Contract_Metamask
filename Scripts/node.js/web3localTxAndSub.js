@@ -7,11 +7,14 @@
 var Tx = require("ethereumjs-tx")
 const Web3 = require('web3')
 
-const devWalletaddress = '0xc1202e7d42655F23097476f6D48006fE56d38d4f' // Your account address goes here
-const devTestnetPrivateKey = Buffer.from(process.env.devTestnetPrivateKey, 'hex')
-
 const rpcURL = process.env.goerliWebSocketSecureEventsInfuraAPIKey// Your RPC URL goes here
 const web3 = new Web3(rpcURL)
+
+console.log("chainId:")
+web3.eth.getChainId().then(console.log);
+
+const devTestnetPrivateKey = Buffer.from(process.env.devTestnetPrivateKey, 'hex')
+const devWalletAddress = web3.eth.accounts.privateKeyToAccount(process.env.devTestnetPrivateKey).address;
 
 //HIDE KEY WITH "Linux Environment Variables" https://www.youtube.com/watch?v=himEMfYQJ1w
 
@@ -30,7 +33,7 @@ function checkValueLatest() {
 function createAndSendTx() {
   // Transfer some tokens
     const unixTIme = Date.now();
-    web3.eth.getTransactionCount(devWalletaddress, (err, txCount) => {
+    web3.eth.getTransactionCount(devWalletAddress, (err, txCount) => {
       const txObject = {
         nonce:    web3.utils.toHex(txCount),
         gasLimit: web3.utils.toHex(30000), // Raise the gas limit to a much higher amount
