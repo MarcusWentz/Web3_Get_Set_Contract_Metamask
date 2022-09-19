@@ -15,6 +15,8 @@ const contractABI_JS = [{"inputs":[{"internalType":"uint256","name":"x","type":"
 
 const contractDefined_JS = new web3.eth.Contract(contractABI_JS, contractAddress_JS)
 
+// const codeHashMap: any = new Map();
+
 function createAndSendTx() {
     let contractOneAddress;
     // let contractTwoAddress;
@@ -22,6 +24,7 @@ function createAndSendTx() {
     contractDefined_JS.methods.callContractToCall().call((err, getCallContractToCall) => {
       console.log({ err, getCallContractToCall })
       contractOneAddress = getCallContractToCall;
+      //0xE8eb488bEe284ed5b9657D5fc928f90F40BC2d57
     })
 
     // contractDefined_JS.methods.callContractTwo().call((err, getcallContractTwo) => {
@@ -33,10 +36,11 @@ function createAndSendTx() {
     web3.eth.getTransactionCount(devWalletAddress, (err, txCount) => {
       const txObject = {
         nonce:    web3.utils.toHex(txCount),
-        gasLimit: web3.utils.toHex(3000000), // Raise the gas limit to a much higher amount
-        gasPrice: web3.utils.toHex(web3.utils.toWei('300', 'gwei')),
+        gasLimit: web3.utils.toHex(2100000), // Raise the gas limit to a much higher amount
+        gasPrice: web3.utils.toHex(web3.utils.toWei('30', 'gwei')),
         to: contractAddress_JS,
-        data: contractDefined_JS.methods.multiCall(unixTIme).encodeABI(),
+        // data: contractDefined_JS.methods.multiCall(unixTIme).encodeABI(),
+        data: contractDefined_JS.methods.multiCall(444).encodeABI(),
         type: 1,
         accessList: [
           // {
@@ -53,6 +57,7 @@ function createAndSendTx() {
             address: contractOneAddress,
             storageKeys: [
               "0x0000000000000000000000000000000000000000000000000000000000000000",
+              "0x6ad388c3c3423bab3b6a72664273d2db94b96db28c3dcb552398a88ee5fa8d1b" //Code hash from EXTCODEHASH https://blog.finxter.com/how-to-find-out-if-an-ethereum-address-is-a-contract/
             ]
           }
         ]
