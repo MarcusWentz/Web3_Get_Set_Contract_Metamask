@@ -27,7 +27,7 @@ async function createAndSendTx() {
   const txCount = await provider.getTransactionCount(signer.address);
 
   const tx = signer.sendTransaction({
-    // chainId: chainIdConnected,
+    chainId: chainIdConnected,
     nonce:    web3.utils.toHex(txCount),
     gasLimit: web3.utils.toHex(30000), // Raise the gas limit to a much higher amount
     gasPrice: web3.utils.toHex(web3.utils.toWei('10', 'gwei')),
