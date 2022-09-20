@@ -19,13 +19,13 @@ async function createAndSendTx() {
     const chainIdConnected = await web3.eth.getChainId();
     console.log("chainIdConnected: "+chainIdConnected)
 
-    let contractOneAddress = await contractDefined_JS.methods.callContractToCall().call()
+    const contractOneAddress = await contractDefined_JS.methods.callContractToCall().call()
     console.log("contractOneAddress: "+contractOneAddress)
     const contractOneABI = [{"inputs":[{"internalType":"uint256","name":"x","type":"uint256"}],"name":"set","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"slot0","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}]
 
     const contractOneDefined = new web3.eth.Contract(contractOneABI, contractOneAddress)
 
-    let slot0 = await contractOneDefined.methods.slot0().call()
+    const slot0 = await contractOneDefined.methods.slot0().call()
     console.log("slot0: "+slot0)
 
     const provider = new ethers.providers.JsonRpcProvider("https://liberty20.shardeum.org/")
