@@ -5,8 +5,6 @@ import time
 from hexbytes import HexBytes
 import math
 
-# infura_goerli_testnet_url_API = str(os.environ['goerliHTTPS_InfuraAPIKey']);
-
 ShardeumConnectionHTTPS = "https://liberty20.shardeum.org/";
 web3 = Web3(Web3.HTTPProvider(ShardeumConnectionHTTPS))
 
