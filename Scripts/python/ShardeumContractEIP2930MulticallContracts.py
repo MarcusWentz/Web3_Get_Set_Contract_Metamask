@@ -1,6 +1,7 @@
 from web3 import Web3
 import json
 import os
+import time
 
 # infura_goerli_testnet_url_API = str(os.environ['goerliHTTPS_InfuraAPIKey']);
 
@@ -63,4 +64,10 @@ EIP_2930_tx = {
 }
 
 signed_tx = web3.eth.account.signTransaction(EIP_2930_tx, devTestnetPrivateKey)
-print(web3.toHex(web3.eth.sendRawTransaction(signed_tx.rawTransaction)))
+tx_hash = web3.toHex(web3.eth.sendRawTransaction(signed_tx.rawTransaction))
+print(tx_hash)
+
+time.sleep(15)
+
+receipt = web3.eth.getTransactionReceipt(tx_hash)
+print(receipt)

@@ -1,5 +1,6 @@
 const Web3 = require('web3')
 var Tx = require("ethereumjs-tx")
+const ethers = require("ethers")
 
 const rpcURL = "https://liberty20.shardeum.org/"
 const web3 = new Web3(rpcURL)
@@ -17,9 +18,10 @@ const contractDefined_JS = new web3.eth.Contract(contractABI_JS, contractAddress
 
 // const codeHashMap: any = new Map();
 
-function createAndSendTx() {
+async function createAndSendTx() {
+
     let contractOneAddress;
-    // let contractTwoAddress;
+    let contractTwoAddress;
 
     contractDefined_JS.methods.callContractToCall().call((err, getCallContractToCall) => {
       console.log({ err, getCallContractToCall })
@@ -27,40 +29,31 @@ function createAndSendTx() {
       //0xE8eb488bEe284ed5b9657D5fc928f90F40BC2d57
     })
 
-    // contractDefined_JS.methods.callContractTwo().call((err, getcallContractTwo) => {
-    //   console.log({ err, getcallContractTwo })
-    //   contractTwoAddress = getcallContractTwo;
-    // })
+    let provider = new ethers.providers.JsonRpcProvider("https://liberty20.shardeum.org/")
+    let codeHash = await provider.getCode("0xE8eb488bEe284ed5b9657D5fc928f90F40BC2d57")
+    console.log("CODEHASH:" + codeHash)
 
-    const unixTIme = Date.now();
+    // const unixTIme = Date.now();
     web3.eth.getTransactionCount(devWalletAddress, (err, txCount) => {
       const txObject = {
+        chainId: 8081,
         nonce:    web3.utils.toHex(txCount),
         gasLimit: web3.utils.toHex(2100000), // Raise the gas limit to a much higher amount
         gasPrice: web3.utils.toHex(web3.utils.toWei('30', 'gwei')),
         to: contractAddress_JS,
         // data: contractDefined_JS.methods.multiCall(unixTIme).encodeABI(),
-        data: contractDefined_JS.methods.multiCall(444).encodeABI(),
+        data: contractDefined_JS.methods.multiCall(777).encodeABI(),
         type: 1,
         accessList: [
-          // {
-          //     address : devWalletAddress,
-          //     storageKeys: [],
-          // },
-          // {
-          //   address: contractAddress_JS,
-          //   storageKeys: [
-          //     "0x0000000000000000000000000000000000000000000000000000000000000000",
-          //   ],
-          // },
           {
-            address: contractOneAddress,
+            address: contractOneAddress, // proceedsRecipient gnosis safe proxy address
             storageKeys: [
               "0x0000000000000000000000000000000000000000000000000000000000000000",
-              "0x6ad388c3c3423bab3b6a72664273d2db94b96db28c3dcb552398a88ee5fa8d1b" //Code hash from EXTCODEHASH https://blog.finxter.com/how-to-find-out-if-an-ethereum-address-is-a-contract/
+              codeHash, //Code hash from EXTCODEHASH https://blog.finxter.com/how-to-find-out-if-an-ethereum-address-is-a-contract/
             ]
           }
         ]
+
     }
     // Sign the transaction
     const tx = new Tx(txObject, {chain:'Shardeum'})
