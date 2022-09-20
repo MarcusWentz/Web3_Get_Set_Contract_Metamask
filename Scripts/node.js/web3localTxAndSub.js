@@ -28,10 +28,10 @@ async function createAndSendTx() {
 
   const tx = signer.sendTransaction({
     chainId: chainIdConnected,
+    to: contractAddress,
     nonce:    web3.utils.toHex(txCount),
     gasLimit: web3.utils.toHex(30000), // Raise the gas limit to a much higher amount
     gasPrice: web3.utils.toHex(web3.utils.toWei('10', 'gwei')),
-    to: contractAddress,
     data: contractDeployed.methods.set(unixTIme).encodeABI()
   });
 
