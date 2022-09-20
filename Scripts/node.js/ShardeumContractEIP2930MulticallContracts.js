@@ -23,15 +23,16 @@ async function createAndSendTx() {
     console.log("contractOneAddress: "+contractOneAddress)
     const contractOneABI = [{"inputs":[{"internalType":"uint256","name":"x","type":"uint256"}],"name":"set","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"slot0","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}]
 
-    const contractOneDefined = new web3.eth.Contract(contractOneABI, contractOneAddress)
+    const contractOneDeployed = new web3.eth.Contract(contractOneABI, contractOneAddress)
 
-    const slot0 = await contractOneDefined.methods.slot0().call()
+    const slot0 = await contractOneDeployed.methods.slot0().call()
     console.log("slot0: "+slot0)
 
     const codeHash = await provider.getCode(contractOneAddress)
     console.log("contractOneAddress codeHash: " + codeHash)
 
-    const unixTIme = Date.now();
+    const unixTime = Date.now();
+    console.log("UNIX TIME: " + unixTime)
 
     const txCount = await provider.getTransactionCount(signer.address);
 
@@ -41,7 +42,7 @@ async function createAndSendTx() {
         nonce:    web3.utils.toHex(txCount),
         gasLimit: web3.utils.toHex(2100000), // Raise the gas limit to a much higher amount
         gasPrice: web3.utils.toHex(web3.utils.toWei('30', 'gwei')),
-        data: contractDefined_JS.methods.multiCall(unixTIme).encodeABI(),
+        data: contractDefined_JS.methods.multiCall(unixTime).encodeABI(),
         type: 1,
         accessList: [
           {
@@ -55,7 +56,9 @@ async function createAndSendTx() {
 
     });
 
+    console.log("WAIT FOR TX RECEIPT: ")
     await tx
+    console.log("TX RECEIPT: ")
     console.log(tx)
 
 }
