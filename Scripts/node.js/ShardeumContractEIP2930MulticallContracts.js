@@ -17,16 +17,22 @@ createAndSendTx();
 async function createAndSendTx() {
 
     const chainIdConnected = await web3.eth.getChainId();
-    console.log(chainIdConnected)
+    console.log("chainIdConnected: "+chainIdConnected)
 
     let contractOneAddress = await contractDefined_JS.methods.callContractToCall().call()
-    console.log(contractOneAddress)
+    console.log("contractOneAddress: "+contractOneAddress)
+    const contractOneABI = [{"inputs":[{"internalType":"uint256","name":"x","type":"uint256"}],"name":"set","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"slot0","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}]
+
+    const contractOneDefined = new web3.eth.Contract(contractOneABI, contractOneAddress)
+
+    let slot0 = await contractOneDefined.methods.slot0().call()
+    console.log("slot0: "+slot0)
 
     const provider = new ethers.providers.JsonRpcProvider("https://liberty20.shardeum.org/")
     const signer = new ethers.Wallet(Buffer.from(process.env.devTestnetPrivateKey, 'hex'), provider);
 
     const codeHash = await provider.getCode(contractOneAddress)
-    console.log("CODEHASH:" + codeHash)
+    console.log("contractOneAddress codeHash: " + codeHash)
 
     const unixTIme = Date.now();
 
@@ -38,11 +44,11 @@ async function createAndSendTx() {
         nonce:    web3.utils.toHex(txCount),
         gasLimit: web3.utils.toHex(2100000), // Raise the gas limit to a much higher amount
         gasPrice: web3.utils.toHex(web3.utils.toWei('30', 'gwei')),
-        data: contractDefined_JS.methods.multiCall(3).encodeABI(),
+        data: contractDefined_JS.methods.multiCall(unixTIme).encodeABI(),
         type: 1,
         accessList: [
           {
-            address: contractOneAddress, // proceedsRecipient gnosis safe proxy address
+            address: contractOneAddress, //Contract address we are calling from the "to" contract at some point.
             storageKeys: [
               "0x0000000000000000000000000000000000000000000000000000000000000000",
               codeHash, //Code hash from EXTCODEHASH https://blog.finxter.com/how-to-find-out-if-an-ethereum-address-is-a-contract/
