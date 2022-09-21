@@ -28,7 +28,7 @@ contractOneDeployed = web3.eth.contract(address = contractOneAddress , abi = con
 slot0 = contractOneDeployed.functions.slot0().call()
 print("slot0: "+ str(slot0) )
 
-codeHashBytes32 =  (web3.eth.get_code('0xE8eb488bEe284ed5b9657D5fc928f90F40BC2d57'))
+codeHashBytes32 =  (web3.eth.get_code(contractOneAddress))
 codeHashString = codeHashBytes32.hex()
 print("contractOneAddress codeHash: " + codeHashString )
 
