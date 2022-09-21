@@ -28,12 +28,8 @@ contractOneDeployed = web3.eth.contract(address = contractOneAddress , abi = con
 slot0 = contractOneDeployed.functions.slot0().call()
 print("slot0: "+ str(slot0) )
 
-getCodeHashContractAddress= web3.toChecksumAddress("0x7d0a188781AdEf198f7056268d2FDa3F1B534287");
-getCodeHashContractABI = json.loads('[{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"getCodeHash","outputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"isContractBasedOnHash","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"addr","type":"address"}],"name":"isContractBasedOnSize","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"}]')
-getCodeHashContractDeployed = web3.eth.contract(address = getCodeHashContractAddress , abi = getCodeHashContractABI);
-
-codeHashBytes32 = getCodeHashContractDeployed.functions.getCodeHash(contractOneAddress).call()
-codeHashString = "0x" + codeHashBytes32.hex()
+codeHashBytes32 =  (web3.eth.get_code('0xE8eb488bEe284ed5b9657D5fc928f90F40BC2d57'))
+codeHashString = codeHashBytes32.hex()
 print("contractOneAddress codeHash: " + codeHashString )
 
 unixTime = int(math.floor( time.time()*(10**3)) )
