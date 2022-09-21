@@ -6,6 +6,7 @@ const web3 = new Web3(rpcURL)
 
 const provider = new ethers.providers.JsonRpcProvider(rpcURL)
 const signer = new ethers.Wallet(Buffer.from(process.env.devTestnetPrivateKey, 'hex'), provider);
+console.log("User wallet address: " + signer.address)
 
 createAndSendTx();
 
