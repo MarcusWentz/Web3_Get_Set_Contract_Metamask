@@ -8,8 +8,8 @@ const provider = new ethers.providers.JsonRpcProvider(rpcURL)
 const signer = new ethers.Wallet(Buffer.from(process.env.devTestnetPrivateKey, 'hex'), provider);
 console.log("User wallet address: " + signer.address)
 
-const walletAddressSentMsgValueTo = new ethers.Wallet(Buffer.from(process.env.devTestnetPrivateKeyTwo, 'hex'), provider);
-console.log("walletAddressSentMsgValueTo: " + walletAddressSentMsgValueTo.address)
+const transferToWallet = new ethers.Wallet(Buffer.from(process.env.devTestnetPrivateKeyTwo, 'hex'), provider);
+console.log("transferToWallet address: " + transferToWallet.address)
 
 createAndSendTx();
 
@@ -25,7 +25,7 @@ async function createAndSendTx() {
     console.log("User Balance [Shardeum SHM]" )
     console.log(ethers.utils.formatEther(userBalance))
 
-    const receiverBalance = await provider.getBalance(walletAddressSentMsgValueTo.address);
+    const receiverBalance = await provider.getBalance(transferToWallet.address);
     console.log("Receiver Balance [Shardeum SHM]" )
     console.log(ethers.utils.formatEther(receiverBalance))
 
@@ -33,7 +33,7 @@ async function createAndSendTx() {
 
     const tx = signer.sendTransaction({
           chainId: chainIdConnected,
-          to: walletAddressSentMsgValueTo.address,
+          to: transferToWallet.address,
           nonce:    web3.utils.toHex(txCount),
           gasLimit: web3.utils.toHex(300000), // Raise the gas limit to a much higher amount
           gasPrice: web3.utils.toHex(web3.utils.toWei('30', 'gwei')),
@@ -41,7 +41,7 @@ async function createAndSendTx() {
           type: 1,
           accessList: [
             {
-              address: walletAddressSentMsgValueTo.address,
+              address: transferToWallet.address,
               storageKeys: []
             }
           ]

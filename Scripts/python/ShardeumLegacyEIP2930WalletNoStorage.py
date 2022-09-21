@@ -16,8 +16,8 @@ print("User Wallet Address: " + userWallet)
 
 devTestnetPrivateKeyTwo = str(os.environ['devTestnetPrivateKeyTwo']);
 
-walletAddressSentMsgValueTo = (web3.eth.account.from_key(devTestnetPrivateKeyTwo)).address
-print("walletAddressSentMsgValueTo: " + walletAddressSentMsgValueTo)
+transferToWallet = (web3.eth.account.from_key(devTestnetPrivateKeyTwo)).address
+print("transferToWallet address: " + transferToWallet)
 
 oneEtherInWeiSHM = "1000000000000000000"
 print("weiMsgValueToSend: " + oneEtherInWeiSHM)
@@ -26,21 +26,21 @@ userBalance =  web3.eth.getBalance(userWallet);
 print("User Balance [Shardeum SHM]" )
 print(web3.fromWei(userBalance, "ether"))
 
-receiverBalance =  web3.eth.getBalance(walletAddressSentMsgValueTo);
+receiverBalance =  web3.eth.getBalance(transferToWallet);
 print("Receiver Balance [Shardeum SHM]" )
 print(web3.fromWei(receiverBalance, "ether"))
 
 transferTx = {
     'chainId' : chainIdConnected,
     'nonce':  web3.eth.getTransactionCount(userWallet)       ,
-    'to': walletAddressSentMsgValueTo, #WORKS WITH REGULAR WALLETS BUT CANNOT SEND TO CONTRACT FOR SOME REASON?
+    'to': transferToWallet, #WORKS WITH REGULAR WALLETS BUT CANNOT SEND TO CONTRACT FOR SOME REASON?
     'gas': 2100000, #WORKS WITH 1000000. If not try : Remix > deploy and run transactions
     'gasPrice': web3.toWei('30', 'gwei'), # https://etherscan.io/gastracker
     'value': int(oneEtherInWeiSHM),
     'accessList' :
                 [
                     {
-                        "address" : walletAddressSentMsgValueTo,
+                        "address" : transferToWallet,
                         "storageKeys": []
                     }
                 ]
