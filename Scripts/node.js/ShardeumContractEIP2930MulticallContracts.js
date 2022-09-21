@@ -17,16 +17,16 @@ createAndSendTx();
 async function createAndSendTx() {
 
     const chainIdConnected = await web3.eth.getChainId();
-    console.log("chainIdConnected: "+chainIdConnected)
+    console.log("chainIdConnected: "+ chainIdConnected)
 
     const contractOneAddress = await contractDefined_JS.methods.callContractToCall().call()
-    console.log("contractOneAddress: "+contractOneAddress)
+    console.log("contractOneAddress: "+ contractOneAddress)
     const contractOneABI = [{"inputs":[{"internalType":"uint256","name":"x","type":"uint256"}],"name":"set","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"slot0","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}]
 
     const contractOneDeployed = new web3.eth.Contract(contractOneABI, contractOneAddress)
 
     const slot0 = await contractOneDeployed.methods.slot0().call()
-    console.log("slot0: "+slot0)
+    console.log("slot0: "+ slot0)
 
     const codeHash = await provider.getCode(contractOneAddress)
     console.log("contractOneAddress codeHash: " + codeHash)

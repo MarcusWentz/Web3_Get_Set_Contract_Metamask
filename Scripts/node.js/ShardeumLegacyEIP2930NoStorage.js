@@ -7,11 +7,6 @@ const web3 = new Web3(rpcURL)
 const provider = new ethers.providers.JsonRpcProvider(rpcURL)
 const signer = new ethers.Wallet(Buffer.from(process.env.devTestnetPrivateKey, 'hex'), provider);
 
-const simpleStorageAddress = '0xE8eb488bEe284ed5b9657D5fc928f90F40BC2d57'
-const simpleStorageABI = [{"inputs":[{"internalType":"uint256","name":"x","type":"uint256"}],"name":"set","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"slot0","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}]
-
-const simpleStorageDeployed = new web3.eth.Contract(simpleStorageABI, simpleStorageAddress)
-
 createAndSendTx();
 
 async function createAndSendTx() {
@@ -19,27 +14,34 @@ async function createAndSendTx() {
     const chainIdConnected = await web3.eth.getChainId();
     console.log("chainIdConnected: "+ chainIdConnected)
 
-    const unixTIme = Date.now();
+    const walletAddressSentMsgValueTo = "0x66C1d8A5ee726b545576A75380391835F8AAA43c"
+    console.log("walletAddressSentMsgValueTo: " + walletAddressSentMsgValueTo)
 
-    const slot0 = await simpleStorageDeployed.methods.slot0().call()
-    console.log("slot0: "+ slot0)
+    const oneEtherInWeiSHM = "1000000000000000000"
+    console.log("weiMsgValueToSend: " + oneEtherInWeiSHM)
+
+    const userBalance = await provider.getBalance(signer.address);
+    console.log("User Balance [Shardeum SHM]" )
+    console.log(ethers.utils.formatEther(userBalance))
+
+    const receiverBalance = await provider.getBalance(walletAddressSentMsgValueTo);
+    console.log("Receiver Balance [Shardeum SHM]" )
+    console.log(ethers.utils.formatEther(receiverBalance))
 
     const txCount = await provider.getTransactionCount(signer.address);
 
     const tx = signer.sendTransaction({
           chainId: chainIdConnected,
-          to: simpleStorageAddress,
+          to: walletAddressSentMsgValueTo,
           nonce:    web3.utils.toHex(txCount),
           gasLimit: web3.utils.toHex(300000), // Raise the gas limit to a much higher amount
           gasPrice: web3.utils.toHex(web3.utils.toWei('30', 'gwei')),
-          data: simpleStorageDeployed.methods.set(unixTIme).encodeABI(),
+          value: oneEtherInWeiSHM,
           type: 1,
           accessList: [
             {
-              address: simpleStorageAddress,
-              storageKeys: [
-                "0x0000000000000000000000000000000000000000000000000000000000000000",
-              ]
+              address: walletAddressSentMsgValueTo,
+              storageKeys: []
             }
           ]
 
@@ -49,5 +51,5 @@ async function createAndSendTx() {
     await tx
     console.log("TX RECEIPT: ")
     console.log(tx)
-    
+
 }

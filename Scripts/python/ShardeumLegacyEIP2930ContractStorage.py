@@ -7,17 +7,18 @@ import time
 ShardeumConnectionHTTPS = "https://liberty20.shardeum.org/";
 web3 = Web3(Web3.HTTPProvider(ShardeumConnectionHTTPS))
 
+chainIdConnected = web3.eth.chain_id
+print("chainIdConnected: " + str(chainIdConnected))
+
 devTestnetPrivateKey = str(os.environ['devTestnetPrivateKey']);
 
 userWallet = (web3.eth.account.from_key(devTestnetPrivateKey)).address
 print(userWallet)
 
-chainIdConnected = web3.eth.chain_id
-print("chainIdConnected: " + str(chainIdConnected))
-
 Contract_At_Address= web3.toChecksumAddress("0xE8eb488bEe284ed5b9657D5fc928f90F40BC2d57");
 abi_Contract = json.loads('[{"inputs":[{"internalType":"uint256","name":"x","type":"uint256"}],"name":"set","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"slot0","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}]')
 contract_Call = web3.eth.contract(address = Contract_At_Address , abi = abi_Contract);
+
 print(contract_Call.functions.slot0().call());
 
 unixTime = int(math.floor( time.time()*(10**3)) )
