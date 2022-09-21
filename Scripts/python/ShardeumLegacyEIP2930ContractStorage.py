@@ -13,7 +13,7 @@ print("chainIdConnected: " + str(chainIdConnected))
 devTestnetPrivateKey = str(os.environ['devTestnetPrivateKey']);
 
 userWallet = (web3.eth.account.from_key(devTestnetPrivateKey)).address
-print(userWallet)
+print("User Wallet Address: " + userWallet)
 
 Contract_At_Address= web3.toChecksumAddress("0xE8eb488bEe284ed5b9657D5fc928f90F40BC2d57");
 abi_Contract = json.loads('[{"inputs":[{"internalType":"uint256","name":"x","type":"uint256"}],"name":"set","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"slot0","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}]')

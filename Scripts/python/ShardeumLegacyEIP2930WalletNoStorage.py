@@ -12,7 +12,7 @@ print("chainIdConnected: " + str(chainIdConnected))
 devTestnetPrivateKey = str(os.environ['devTestnetPrivateKey']);
 
 userWallet = (web3.eth.account.from_key(devTestnetPrivateKey)).address
-print(userWallet)
+print("User Wallet Address: " + userWallet)
 
 walletAddressSentMsgValueTo = "0x66C1d8A5ee726b545576A75380391835F8AAA43c"
 print("walletAddressSentMsgValueTo: " + walletAddressSentMsgValueTo)

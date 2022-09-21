@@ -14,6 +14,7 @@ print("chainIdConnected: " + str(chainIdConnected))
 devTestnetPrivateKey = str(os.environ['devTestnetPrivateKey']);
 
 userWallet = (web3.eth.account.from_key(devTestnetPrivateKey)).address
+print("User Wallet Address: " + userWallet)
 
 multicallContractAddress= web3.toChecksumAddress("0x41Ae7549023a7F0b6Cb7FE4d1807487b18cbAe10");
 multicallContractABI = json.loads('[{"inputs":[{"internalType":"uint256","name":"x","type":"uint256"}],"name":"multiCall","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"setCallOne","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[],"name":"callContractToCall","outputs":[{"internalType":"contractcontractToCall","name":"","type":"address"}],"stateMutability":"view","type":"function"}]')
