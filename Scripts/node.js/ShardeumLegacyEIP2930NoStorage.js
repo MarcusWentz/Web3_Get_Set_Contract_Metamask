@@ -8,6 +8,9 @@ const provider = new ethers.providers.JsonRpcProvider(rpcURL)
 const signer = new ethers.Wallet(Buffer.from(process.env.devTestnetPrivateKey, 'hex'), provider);
 console.log("User wallet address: " + signer.address)
 
+const walletAddressSentMsgValueTo = new ethers.Wallet(Buffer.from(process.env.devTestnetPrivateKeyTwo, 'hex'), provider);
+console.log("walletAddressSentMsgValueTo: " + walletAddressSentMsgValueTo.address)
+
 createAndSendTx();
 
 async function createAndSendTx() {
@@ -15,17 +18,14 @@ async function createAndSendTx() {
     const chainIdConnected = await web3.eth.getChainId();
     console.log("chainIdConnected: "+ chainIdConnected)
 
-    const walletAddressSentMsgValueTo = "0x66C1d8A5ee726b545576A75380391835F8AAA43c"
-    console.log("walletAddressSentMsgValueTo: " + walletAddressSentMsgValueTo)
-
     const oneEtherInWeiSHM = "1000000000000000000"
-    console.log("weiMsgValueToSend: " + oneEtherInWeiSHM)
+    console.log("oneEtherInWeiSHM: " + oneEtherInWeiSHM)
 
     const userBalance = await provider.getBalance(signer.address);
     console.log("User Balance [Shardeum SHM]" )
     console.log(ethers.utils.formatEther(userBalance))
 
-    const receiverBalance = await provider.getBalance(walletAddressSentMsgValueTo);
+    const receiverBalance = await provider.getBalance(walletAddressSentMsgValueTo.address);
     console.log("Receiver Balance [Shardeum SHM]" )
     console.log(ethers.utils.formatEther(receiverBalance))
 
@@ -33,7 +33,7 @@ async function createAndSendTx() {
 
     const tx = signer.sendTransaction({
           chainId: chainIdConnected,
-          to: walletAddressSentMsgValueTo,
+          to: walletAddressSentMsgValueTo.address,
           nonce:    web3.utils.toHex(txCount),
           gasLimit: web3.utils.toHex(300000), // Raise the gas limit to a much higher amount
           gasPrice: web3.utils.toHex(web3.utils.toWei('30', 'gwei')),
@@ -41,7 +41,7 @@ async function createAndSendTx() {
           type: 1,
           accessList: [
             {
-              address: walletAddressSentMsgValueTo,
+              address: walletAddressSentMsgValueTo.address,
               storageKeys: []
             }
           ]

@@ -14,7 +14,9 @@ devTestnetPrivateKey = str(os.environ['devTestnetPrivateKey']);
 userWallet = (web3.eth.account.from_key(devTestnetPrivateKey)).address
 print("User Wallet Address: " + userWallet)
 
-walletAddressSentMsgValueTo = "0x66C1d8A5ee726b545576A75380391835F8AAA43c"
+devTestnetPrivateKeyTwo = str(os.environ['devTestnetPrivateKeyTwo']);
+
+walletAddressSentMsgValueTo = (web3.eth.account.from_key(devTestnetPrivateKeyTwo)).address
 print("walletAddressSentMsgValueTo: " + walletAddressSentMsgValueTo)
 
 oneEtherInWeiSHM = "1000000000000000000"
@@ -23,7 +25,6 @@ print("weiMsgValueToSend: " + oneEtherInWeiSHM)
 userBalance =  web3.eth.getBalance(userWallet);
 print("User Balance [Shardeum SHM]" )
 print(web3.fromWei(userBalance, "ether"))
-
 
 receiverBalance =  web3.eth.getBalance(walletAddressSentMsgValueTo);
 print("Receiver Balance [Shardeum SHM]" )
