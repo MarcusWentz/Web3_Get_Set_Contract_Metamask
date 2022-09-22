@@ -5,6 +5,9 @@ import os
 infura_goerli_testnet_url_API = str(os.environ['goerliHTTPS_InfuraAPIKey']);
 web3 = Web3(Web3.HTTPProvider(infura_goerli_testnet_url_API))
 
+# goerli_testnet_url_API = str(os.environ["http://localhost:8545"]);
+# web3 = Web3(Web3.HTTPProvider(goerli_testnet_url_API))
+
 devTestnetPrivateKey = str(os.environ['devTestnetPrivateKey']);
 
 userWallet = (web3.eth.account.from_key(devTestnetPrivateKey)).address

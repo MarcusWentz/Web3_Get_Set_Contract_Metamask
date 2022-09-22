@@ -2,6 +2,9 @@ const Web3 = require('web3')
 const ethers = require("ethers")
 
 const rpcURL = process.env.goerliHTTPS_InfuraAPIKey// Your RPC URL goes here
+
+// const rpcURL = "http://localhost:8545"// Your RPC URL goes here
+
 const web3 = new Web3(rpcURL)
 
 const provider = new ethers.providers.JsonRpcProvider(rpcURL)
@@ -30,7 +33,7 @@ async function createAndSendTx() {
     chainId: chainIdConnected,
     to: contractAddress,
     nonce:    web3.utils.toHex(txCount),
-    gasLimit: web3.utils.toHex(30000), // Raise the gas limit to a much higher amount
+    gasLimit: web3.utils.toHex(3000000000), // Raise the gas limit to a much higher amount
     gasPrice: web3.utils.toHex(web3.utils.toWei('10', 'gwei')),
     data: contractDeployed.methods.set(unixTIme).encodeABI()
   });
@@ -42,6 +45,9 @@ async function createAndSendTx() {
 }
 
 const web3Sub = new Web3(process.env.goerliWebSocketSecureEventsInfuraAPIKey)
+
+// const web3Sub = new Web3("ws://localhost:8546")
+
 const eventsListener = new web3Sub.eth.Contract(contractABI, contractAddress)
 
 // //Subscribe to event.

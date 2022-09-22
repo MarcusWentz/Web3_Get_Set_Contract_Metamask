@@ -26,12 +26,13 @@ import (
 func main() {
 
      // Use this endpoint when you are running your own node on a specific chain (no events)
-     // client, chainID := clientSetup(os.Getenv("http://localhost/8545"))
+     // client, chainID := clientSetup("http://localhost:8545")
 
      // Use this endpoint when you are running your own node on a specific chain (events allowed)
-     // client, chainID := clientSetup(os.Getenv("ws://localhost/8546"))
+     // client, chainID := clientSetup("ws://localhost:8546")
 
      client, chainID := clientSetup(os.Getenv("goerliWebSocketSecureEventsInfuraAPIKey"))
+
      fmt.Println("chainID: ", chainID)
 
      contractAddress := common.HexToAddress("0xdbaA7dfBd9125B7a43457D979B1f8a1Bd8687f37")
@@ -122,7 +123,7 @@ func SetStoredDataTx(setUintValue *big.Int, client *ethclient.Client, auth *bind
   }
 
   auth.Nonce = big.NewInt(int64(nonce))
-  auth.GasLimit = uint64(300000) // in units
+  auth.GasLimit = uint64(3000000) // in units
   auth.GasPrice = gasPrice
   auth.Value = big.NewInt(0)     // in wei
 
