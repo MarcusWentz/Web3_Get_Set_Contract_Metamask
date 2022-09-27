@@ -19,7 +19,7 @@
 
 pragma solidity ^0.4.18;
 
-contract WETH9 {
+contract WSHM {
     string public name     = "Wrapped SHM";
     string public symbol   = "WSHM";
     uint8  public decimals = 18;
