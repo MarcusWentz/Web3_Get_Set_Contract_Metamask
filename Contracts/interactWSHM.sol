@@ -26,7 +26,7 @@ contract interactWSHM {
     }
 
     constructor() {
-        WSHM = interfaceWSHM(0x8d05ec01eFb626c638419387F59aed09F8FB84f0); // WSHM Liberty 2.0 address.
+        WSHM = interfaceWSHM(0x22AB9aC0b9290a09B1d3fd44E7Ae61021Fcbd8B1); // WSHM Liberty 2.0 address.
     }
 
     function multicallDeposit() public payable {
@@ -34,8 +34,8 @@ contract interactWSHM {
         WSHM.transfer(msg.sender, msg.value);
     }
 
-    function multicallWithdraw(address approvedAddress, uint256 amount) public {
-        WSHM.transferFrom(approvedAddress,address(this),amount);
+    function multicallWithdraw(uint256 amount) public {
+        WSHM.transferFrom(msg.sender,address(this),amount);
         WSHM.withdraw(amount);
         payable(msg.sender).transfer(address(this).balance);
     }
