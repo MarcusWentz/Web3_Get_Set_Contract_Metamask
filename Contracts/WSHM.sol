@@ -22,7 +22,7 @@ pragma solidity 0.8.17;
 
 contract WETH9 {
     string public name     = "Wrapped SHM";
-    string public symbol   = "SHM";
+    string public symbol   = "WSHM";
     uint8  public decimals = 18;
 
     event  Approval(address indexed src, address indexed guy, uint wad);
