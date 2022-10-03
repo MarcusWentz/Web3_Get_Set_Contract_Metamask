@@ -8,7 +8,7 @@ const provider = new ethers.providers.JsonRpcProvider(rpcURL)
 const signer = new ethers.Wallet(Buffer.from(process.env.devTestnetPrivateKey, 'hex'), provider);
 console.log("User wallet address: " + signer.address)
 
-const contractAddress_JS = '0x37160d3cB5834B090621AB2A86355493d808f45B'
+const contractAddress_JS = '0xB4a3bfCBB0C8adf5C82076A87542869C7d526fA9'
 const contractABI_JS = [{"inputs":[],"name":"multicallDeposit","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"multicallWithdraw","outputs":[],"stateMutability":"nonpayable","type":"function"},{"stateMutability":"payable","type":"receive"},{"stateMutability":"payable","type":"fallback"},{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[],"name":"WSHM","outputs":[{"internalType":"contractinterfaceWSHM","name":"","type":"address"}],"stateMutability":"view","type":"function"}]
 
 const contractDefined_JS = new web3.eth.Contract(contractABI_JS, contractAddress_JS)
@@ -59,7 +59,6 @@ async function createAndSendTx() {
           {
             address: addressWSHM, //Contract address we are calling from the "to" contract at some point.
             storageKeys: [
-              // "0x0000000000000000000000000000000000000000000000000000000000000000",
               codeHash, //Code hash from EXTCODEHASH https://blog.finxter.com/how-to-find-out-if-an-ethereum-address-is-a-contract/
             ]
           }
@@ -84,16 +83,6 @@ async function createAndSendTx() {
         gasLimit: web3.utils.toHex(2100000), // Raise the gas limit to a much higher amount
         gasPrice: web3.utils.toHex(web3.utils.toWei('30', 'gwei')),
         data: deployedWSHM.methods.approve(contractAddress_JS,oneEtherInWeiSHM).encodeABI(),
-        // type: 1,
-        // accessList: [
-        //   {
-        //     address: addressWSHM, //Contract address we are calling from the "to" contract at some point.
-        //     storageKeys: [
-        //       // "0x0000000000000000000000000000000000000000000000000000000000000000",
-        //       codeHash, //Code hash from EXTCODEHASH https://blog.finxter.com/how-to-find-out-if-an-ethereum-address-is-a-contract/
-        //     ]
-        //   }
-        // ]
 
     });
 
@@ -119,7 +108,6 @@ async function createAndSendTx() {
           {
             address: addressWSHM, //Contract address we are calling from the "to" contract at some point.
             storageKeys: [
-              // "0x0000000000000000000000000000000000000000000000000000000000000000",
               codeHash, //Code hash from EXTCODEHASH https://blog.finxter.com/how-to-find-out-if-an-ethereum-address-is-a-contract/
             ]
           }
