@@ -8,8 +8,8 @@ const provider = new ethers.providers.JsonRpcProvider(rpcURL)
 const signer = new ethers.Wallet(Buffer.from(process.env.devTestnetPrivateKey, 'hex'), provider);
 console.log("User wallet address: " + signer.address)
 
-const contractAddress_JS = '0x41Ae7549023a7F0b6Cb7FE4d1807487b18cbAe10'
-const contractABI_JS = [{"inputs":[{"internalType":"uint256","name":"x","type":"uint256"}],"name":"multiCall","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"setCallOne","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[],"name":"callContractToCall","outputs":[{"internalType":"contractcontractToCall","name":"","type":"address"}],"stateMutability":"view","type":"function"}]
+const contractAddress_JS = '0xb1fEf690f84241738b188eF8b88e52B2cc59AbD2'
+const contractABI_JS = [{"inputs":[{"internalType":"uint256","name":"x","type":"uint256"}],"name":"multiCallWrite","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"setCallOne","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[],"name":"callContractToCall","outputs":[{"internalType":"contractcontractToCall","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"multiCallRead","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}]
 
 const contractDefined_JS = new web3.eth.Contract(contractABI_JS, contractAddress_JS)
 
@@ -20,14 +20,11 @@ async function createAndSendTx() {
     const chainIdConnected = await web3.eth.getChainId();
     console.log("chainIdConnected: "+ chainIdConnected)
 
+    const slot0 = await contractDefined_JS.methods.multiCallRead().call()
+    console.log("slot0: "+ slot0)
+
     const contractOneAddress = await contractDefined_JS.methods.callContractToCall().call()
     console.log("contractOneAddress: "+ contractOneAddress)
-    const contractOneABI = [{"inputs":[{"internalType":"uint256","name":"x","type":"uint256"}],"name":"set","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"slot0","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}]
-
-    const contractOneDeployed = new web3.eth.Contract(contractOneABI, contractOneAddress)
-
-    const slot0 = await contractOneDeployed.methods.slot0().call()
-    console.log("slot0: "+ slot0)
 
     const codeHash = await provider.getCode(contractOneAddress)
     console.log("contractOneAddress codeHash: " + codeHash)
@@ -43,7 +40,7 @@ async function createAndSendTx() {
         nonce:    web3.utils.toHex(txCount),
         gasLimit: web3.utils.toHex(2100000), // Raise the gas limit to a much higher amount
         gasPrice: web3.utils.toHex(web3.utils.toWei('30', 'gwei')),
-        data: contractDefined_JS.methods.multiCall(unixTime).encodeABI(),
+        data: contractDefined_JS.methods.multiCallWrite(unixTime).encodeABI(),
         type: 1,
         accessList: [
           {
