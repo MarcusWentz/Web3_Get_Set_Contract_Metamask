@@ -2,6 +2,7 @@
 pragma solidity 0.8.17;
 
 contract contractToCall {
+
     uint public slot0; //uint is 32 bytes and fills a 32 byte slot. //Do not set 0 manually it wastes gas!
 
     function set(uint x) public {
@@ -18,7 +19,11 @@ contract Multicall {
         callContractToCall = contractToCall(setCallOne);
     }
 
-    function multiCall(uint x) public {
+    function multiCallRead() public view returns(uint) {
+        return callContractToCall.slot0();
+    }
+
+    function multiCallWrite(uint x) public {
         callContractToCall.set(x);
     }
 
