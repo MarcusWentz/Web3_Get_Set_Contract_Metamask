@@ -2,7 +2,6 @@ from web3 import Web3
 import json
 import os
 import time
-from hexbytes import HexBytes
 import math
 
 ShardeumConnectionHTTPS = "https://liberty20.shardeum.org/";
@@ -16,16 +15,14 @@ devTestnetPrivateKey = str(os.environ['devTestnetPrivateKey']);
 userWallet = (web3.eth.account.from_key(devTestnetPrivateKey)).address
 print("User Wallet Address: " + userWallet)
 
-multicallContractAddress= web3.toChecksumAddress("0x41Ae7549023a7F0b6Cb7FE4d1807487b18cbAe10");
-multicallContractABI = json.loads('[{"inputs":[{"internalType":"uint256","name":"x","type":"uint256"}],"name":"multiCall","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"setCallOne","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[],"name":"callContractToCall","outputs":[{"internalType":"contractcontractToCall","name":"","type":"address"}],"stateMutability":"view","type":"function"}]')
+multicallContractAddress= web3.toChecksumAddress("0xb1fEf690f84241738b188eF8b88e52B2cc59AbD2");
+multicallContractABI = json.loads('[{"inputs":[{"internalType":"uint256","name":"x","type":"uint256"}],"name":"multiCallWrite","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"setCallOne","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[],"name":"callContractToCall","outputs":[{"internalType":"contractcontractToCall","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"multiCallRead","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}]')
 multicallContractDeployed = web3.eth.contract(address = multicallContractAddress , abi = multicallContractABI);
 
 contractOneAddress = multicallContractDeployed.functions.callContractToCall().call()
 print("contractOneAddress: "+contractOneAddress)
-contractOneABI = [{"inputs":[{"internalType":"uint256","name":"x","type":"uint256"}],"name":"set","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"slot0","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}]
-contractOneDeployed = web3.eth.contract(address = contractOneAddress , abi = contractOneABI);
 
-slot0 = contractOneDeployed.functions.slot0().call()
+slot0 = multicallContractDeployed.functions.multiCallRead().call()
 print("slot0: "+ str(slot0) )
 
 codeHashBytes32 =  (web3.eth.get_code(contractOneAddress))
@@ -41,7 +38,7 @@ EIP_2930_tx = {
     'nonce':  web3.eth.getTransactionCount(userWallet)       ,
     'gas': 2100000, #WORKS WITH 1000000. If not try : Remix > deploy and run transactions
     'gasPrice': web3.toWei('30', 'gwei'), # https://etherscan.io/gastracker
-    'data' : multicallContractDeployed.encodeABI(fn_name='multiCall', args=[unixTime]) ,
+    'data' : multicallContractDeployed.encodeABI(fn_name='multiCallWrite', args=[unixTime]) ,
     'type' : 1,
     'accessList' :
                 [
