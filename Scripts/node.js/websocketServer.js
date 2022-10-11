@@ -28,12 +28,12 @@ wss.on("connection", ws => {
         console.log("Some Error occurred")
     }
 });
-console.log("The WebSocket server is running on port 8081");
+console.log("The websocket server is running on port 8081");
 
 async function loopMessage(ws) {
   while(true){
     let unixTime = Date.now();
-    ws.send(unixTime);
+    ws.send("Server sending UNIX time:" + unixTime);
     await timeout(1*timeMilliSec)
   }
 }
