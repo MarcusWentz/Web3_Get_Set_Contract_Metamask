@@ -4,10 +4,18 @@ const WebSocketServer = require('ws');
 // Creating a new websocket server
 const wss = new WebSocketServer.Server({ port: 8081 })
 
+const timeMilliSec = 1000;
+
+function timeout(ms) {
+	return new Promise(resolve => setTimeout(resolve,ms));
+}
+
 // Creating connection using websocket
 wss.on("connection", ws => {
     console.log("new client connected");
     // sending message
+    loopMessage(ws)
+
     ws.on("message", data => {
         console.log(`Client has sent us: ${data}`)
     });
@@ -20,4 +28,12 @@ wss.on("connection", ws => {
         console.log("Some Error occurred")
     }
 });
-console.log("The WebSocket server is running on port 8080");
+console.log("The WebSocket server is running on port 8081");
+
+async function loopMessage(ws) {
+  while(true){
+    let unixTime = Date.now();
+    ws.send(unixTime);
+    await timeout(1*timeMilliSec)
+  }
+}
