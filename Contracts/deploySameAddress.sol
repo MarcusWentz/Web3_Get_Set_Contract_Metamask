@@ -27,7 +27,7 @@ contract Create2Factory { //Modified from: "Create2 | Solidity 0.8" by  Smart Co
 
     event create2Event(address deployedAddressEvent);
 
-    function create2DeployContract(bytes32 _salt, address ownerAddress) public payable {                            // Salt example:  0x0000000000000000000000000000000000000000000000000000000000000000
+    function create2DeployContract(bytes32 _salt, address ownerAddress) public payable {                              // Salt example:  0x0000000000000000000000000000000000000000000000000000000000000000
         ContractToDeploy deployedAddress = new ContractToDeploy {value: msg.value, salt: _salt}(ownerAddress); // Another salt example: 0x123456789abcdef0000000000000000000000000000000000000000000000000
         emit create2Event(address(deployedAddress));
     }
