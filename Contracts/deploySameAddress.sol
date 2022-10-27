@@ -25,11 +25,11 @@ contract ContractToDeploy {
 
 contract Create2Factory { //Modified from: "Create2 | Solidity 0.8" by  Smart Contract Programmer https://www.youtube.com/watch?v=883-koWrsO4&ab_channel=SmartContractProgrammer
 
-    address public lastDeployedAddress;
+    event create2Event(address deployedAddressEvent);
 
     function create2(bytes32 _salt, address ownerAddress) public payable { // Salt example:         0x0000000000000000000000000000000000000000000000000000000000000000
         ContractToDeploy deployedAddress = new ContractToDeploy {value: 1 ether, salt: _salt}(ownerAddress);
-        lastDeployedAddress = address(deployedAddress);
+        emit create2Event(address(deployedAddress));
     }
 
     function precomputeAddress(uint _salt, address ownerAddress) public view returns (address) {
