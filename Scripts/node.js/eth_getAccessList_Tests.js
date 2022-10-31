@@ -120,8 +120,9 @@ async function updateStorageSlot() {
     const contracDeployedWithEthersProvider = new ethers.Contract(simpleStorageAddress, simpleStorageABI, provider);
     let unsignedTx = await contracDeployedWithEthersProvider.populateTransaction.set(unixTime);
     console.log(unsignedTx)
-    let chainIdCallRPC = await provider.send('eth_chainId')
-    console.log(chainIdCallRPC)
+
+    // let chainIdCallRPC = await provider.send('eth_chainId')
+    // console.log(chainIdCallRPC)
 
     let predictedAccessList = await provider.send('eth_getAccessList', [unsignedTx])
     console.log(predictedAccessList)
@@ -168,8 +169,9 @@ async function multiCallUpdateStorageSlot() {
     const contracDeployedWithEthersProvider = new ethers.Contract(multiCallStorageAddress, multiCallStorageABI, provider);
     let unsignedTx = await contracDeployedWithEthersProvider.populateTransaction.multiCallWrite(unixTime);
     console.log(unsignedTx)
-    let chainIdCallRPC = await provider.send('eth_chainId')
-    console.log(chainIdCallRPC)
+
+    // let chainIdCallRPC = await provider.send('eth_chainId')
+    // console.log(chainIdCallRPC)
 
     let predictedAccessList = await provider.send('eth_getAccessList', [unsignedTx])
     console.log(predictedAccessList)
@@ -206,48 +208,52 @@ async function bugTestEC20Transfer() {
     let blockNumber = await web3.eth.getBlockNumber();
     console.log("blockNumber: "+ blockNumber)
 
+		let balanceOfSigner = await tokenErc20Deployed.methods.balanceOf(signer.address).call()
+		console.log("balanceOfSigner: "+ balanceOfSigner)
+
 		// Send 1 ether token.
-		let contracDeployedWithEthersProvider = new ethers.Contract(tokenErc20Address, tokenErc20ABI, provider);
-		let unsignedTx = await contracDeployedWithEthersProvider.populateTransaction.transfer(bugTestEC20Address,"1000000000000000000");
-		console.log(unsignedTx)
-		let chainIdCallRPC = await provider.send('eth_chainId')
-		console.log(chainIdCallRPC)
+		// let contracDeployedWithEthersProvider = new ethers.Contract(tokenErc20Address, tokenErc20ABI, provider);
+		// let unsignedTx = await contracDeployedWithEthersProvider.populateTransaction.transfer(bugTestEC20Address,"1000000000000000000");
+		// console.log(unsignedTx)
+		// // let chainIdCallRPC = await provider.send('eth_chainId')
+		// // console.log(chainIdCallRPC)
+		//
+		// let predictedAccessList = await provider.send('eth_getAccessList', [unsignedTx])
+		// console.log(predictedAccessList)
 
-		let predictedAccessList = await provider.send('eth_getAccessList', [unsignedTx])
-		console.log(predictedAccessList)
+		// let txCount = await provider.getTransactionCount(signer.address);
+		//
+    // let tx = signer.sendTransaction({
+    //       chainId: chainIdConnected,
+    //       to: tokenErc20Address,
+    //       nonce:    web3.utils.toHex(txCount),
+    //       gasLimit: web3.utils.toHex(300000), // Raise the gas limit to a much higher amount
+    //       gasPrice: web3.utils.toHex(web3.utils.toWei('30', 'gwei')),
+    //       data: tokenErc20Deployed.methods.transfer(bugTestEC20Address,"1000000000000000000").encodeABI(),
+    //       // type: 1,
+    //       // accessList: predictedAccessList
+    // });
+		//
+		// console.log("WAIT FOR TX RECEIPT: ")
+		// await tx
+		// console.log("TX RECEIPT: ")
+		// console.log(tx)
+		//
+		// await timeout(15*timeMilliSec)
 
-		let txCount = await provider.getTransactionCount(signer.address);
+		let balanceOfContract = await tokenErc20Deployed.methods.balanceOf(bugTestEC20Address).call()
+    console.log("balanceOfContract: "+ balanceOfContract)
 
-    let tx = signer.sendTransaction({
-          chainId: chainIdConnected,
-          to: tokenErc20Address,
-          nonce:    web3.utils.toHex(txCount),
-          gasLimit: web3.utils.toHex(300000), // Raise the gas limit to a much higher amount
-          gasPrice: web3.utils.toHex(web3.utils.toWei('30', 'gwei')),
-          data: tokenErc20Deployed.methods.transfer(bugTestEC20Address,"1000000000000000000").encodeABI(),
-          type: 1,
-          accessList: predictedAccessList
-    });
-
-		console.log("WAIT FOR TX RECEIPT: ")
-		await tx
-		console.log("TX RECEIPT: ")
-		console.log(tx)
-
-		await timeout(15*timeMilliSec)
-
-		const balanceOf = await tokenErc20Deployed.methods.balanceOf(bugTestEC20Address).call()
-    console.log("balanceOf: "+ balanceOf)
-
-    // // Useful for raw unsigned transactions.
+    // Useful for raw unsigned transactions.
     contracDeployedWithEthersProvider = new ethers.Contract(bugTestEC20Address, bugTestEC20ABI, provider);
     unsignedTx = await contracDeployedWithEthersProvider.populateTransaction.transferTest();
     console.log(unsignedTx)
-    chainIdCallRPC = await provider.send('eth_chainId')
-    console.log(chainIdCallRPC)
 
-    // let predictedAccessList = await provider.send('eth_getAccessList', [unsignedTx])
-    // console.log(predictedAccessList)
+    // chainIdCallRPC = await provider.send('eth_chainId')
+    // console.log(chainIdCallRPC)
+
+    let predictedAccessList = await provider.send('eth_getAccessList', [unsignedTx])
+    console.log(predictedAccessList)
 
 		//Test contract after sending 1 token.
     txCount = await provider.getTransactionCount(signer.address);
@@ -259,8 +265,8 @@ async function bugTestEC20Transfer() {
           gasLimit: web3.utils.toHex(300000), // Raise the gas limit to a much higher amount
           gasPrice: web3.utils.toHex(web3.utils.toWei('30', 'gwei')),
           data: bugTestEC20Deployed.methods.transferTest().encodeABI(),
-          // type: 1,
-          // accessList: predictedAccessList
+          type: 1,
+          accessList: predictedAccessList
     });
 
     console.log("WAIT FOR TX RECEIPT: ")
@@ -289,8 +295,9 @@ async function bugTestEC20TransferFrom() {
     const contracDeployedWithEthersProvider = new ethers.Contract(bugTestEC20Address, bugTestEC20ABI, provider);
     let unsignedTx = await contracDeployedWithEthersProvider.populateTransaction.transferFromTest();
     console.log(unsignedTx)
-    let chainIdCallRPC = await provider.send('eth_chainId')
-    console.log(chainIdCallRPC)
+
+    // let chainIdCallRPC = await provider.send('eth_chainId')
+    // console.log(chainIdCallRPC)
 
     let predictedAccessList = await provider.send('eth_getAccessList', [unsignedTx])
     console.log(predictedAccessList)
@@ -334,8 +341,9 @@ async function bugTestEC20TransferBothTests() {
     const contracDeployedWithEthersProvider = new ethers.Contract(bugTestEC20Address, bugTestEC20ABI, provider);
     let unsignedTx = await contracDeployedWithEthersProvider.populateTransaction.transferBothTests();
     console.log(unsignedTx)
-    let chainIdCallRPC = await provider.send('eth_chainId')
-    console.log(chainIdCallRPC)
+
+    // let chainIdCallRPC = await provider.send('eth_chainId')
+    // console.log(chainIdCallRPC)
 
     let predictedAccessList = await provider.send('eth_getAccessList', [unsignedTx])
     console.log(predictedAccessList)
