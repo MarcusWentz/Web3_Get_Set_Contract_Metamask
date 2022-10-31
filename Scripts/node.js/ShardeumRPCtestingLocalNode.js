@@ -130,41 +130,43 @@ async function updateStorageSlot() {
     console.log("UNIX TIME: " + unixTime)
 
     // Useful for raw unsigned transactions.
-    // const contracDeployedWithEthersProvider = new ethers.Contract(simpleStorageAddress, simpleStorageABI, provider);
-    // let unsignedTx = await contracDeployedWithEthersProvider.populateTransaction.set("6");
-    // console.log(unsignedTx)
-    // let chainIdCallRPC = await provider.send('eth_chainId')
-    // console.log(chainIdCallRPC)
+    const contracDeployedWithEthersProvider = new ethers.Contract(simpleStorageAddress, simpleStorageABI, provider);
+    let unsignedTx = await contracDeployedWithEthersProvider.populateTransaction.set("6");
+    console.log(unsignedTx)
+    let chainIdCallRPC = await provider.send('eth_chainId')
+    console.log(chainIdCallRPC)
     //
-    // let predictedAccessList = await provider.send('eth_getAccessList', [unsignedTx])
+    // const txCount = await provider.getTransactionCount(signer.address);
+
+    let predictedAccessList = await provider.send('eth_getAccessList', [unsignedTx])
     // console.log(predictedAccessList)
     // let tx = await signer.sendTransaction(unsignedTx);
     // console.log(tx)
 
-    const txCount = await provider.getTransactionCount(signer.address);
+    // const txCount = await provider.getTransactionCount(signer.address);
+    //
+    // const tx = signer.sendTransaction({
+    //       chainId: chainIdConnected,
+    //       to: simpleStorageAddress,
+    //       nonce:    web3.utils.toHex(txCount),
+    //       gasLimit: web3.utils.toHex(300000), // Raise the gas limit to a much higher amount
+    //       gasPrice: web3.utils.toHex(web3.utils.toWei('30', 'gwei')),
+    //       data: simpleStorageDeployed.methods.set(unixTime).encodeABI(),
+    //       // type: 1,
+    //       // accessList: [
+    //       //   {
+    //       //     address: simpleStorageAddress,
+    //       //     storageKeys: [
+    //       //       "0x0000000000000000000000000000000000000000000000000000000000000000",
+    //       //     ]
+    //       //   }
+    //       // ]
+    //
+    // });
 
-    const tx = signer.sendTransaction({
-          chainId: chainIdConnected,
-          to: simpleStorageAddress,
-          nonce:    web3.utils.toHex(txCount),
-          gasLimit: web3.utils.toHex(300000), // Raise the gas limit to a much higher amount
-          gasPrice: web3.utils.toHex(web3.utils.toWei('30', 'gwei')),
-          data: simpleStorageDeployed.methods.set(unixTime).encodeABI(),
-          // type: 1,
-          // accessList: [
-          //   {
-          //     address: simpleStorageAddress,
-          //     storageKeys: [
-          //       "0x0000000000000000000000000000000000000000000000000000000000000000",
-          //     ]
-          //   }
-          // ]
-
-    });
-
-    console.log("WAIT FOR TX RECEIPT: ")
-    await tx
-    console.log("TX RECEIPT: ")
-    console.log(tx)
+    // console.log("WAIT FOR TX RECEIPT: ")
+    // await tx
+    // console.log("TX RECEIPT: ")
+    // console.log(tx)
 
 }
