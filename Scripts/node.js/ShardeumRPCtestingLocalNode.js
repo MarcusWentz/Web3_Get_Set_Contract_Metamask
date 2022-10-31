@@ -3,7 +3,7 @@ const ethers = require("ethers")
 
 // const rpcURL = "https://liberty20.shardeum.org/"
 // const rpcURL = "https://liberty10.shardeum.org/"
-const rpcURL = process.env.shardeumTestnetNodeHTTP=
+const rpcURL = process.env.shardeumTestnetNodeHTTP
 const web3 = new Web3(rpcURL)
 
 const provider = new ethers.providers.JsonRpcProvider(rpcURL)
