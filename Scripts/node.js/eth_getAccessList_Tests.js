@@ -19,11 +19,11 @@ const multiCallStorageABI =
 [{"inputs":[{"internalType":"uint256","name":"x","type":"uint256"}],"name":"multiCallWrite","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"setCallOne","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[],"name":"callContractToCall","outputs":[{"internalType":"contractcontractToCall","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"multiCallRead","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}]
 const multiCallStorageDeployed = new web3.eth.Contract(multiCallStorageABI, multiCallStorageAddress)
 
-const tokenErc20Address = "0x32B6f2C027D4c9D99Ca07d047D17987390a5EB39"
+const tokenErc20Address = "0x45cbBAEe7A8015748AFb2fAEeE1c94A57cA55B54"
 const tokenErc20ABI = [{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":true,"internalType":"address","name":"spender","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Approval","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"from","type":"address"},{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Transfer","type":"event"},{"inputs":[{"internalType":"address","name":"owner","type":"address"},{"internalType":"address","name":"spender","type":"address"}],"name":"allowance","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"approve","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"balanceOf","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"decimals","outputs":[{"internalType":"uint8","name":"","type":"uint8"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"subtractedValue","type":"uint256"}],"name":"decreaseAllowance","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"addedValue","type":"uint256"}],"name":"increaseAllowance","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"name","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"symbol","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalSupply","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"transfer","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"from","type":"address"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"transferFrom","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"}]
 const tokenErc20Deployed = new web3.eth.Contract(tokenErc20ABI, tokenErc20Address)
 
-const bugTestEC20Address = "0x4f2CCd7c88CC7b9269164F58Fa1BEdDFC8d1aBc2"
+const bugTestEC20Address = "0x1493e0c29F214894B6B23c97d186DF2FE9611888"
 const bugTestEC20ABI = [{"inputs":[],"name":"transferBothTests","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"transferFromTest","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"transferTest","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_token","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[],"name":"tokenObject","outputs":[{"internalType":"contractERC20TokenContract","name":"","type":"address"}],"stateMutability":"view","type":"function"}]
 const bugTestEC20Deployed = new web3.eth.Contract(bugTestEC20ABI, bugTestEC20Address)
 
@@ -34,12 +34,15 @@ function timeout(ms) {
 }
 
 // createAndSendTxTransfer();
+
 // deploySimpleStorage();
+
 // updateStorageSlot();
 // multiCallUpdateStorageSlot();
-// bugTestEC20TransferFrom();
-bugTestEC20Transfer();
 
+bugTestEC20Transfer();
+// bugTestEC20TransferFrom();
+// bugTestEC20TransferBothTests();
 
 async function createAndSendTxTransfer() {
 
@@ -107,7 +110,7 @@ async function updateStorageSlot() {
     let blockNumber = await web3.eth.getBlockNumber();
     console.log("blockNumber: "+ blockNumber)
 
-    const slot0 = await simpleStorageDeployed.methods.storedData().call()
+    const slot0 = await simpleStorageDeployed.methods.slot0().call()
     console.log("slot0: "+ slot0)
 
     const unixTime = Date.now();
@@ -203,12 +206,88 @@ async function bugTestEC20Transfer() {
     let blockNumber = await web3.eth.getBlockNumber();
     console.log("blockNumber: "+ blockNumber)
 
-    // const slot0 = await multiCallStorageDeployed.methods.multiCallRead().call()
-    // console.log("slot0: "+ slot0)
+		// Send 1 ether token.
+		let contracDeployedWithEthersProvider = new ethers.Contract(tokenErc20Address, tokenErc20ABI, provider);
+		let unsignedTx = await contracDeployedWithEthersProvider.populateTransaction.transfer(bugTestEC20Address,"1000000000000000000");
+		console.log(unsignedTx)
+		let chainIdCallRPC = await provider.send('eth_chainId')
+		console.log(chainIdCallRPC)
+
+		let predictedAccessList = await provider.send('eth_getAccessList', [unsignedTx])
+		console.log(predictedAccessList)
+
+		let txCount = await provider.getTransactionCount(signer.address);
+
+    let tx = signer.sendTransaction({
+          chainId: chainIdConnected,
+          to: tokenErc20Address,
+          nonce:    web3.utils.toHex(txCount),
+          gasLimit: web3.utils.toHex(300000), // Raise the gas limit to a much higher amount
+          gasPrice: web3.utils.toHex(web3.utils.toWei('30', 'gwei')),
+          data: tokenErc20Deployed.methods.transfer(bugTestEC20Address,"1000000000000000000").encodeABI(),
+          type: 1,
+          accessList: predictedAccessList
+    });
+
+		console.log("WAIT FOR TX RECEIPT: ")
+		await tx
+		console.log("TX RECEIPT: ")
+		console.log(tx)
+
+		await timeout(15*timeMilliSec)
+
+		const balanceOf = await tokenErc20Deployed.methods.balanceOf(bugTestEC20Address).call()
+    console.log("balanceOf: "+ balanceOf)
+
+    // // Useful for raw unsigned transactions.
+    contracDeployedWithEthersProvider = new ethers.Contract(bugTestEC20Address, bugTestEC20ABI, provider);
+    unsignedTx = await contracDeployedWithEthersProvider.populateTransaction.transferTest();
+    console.log(unsignedTx)
+    chainIdCallRPC = await provider.send('eth_chainId')
+    console.log(chainIdCallRPC)
+
+    // let predictedAccessList = await provider.send('eth_getAccessList', [unsignedTx])
+    // console.log(predictedAccessList)
+
+		//Test contract after sending 1 token.
+    txCount = await provider.getTransactionCount(signer.address);
+
+    tx = signer.sendTransaction({
+          chainId: chainIdConnected,
+          to: bugTestEC20Address,
+          nonce:    web3.utils.toHex(txCount),
+          gasLimit: web3.utils.toHex(300000), // Raise the gas limit to a much higher amount
+          gasPrice: web3.utils.toHex(web3.utils.toWei('30', 'gwei')),
+          data: bugTestEC20Deployed.methods.transferTest().encodeABI(),
+          // type: 1,
+          // accessList: predictedAccessList
+    });
+
+    console.log("WAIT FOR TX RECEIPT: ")
+    await tx
+    console.log("TX RECEIPT: ")
+    console.log(tx)
+
+}
+
+async function bugTestEC20TransferFrom() {
+
+    const chainIdConnected = await web3.eth.getChainId();
+    console.log("chainIdConnected: "+ chainIdConnected)
+
+    const userBalance = await provider.getBalance(signer.address);
+    console.log("User Balance [Shardeum SHM]" )
+    console.log(ethers.utils.formatEther(userBalance))
+
+    let blockNumber = await web3.eth.getBlockNumber();
+    console.log("blockNumber: "+ blockNumber)
+
+		const allowance = await tokenErc20Deployed.methods.allowance(signer.address,bugTestEC20Address).call()
+    console.log("allowance: "+ allowance)
 
     // // Useful for raw unsigned transactions.
     const contracDeployedWithEthersProvider = new ethers.Contract(bugTestEC20Address, bugTestEC20ABI, provider);
-    let unsignedTx = await contracDeployedWithEthersProvider.populateTransaction.transferTest();
+    let unsignedTx = await contracDeployedWithEthersProvider.populateTransaction.transferFromTest();
     console.log(unsignedTx)
     let chainIdCallRPC = await provider.send('eth_chainId')
     console.log(chainIdCallRPC)
@@ -224,7 +303,52 @@ async function bugTestEC20Transfer() {
           nonce:    web3.utils.toHex(txCount),
           gasLimit: web3.utils.toHex(300000), // Raise the gas limit to a much higher amount
           gasPrice: web3.utils.toHex(web3.utils.toWei('30', 'gwei')),
-          data: bugTestEC20Deployed.methods.transferTest().encodeABI(),
+          data: bugTestEC20Deployed.methods.transferFromTest().encodeABI(),
+          type: 1,
+          accessList: predictedAccessList
+    });
+
+    console.log("WAIT FOR TX RECEIPT: ")
+    await tx
+    console.log("TX RECEIPT: ")
+    console.log(tx)
+
+}
+
+async function bugTestEC20TransferBothTests() {
+
+    const chainIdConnected = await web3.eth.getChainId();
+    console.log("chainIdConnected: "+ chainIdConnected)
+
+    const userBalance = await provider.getBalance(signer.address);
+    console.log("User Balance [Shardeum SHM]" )
+    console.log(ethers.utils.formatEther(userBalance))
+
+    let blockNumber = await web3.eth.getBlockNumber();
+    console.log("blockNumber: "+ blockNumber)
+
+    const allowance = await tokenErc20Deployed.methods.allowance(signer.address,bugTestEC20Address).call()
+    console.log("allowance: "+ allowance)
+
+    // // Useful for raw unsigned transactions.
+    const contracDeployedWithEthersProvider = new ethers.Contract(bugTestEC20Address, bugTestEC20ABI, provider);
+    let unsignedTx = await contracDeployedWithEthersProvider.populateTransaction.transferBothTests();
+    console.log(unsignedTx)
+    let chainIdCallRPC = await provider.send('eth_chainId')
+    console.log(chainIdCallRPC)
+
+    let predictedAccessList = await provider.send('eth_getAccessList', [unsignedTx])
+    console.log(predictedAccessList)
+
+    const txCount = await provider.getTransactionCount(signer.address);
+
+    const tx = signer.sendTransaction({
+          chainId: chainIdConnected,
+          to: bugTestEC20Address,
+          nonce:    web3.utils.toHex(txCount),
+          gasLimit: web3.utils.toHex(300000), // Raise the gas limit to a much higher amount
+          gasPrice: web3.utils.toHex(web3.utils.toWei('30', 'gwei')),
+          data: bugTestEC20Deployed.methods.transferBothTests().encodeABI(),
           type: 1,
           accessList: predictedAccessList
     });
