@@ -10,7 +10,7 @@ const provider = new ethers.providers.JsonRpcProvider(rpcURL)
 const signer = new ethers.Wallet(Buffer.from(process.env.shardeumTestnetPrivateKey, 'hex'), provider);
 console.log("User wallet address: " + signer.address)
 
-const simpleStorageAddress = '0x80e293fC7a3338dC18F06917dbab58Fc921B1bb3'
+const simpleStorageAddress = '0x4a5637Bf53992275B93Ff5e160669Ec5Ee9aB372'
 const simpleStorageABI = [{"anonymous":false,"inputs":[],"name":"setEvent","type":"event"},{"inputs":[{"internalType":"uint256","name":"x","type":"uint256"}],"name":"set","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"storedData","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}]
 const simpleStorageDeployed = new web3.eth.Contract(simpleStorageABI, simpleStorageAddress)
 
@@ -102,7 +102,8 @@ console.log("Contract deployed at: " + contract.address)
 
 // Wait until the contract has been deployed before interacting
 // with it; returns the receipt for the deployemnt transaction
-await contract.deployTransaction.wait();
+
+// await contract.deployTransaction.wait();
 
 
 }
@@ -119,19 +120,15 @@ async function updateStorageSlot() {
     let blockNumber = await web3.eth.getBlockNumber();
     console.log("blockNumber: "+ blockNumber)
 
-
     const slot0 = await simpleStorageDeployed.methods.storedData().call()
     console.log("slot0: "+ slot0)
-
-    // const slot0 = await simpleStorageDeployed.methods.storedData().call()
-    // console.log("slot0: "+ slot0)
 
     const unixTime = Date.now();
     console.log("UNIX TIME: " + unixTime)
 
-    // Useful for raw unsigned transactions.
+    // // Useful for raw unsigned transactions.
     const contracDeployedWithEthersProvider = new ethers.Contract(simpleStorageAddress, simpleStorageABI, provider);
-    let unsignedTx = await contracDeployedWithEthersProvider.populateTransaction.set("6");
+    let unsignedTx = await contracDeployedWithEthersProvider.populateTransaction.set(unixTime);
     console.log(unsignedTx)
     let chainIdCallRPC = await provider.send('eth_chainId')
     console.log(chainIdCallRPC)
@@ -139,34 +136,36 @@ async function updateStorageSlot() {
     // const txCount = await provider.getTransactionCount(signer.address);
 
     let predictedAccessList = await provider.send('eth_getAccessList', [unsignedTx])
-    // console.log(predictedAccessList)
+    console.log(predictedAccessList)
+
     // let tx = await signer.sendTransaction(unsignedTx);
     // console.log(tx)
 
-    // const txCount = await provider.getTransactionCount(signer.address);
-    //
-    // const tx = signer.sendTransaction({
-    //       chainId: chainIdConnected,
-    //       to: simpleStorageAddress,
-    //       nonce:    web3.utils.toHex(txCount),
-    //       gasLimit: web3.utils.toHex(300000), // Raise the gas limit to a much higher amount
-    //       gasPrice: web3.utils.toHex(web3.utils.toWei('30', 'gwei')),
-    //       data: simpleStorageDeployed.methods.set(unixTime).encodeABI(),
-    //       // type: 1,
-    //       // accessList: [
-    //       //   {
-    //       //     address: simpleStorageAddress,
-    //       //     storageKeys: [
-    //       //       "0x0000000000000000000000000000000000000000000000000000000000000000",
-    //       //     ]
-    //       //   }
-    //       // ]
-    //
-    // });
+    const txCount = await provider.getTransactionCount(signer.address);
 
-    // console.log("WAIT FOR TX RECEIPT: ")
-    // await tx
-    // console.log("TX RECEIPT: ")
-    // console.log(tx)
+    const tx = signer.sendTransaction({
+          chainId: chainIdConnected,
+          to: simpleStorageAddress,
+          nonce:    web3.utils.toHex(txCount),
+          gasLimit: web3.utils.toHex(300000), // Raise the gas limit to a much higher amount
+          gasPrice: web3.utils.toHex(web3.utils.toWei('30', 'gwei')),
+          data: simpleStorageDeployed.methods.set(unixTime).encodeABI(),
+          type: 1,
+          accessList: predictedAccessList
+          // accessList: [
+          //   {
+          //     address: simpleStorageAddress,
+          //     storageKeys: [
+          //       "0x0000000000000000000000000000000000000000000000000000000000000000",
+          //     ]
+          //   }
+          // ]
+
+    });
+
+    console.log("WAIT FOR TX RECEIPT: ")
+    await tx
+    console.log("TX RECEIPT: ")
+    console.log(tx)
 
 }
