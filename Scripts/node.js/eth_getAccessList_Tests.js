@@ -40,8 +40,8 @@ function timeout(ms) {
 // updateStorageSlot();
 // multiCallUpdateStorageSlot();
 
-bugTestEC20Transfer();
-// bugTestEC20TransferFrom();
+// bugTestEC20Transfer();
+bugTestEC20TransferFrom();
 // bugTestEC20TransferBothTests();
 
 async function createAndSendTxTransfer() {
@@ -288,6 +288,9 @@ async function bugTestEC20TransferFrom() {
     let blockNumber = await web3.eth.getBlockNumber();
     console.log("blockNumber: "+ blockNumber)
 
+		let balanceOfSigner = await tokenErc20Deployed.methods.balanceOf(signer.address).call()
+		console.log("balanceOfSigner: "+ balanceOfSigner)
+
 		const allowance = await tokenErc20Deployed.methods.allowance(signer.address,bugTestEC20Address).call()
     console.log("allowance: "+ allowance)
 
@@ -299,8 +302,8 @@ async function bugTestEC20TransferFrom() {
     // let chainIdCallRPC = await provider.send('eth_chainId')
     // console.log(chainIdCallRPC)
 
-    let predictedAccessList = await provider.send('eth_getAccessList', [unsignedTx])
-    console.log(predictedAccessList)
+    // let predictedAccessList = await provider.send('eth_getAccessList', [unsignedTx])
+    // console.log(predictedAccessList)
 
     const txCount = await provider.getTransactionCount(signer.address);
 
@@ -311,8 +314,8 @@ async function bugTestEC20TransferFrom() {
           gasLimit: web3.utils.toHex(300000), // Raise the gas limit to a much higher amount
           gasPrice: web3.utils.toHex(web3.utils.toWei('30', 'gwei')),
           data: bugTestEC20Deployed.methods.transferFromTest().encodeABI(),
-          type: 1,
-          accessList: predictedAccessList
+          // type: 1,
+          // accessList: predictedAccessList
     });
 
     console.log("WAIT FOR TX RECEIPT: ")
@@ -333,6 +336,9 @@ async function bugTestEC20TransferBothTests() {
 
     let blockNumber = await web3.eth.getBlockNumber();
     console.log("blockNumber: "+ blockNumber)
+
+		let balanceOfSigner = await tokenErc20Deployed.methods.balanceOf(signer.address).call()
+		console.log("balanceOfSigner: "+ balanceOfSigner)
 
     const allowance = await tokenErc20Deployed.methods.allowance(signer.address,bugTestEC20Address).call()
     console.log("allowance: "+ allowance)
