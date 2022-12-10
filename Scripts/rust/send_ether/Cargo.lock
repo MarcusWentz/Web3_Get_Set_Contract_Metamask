@@ -1945,10 +1945,11 @@ dependencies = [
 ]
 
 [[package]]
-name = "sendEther"
+name = "send_ether"
 version = "0.1.0"
 dependencies = [
  "ethers",
+ "ethers-core",
  "ethers-providers",
  "eyre",
  "hex",

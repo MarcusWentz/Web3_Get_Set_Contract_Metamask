@@ -1,5 +1,5 @@
 [package]
-name = "sendEther"
+name = "send_ether"
 version = "0.1.0"
 edition = "2021"
 
@@ -12,3 +12,4 @@ ethers-providers = "1.0.2"
 tokio = { version = "1", features = ["full"] }
 eyre = "0.6.8"
 hex = "0.4.3"
+ethers-core = "1.0.2"
