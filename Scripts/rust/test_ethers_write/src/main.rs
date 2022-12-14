@@ -41,9 +41,19 @@ async fn main() -> Result<()> {
     println!("client {:?}:", client);
 
     // ...and sign transactions
-    let tx = TransactionRequest::pay(signer_address, 100);
-    let pending_tx = client.send_transaction(tx, None).await?;
-    let _receipt = pending_tx.confirmations(2).await?;
+    // let tx = TransactionRequest::pay(signer_address, 100);
+    // let pending_tx = client.send_transaction(tx, None).await?;
+    // let _receipt = pending_tx.confirmations(2).await?;
+
+    // ...and sign transactions
+    let tx_raw = TransactionRequest::new()
+        .chain_id(5)
+        .to(signer_address)
+        .value(4444)
+        .gas(200000)
+        .gas_price(3_000_000_000u32); //3000000000 wei = 3 Gwei
+    let tx_raw_hash = client.send_transaction(tx_raw, None).await?;
+    let _receipt_raw = tx_raw_hash.confirmations(2).await?;
 
     Ok(())
 
