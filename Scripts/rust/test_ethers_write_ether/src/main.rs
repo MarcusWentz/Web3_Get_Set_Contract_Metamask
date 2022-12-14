@@ -40,12 +40,10 @@ async fn main() -> Result<()> {
     let client = SignerMiddleware::new_with_provider_chain(provider, signer).await.unwrap();
     println!("client {:?}:", client);
 
-    // ...and sign transactions
     // let tx = TransactionRequest::pay(signer_address, 100);
     // let pending_tx = client.send_transaction(tx, None).await?;
     // let _receipt = pending_tx.confirmations(2).await?;
 
-    // ...and sign transactions
     let tx_raw = TransactionRequest::new()
         .chain_id(5)
         .to(signer_address)
