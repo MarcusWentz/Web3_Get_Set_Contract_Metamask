@@ -1,24 +1,30 @@
 //Contracts Rust Ethers credit: https://docs.rs/ethers-contract/0.2.2/ethers_contract/struct.Contract.html
 //Credit: https://coinsbench.com/ethereum-with-rust-tutorial-part-1-create-simple-transactions-with-rust-26d365a7ea93
-use std::convert::TryFrom;
+use std::{convert::TryFrom, path::Path};
 use std::env;
 
 use ethers_signers::{LocalWallet, Signer};
 use ethers_providers::{Middleware, Provider, Http};
-use ethers_core::types::{Address,TransactionRequest};
+// use ethers_core::types::{Address,TransactionRequest};
+use ethers_core::types::{Address};
 use ethers_middleware::SignerMiddleware;
+// use ethers::utils::Solc;
 
 use ethers::{
     abi::Abi,
     // utils::Solc,
     // types::{Address, H256},
-    // types::{H256},
+    types::{H256},
     contract::Contract,
     // //providers::{Provider, Http},
     // signers::Wallet,
+    prelude::*,
 };
 
 use eyre::Result;
+
+// Generate the type-safe contract bindings by providing the ABI and Bytecode in the same JSON file.
+abigen!(SimpleStorage, "storeAbiBytecode.json",);
 
 #[tokio::main]
 async fn main() -> Result<()> {
@@ -47,30 +53,43 @@ async fn main() -> Result<()> {
 
     let address = "dbaA7dfBd9125B7a43457D979B1f8a1Bd8687f37".parse::<Address>()?; //0xdbaA7dfBd9125B7a43457D979B1f8a1Bd8687f37
 
-    let abi: Abi = serde_json::from_str(r#"[{"anonymous":false,"inputs":[],"name":"setEvent","type":"event"},{"inputs":[{"internalType":"uint256","name":"x","type":"uint256"}],"name":"set","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"storedData","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}]"#)?;
+    // let abi: Abi = serde_json::from_str(r#"[{"anonymous":false,"inputs":[],"name":"setEvent","type":"event"},{"inputs":[{"internalType":"uint256","name":"x","type":"uint256"}],"name":"set","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"storedData","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}]"#)?;
+
+    // set the path to the contract, `CARGO_MANIFEST_DIR` points to the directory containing the
+    // manifest of `ethers`. which will be `../` relative to this file
+    // let source = Path::new(&env!("CARGO_MANIFEST_DIR")).join("Store.sol");
+    // let compiled = Solc::default().compile_source(source).expect("Could not compile contracts");
+    // let (abi, bytecode, _runtime_bytecode) =
+    //     compiled.find("SimpleStorage").expect("could not find contract").into_parts_or_default();
+
+    // Abigen::new("ERC20Token", "./abi.json")?.generate()?.write_to_file("token.rs")?;
 
     // create the contract object at the address
-    let contract = Contract::new(address, abi, client);
+    // let contract = Contract::new(address, abi, client);
 
     // Calling constant methods is done by calling `call()` on the method builder.
     // (if the function takes no arguments, then you must use `()` as the argument)
-    let storedDataValue = contract
-        .method::<_, i32>("storedData", ())? //Returns a Uint, which is an i32 in Rust.
-        .call()
-        .await?;
+    // let storedDataValue = contract
+    //     .method::<_, i32>("storedData", ())? //Returns a Uint, which is an i32 in Rust.
+    //     .call()
+    //     .await?;
 
-    println!("storedDataValue");
-    println!("{0}", storedDataValue);
 
-    // Non-constant methods are executed via the `send()` call on the method builder.
+    // let storedDataValue = contract.storedData().call().await?;
+    //
+    // println!("storedDataValue");
+    // println!("{0}", storedDataValue);
+    //
+    //
+    //
+    // // Non-constant methods are executed via the `send()` call on the method builder.
     // let call = contract
-    //     .method::<_, H256>("setValue", "hi".to_owned())?;
+    //     .method::<_, H256>("set", "5".to_owned())?;
     // let pending_tx = call.send().await?;
-    //
-    // // `await`ing on the pending transaction resolves to a transaction receipt
-    // let receipt = pending_tx.confirmations(6).await?;
-    //
-    //
+
+    // `await`ing on the pending transaction resolves to a transaction receipt
+    // let receipt = pending_tx.confirmations(2).await?;
+
 
     Ok(())
 
