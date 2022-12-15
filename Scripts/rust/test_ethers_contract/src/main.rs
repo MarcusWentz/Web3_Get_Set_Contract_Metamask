@@ -9,12 +9,13 @@ use ethers_providers::{Middleware, Provider, Http};
 use ethers_core::types::{Address};
 use ethers_middleware::SignerMiddleware;
 // use ethers::utils::Solc;
+use std::sync::Arc;
 
 use ethers::{
     abi::Abi,
     // utils::Solc,
     // types::{Address, H256},
-    types::{H256},
+    // types::{H256},
     contract::Contract,
     // //providers::{Provider, Http},
     // signers::Wallet,
@@ -51,7 +52,7 @@ async fn main() -> Result<()> {
     let client = SignerMiddleware::new_with_provider_chain(provider, signer).await.unwrap();
     println!("client {:?}:", client);
 
-    let address = "dbaA7dfBd9125B7a43457D979B1f8a1Bd8687f37".parse::<Address>()?; //0xdbaA7dfBd9125B7a43457D979B1f8a1Bd8687f37
+    let _address = "dbaA7dfBd9125B7a43457D979B1f8a1Bd8687f37".parse::<Address>()?; //0xdbaA7dfBd9125B7a43457D979B1f8a1Bd8687f37
 
     // let abi: Abi = serde_json::from_str(r#"[{"anonymous":false,"inputs":[],"name":"setEvent","type":"event"},{"inputs":[{"internalType":"uint256","name":"x","type":"uint256"}],"name":"set","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"storedData","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}]"#)?;
 
@@ -65,7 +66,14 @@ async fn main() -> Result<()> {
     // Abigen::new("ERC20Token", "./abi.json")?.generate()?.write_to_file("token.rs")?;
 
     // create the contract object at the address
-    // let contract = Contract::new(address, abi, client);
+
+    let clientArc =
+    Provider::<Ws>::connect("wss://goerli.infura.io/ws/v3/e9520f17b0944cb08b00710d60ff34ac")
+        .await?;
+
+    let _clientArc = Arc::new(client);
+
+    let contract = SimpleStorage::new(_address, Arc::clone(&_clientArc));
 
     // Calling constant methods is done by calling `call()` on the method builder.
     // (if the function takes no arguments, then you must use `()` as the argument)
@@ -75,10 +83,24 @@ async fn main() -> Result<()> {
     //     .await?;
 
 
-    // let storedDataValue = contract.storedData().call().await?;
-    //
-    // println!("storedDataValue");
-    // println!("{0}", storedDataValue);
+    let stored_data_value = contract.stored_data().call().await?;
+
+    println!("storedDataValue");
+    println!("{0}", stored_data_value);
+
+    let tx = contract.set(U256::from(55)).send().await?.await?;
+
+    // let tx_raw = TransactionRequest::new()
+    //     .chain_id(5)
+    //     .to(signer_address)
+    //     .data(contract.set(U256::from(55)))
+    //     .value(0)
+    //     .gas(200000)
+    //     .gas_price(3_000_000_000u32); //3000000000 wei = 3 Gwei
+    // let tx_raw_hash = client.send_transaction(tx_raw, None).await?;
+    // let _receipt_raw = tx_raw_hash.confirmations(2).await?;
+
+
     //
     //
     //
