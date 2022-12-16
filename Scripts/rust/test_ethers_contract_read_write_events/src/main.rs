@@ -65,22 +65,27 @@ async fn main() -> Result<()> {
     let tv_sec:usize =  now_splitted[0].parse().unwrap(); //1657846097
     println!("Unix Time Now: {:?}", tv_sec);
 
-    let _tx = simple_storage_instance.set(U256::from(tv_sec)).send().await?.await?;
+    // Send smart contract data transaction with custom MSG.VALUE and gas parameters.
+    let _tx = simple_storage_instance.set(U256::from(tv_sec))
+                .value(0)
+                .gas(200000)
+                .gas_price(3_000_000_000u32)
+                .send().await?.await?;
 
     println!("Tx mined.");
 
-    let stored_data_value = simple_storage_instance.stored_data().call().await?;
-    println!("storedDataValue: {0}", stored_data_value);
-
+    // Good for transactions that don't have data.
     // let tx_raw = TransactionRequest::new()
     //     .chain_id(5)
-    //     .to(signer_address)
-    //     .data(contract.set(U256::from(55)))
+    //     .to(_address)
     //     .value(0)
     //     .gas(200000)
     //     .gas_price(3_000_000_000u32); //3000000000 wei = 3 Gwei
     // let tx_raw_hash = client.send_transaction(tx_raw, None).await?;
     // let _receipt_raw = tx_raw_hash.confirmations(2).await?;
+
+    let stored_data_value = simple_storage_instance.stored_data().call().await?;
+    println!("storedDataValue: {0}", stored_data_value);
 
     // Subscribe Transfer events
     let events = simple_storage_instance.events();
