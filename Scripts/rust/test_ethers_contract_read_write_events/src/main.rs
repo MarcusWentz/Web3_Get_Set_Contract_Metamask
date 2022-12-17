@@ -4,7 +4,8 @@
 use std::env;
 use std::time::{SystemTime};
 
-use ethers_signers::{LocalWallet, Signer};
+use ethers_signers::{LocalWallet};
+// use ethers_signers::{LocalWallet, Signer};
 // use ethers_providers::{Middleware, Provider, Http};
 // use ethers_providers::{Provider, Http};
 use ethers_providers::{Provider};
@@ -58,56 +59,16 @@ async fn main() -> Result<()> {
     // let mut my_number: simple_storage::SimpleStorage<M> = simple_storage_instance;
     // simple_storage_instance.what_is_this();
     // simple_storage_instance.what_is_this;
-    // simple_storage::SimpleStorage<SignerMiddleware<ethers_providers::Provider<ethers_providers::Ws>, Wallet<ethers_core::k256::ecdsa::SigningKey>>>
-
-
-    // println!("HI");
-    // print_type_of(&simple_storage_instance);
-    // println!("BYE");
-
+    // simple_storage_instance type: simple_storage::SimpleStorage<SignerMiddleware<ethers_providers::Provider<ethers_providers::Ws>, Wallet<ethers_core::k256::ecdsa::SigningKey>>>
 
     let stored_data_value = simple_storage_instance.stored_data().call().await?;
 
     println!("storedDataValue: {0}", stored_data_value);
 
-    // let now = SystemTime::now(); //Credit: https://stackoverflow.com/questions/55849295/field-tv-sec-doesnt-exist-in-struct-systemtime
-    // let now_str = format!("{:?}",now); //SystemTime { tv_sec: 1657846097, tv_nsec: 129747070 }
-    // let now_str_digits_spaces: String = now_str.chars().filter(|c| c.is_digit(10) || *c == ',').collect(); //"1657846097,129747070"
-    // let now_splitted: Vec<&str> = now_str_digits_spaces.split(",").collect(); //["1657846097", "129747070"]
-    // let tv_sec:usize =  now_splitted[0].parse().unwrap(); //1657846097
-    // println!("Unix Time Now: {:?}", tv_sec);
+    // send_set_tx(simple_storage_instance).await;
+    send_set_tx(simple_storage_instance.clone()).await.expect("Transaction function error"); //Clone the value to avoid Rust borrow checker error.
 
-    send_set_tx(simple_storage_instance).await;
-    // send_set_tx().await?;
-    // send_set_tx().await?;
-
-    // let tv_sec = get_unix_time();
-    //
-    // // Send smart contract data transaction with custom MSG.VALUE and gas parameters.
-    // let _tx = simple_storage_instance.set(U256::from(tv_sec))
-    //             .value(0)
-    //             .gas(200000)
-    //             .gas_price(3_000_000_000u32)
-    //             .send().await?.await?;
-    // println!("Tx mined. {}");
-
-    // let stored_data_value = simple_storage_instance.stored_data().call().await?;
-    // println!("storedDataValue: {0}", stored_data_value);
-    //
-    // // Subscribe Transfer events
-    // let events = simple_storage_instance.events();
-    // let mut stream = events.stream().await?;
-    //
-    // println!("EVENT LISTENER START!");
-    //
-    // while let Some(Ok(_event)) = stream.next().await {
-    //
-    //     println!("EVENT DETECTED!");
-    //
-    //     let stored_data_value = simple_storage_instance.stored_data().call().await?;
-    //     println!("storedDataValue: {0}", stored_data_value);
-    //
-    // }
+    subscribe_to_contact_events(simple_storage_instance.clone()).await.expect("Event function error."); //Clone the value to avoid Rust borrow checker error.
 
     Ok(())
 
@@ -150,8 +111,14 @@ async fn send_set_tx(simple_storage_instance_tx: simple_storage::SimpleStorage<S
     let stored_data_value = simple_storage_instance_tx.stored_data().call().await?;
     println!("storedDataValue: {0}", stored_data_value);
 
+    Ok(())
+
+}
+
+async fn subscribe_to_contact_events(simple_storage_instance_event: simple_storage::SimpleStorage<SignerMiddleware<ethers_providers::Provider<ethers_providers::Ws>, Wallet<ethers_core::k256::ecdsa::SigningKey>>>) -> Result<()> {
+
     // Subscribe Transfer events
-    let events = simple_storage_instance_tx.events();
+    let events = simple_storage_instance_event.events();
     let mut stream = events.stream().await?;
 
     println!("EVENT LISTENER START!");
@@ -160,7 +127,7 @@ async fn send_set_tx(simple_storage_instance_tx: simple_storage::SimpleStorage<S
 
         println!("EVENT DETECTED!");
 
-        let stored_data_value = simple_storage_instance_tx.stored_data().call().await?;
+        let stored_data_value = simple_storage_instance_event.stored_data().call().await?;
         println!("storedDataValue: {0}", stored_data_value);
 
     }
@@ -168,7 +135,3 @@ async fn send_set_tx(simple_storage_instance_tx: simple_storage::SimpleStorage<S
     Ok(())
 
 }
-
-// fn print_type_of<T>(_: &T) {
-//     println!("{}", std::any::type_name::<T>());
-// }
