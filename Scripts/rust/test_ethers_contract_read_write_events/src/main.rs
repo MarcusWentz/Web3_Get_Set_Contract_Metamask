@@ -37,7 +37,7 @@ async fn main() -> Result<()> {
 
     let signer = private_key_wallet_string.parse::<LocalWallet>()?;
 
-    let _signer_address = signer.address();
+    // let _signer_address = signer.address();
     // println!("signer address: {}", signer_address);
 
     // println!("signer {:?}:", signer);
@@ -54,16 +54,19 @@ async fn main() -> Result<()> {
 
     let simple_storage_instance = SimpleStorage::new(_address, Arc::clone(&_client_arc));
 
+    // let mut my_number: simple_storage::SimpleStorage = simple_storage_instance;
+    // let mut my_number: simple_storage::SimpleStorage<M> = simple_storage_instance;
+
+    // println!("HI");
+    // print_type_of(&simple_storage_instance);
+    // println!("BYE");
+
+
     let stored_data_value = simple_storage_instance.stored_data().call().await?;
 
     println!("storedDataValue: {0}", stored_data_value);
 
-    let now = SystemTime::now(); //Credit: https://stackoverflow.com/questions/55849295/field-tv-sec-doesnt-exist-in-struct-systemtime
-    let now_str = format!("{:?}",now); //SystemTime { tv_sec: 1657846097, tv_nsec: 129747070 }
-    let now_str_digits_spaces: String = now_str.chars().filter(|c| c.is_digit(10) || *c == ',').collect(); //"1657846097,129747070"
-    let now_splitted: Vec<&str> = now_str_digits_spaces.split(",").collect(); //["1657846097", "129747070"]
-    let tv_sec:usize =  now_splitted[0].parse().unwrap(); //1657846097
-    println!("Unix Time Now: {:?}", tv_sec);
+    let tv_sec = get_unix_time();
 
     // Send smart contract data transaction with custom MSG.VALUE and gas parameters.
     let _tx = simple_storage_instance.set(U256::from(tv_sec))
@@ -72,17 +75,17 @@ async fn main() -> Result<()> {
                 .gas_price(3_000_000_000u32)
                 .send().await?.await?;
 
-    println!("Tx mined.");
+    // let now = SystemTime::now(); //Credit: https://stackoverflow.com/questions/55849295/field-tv-sec-doesnt-exist-in-struct-systemtime
+    // let now_str = format!("{:?}",now); //SystemTime { tv_sec: 1657846097, tv_nsec: 129747070 }
+    // let now_str_digits_spaces: String = now_str.chars().filter(|c| c.is_digit(10) || *c == ',').collect(); //"1657846097,129747070"
+    // let now_splitted: Vec<&str> = now_str_digits_spaces.split(",").collect(); //["1657846097", "129747070"]
+    // let tv_sec:usize =  now_splitted[0].parse().unwrap(); //1657846097
+    // println!("Unix Time Now: {:?}", tv_sec);
 
-    // Good for transactions that don't have data.
-    // let tx_raw = TransactionRequest::new()
-    //     .chain_id(5)
-    //     .to(_address)
-    //     .value(0)
-    //     .gas(200000)
-    //     .gas_price(3_000_000_000u32); //3000000000 wei = 3 Gwei
-    // let tx_raw_hash = client.send_transaction(tx_raw, None).await?;
-    // let _receipt_raw = tx_raw_hash.confirmations(2).await?;
+    // send_set_tx(simple_storage_instance).await;
+    // send_set_tx().await?;
+    // send_set_tx(4).await?;
+
 
     let stored_data_value = simple_storage_instance.stored_data().call().await?;
     println!("storedDataValue: {0}", stored_data_value);
@@ -105,3 +108,39 @@ async fn main() -> Result<()> {
     Ok(())
 
 }
+
+fn get_unix_time() -> usize {
+
+    let now = SystemTime::now(); //Credit: https://stackoverflow.com/questions/55849295/field-tv-sec-doesnt-exist-in-struct-systemtime
+    let now_str = format!("{:?}",now); //SystemTime { tv_sec: 1657846097, tv_nsec: 129747070 }
+    let now_str_digits_spaces: String = now_str.chars().filter(|c| c.is_digit(10) || *c == ',').collect(); //"1657846097,129747070"
+    let now_splitted: Vec<&str> = now_str_digits_spaces.split(",").collect(); //["1657846097", "129747070"]
+    let tv_sec:usize =  now_splitted[0].parse().unwrap(); //1657846097
+    println!("Unix Time Now: {:?}", tv_sec);
+    return tv_sec;
+}
+
+// async fn send_set_tx(simple_storage_instance:
+//     simple_storage::SimpleStorage<ethers_middleware::signer::SignerMiddleware<ethers_providers::provider::Provider<ethers_providers::transports::ws::Ws>, ethers_signers::wallet::Wallet<k256::ecdsa::sign::SigningKey>>>) -> Result<()> {
+//
+//
+//     // println!("Tx mined. {}", a);
+//     // println!("Tx mined. {}", a);
+//
+//     // Good for transactions that don't have data.
+//     // let tx_raw = TransactionRequest::new()
+//     //     .chain_id(5)
+//     //     .to(_address)
+//     //     .value(0)
+//     //     .gas(200000)
+//     //     .gas_price(3_000_000_000u32); //3000000000 wei = 3 Gwei
+//     // let tx_raw_hash = client.send_transaction(tx_raw, None).await?;
+//     // let _receipt_raw = tx_raw_hash.confirmations(2).await?;
+//
+//     Ok(())
+//
+// }
+
+// fn print_type_of<T>(_: &T) {
+//     println!("{}", std::any::type_name::<T>());
+// }
