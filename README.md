@@ -12,4 +12,3 @@ Try the project via GitHub pages:\
   Contract deployed and verified on Goerli testnet: \
   https://goerli.etherscan.io/address/0xdbaa7dfbd9125b7a43457d979b1f8a1bd8687f37#code
 
-test
