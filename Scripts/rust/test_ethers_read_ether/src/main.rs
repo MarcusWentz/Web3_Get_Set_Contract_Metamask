@@ -12,15 +12,22 @@ async fn main() -> Result<()> {
 
     let rpc_goerli_infura_https = env::var("goerliHTTPS_InfuraAPIKey").expect("$goerliHTTPS_InfuraAPIKey is not set");
 
+    // let rpc_shardeum_https = "https://liberty20.shardeum.org/";
+
+    // let rpc_shardeum_local_http = "http://localhost:8080";
+
     let provider = Provider::<Http>::try_from(rpc_goerli_infura_https).expect("could not instantiate HTTP Provider");
+
+    let chainid = provider.get_chainid().await?;
+    println!("Got chainid: {}", chainid);
 
     let other_address_hex = "0x0000000000000000000000000000000000000000";
     let other_address = "0x0000000000000000000000000000000000000000".parse::<Address>()?;
     let other_balance = provider.get_balance(other_address, None).await?;
     println!("Balance for address {}: {}",other_address_hex, other_balance);
 
-    let ens_balance = provider.get_balance("car.eth", None).await?;
-    println!("ENS address balance: {}", ens_balance);
+    // let ens_balance = provider.get_balance("car.eth", None).await?;
+    // println!("ENS address balance: {}", ens_balance);
 
     Ok(())
 
