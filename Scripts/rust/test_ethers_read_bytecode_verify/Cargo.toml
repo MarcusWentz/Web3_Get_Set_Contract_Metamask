@@ -1,0 +1,16 @@
+[package]
+name = "test_ethers"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+# web3 = { git = "https://github.com/tomusdrw/rust-web3" }
+ethers = "1.0.0"
+ethers-providers = "1.0.2"
+tokio = { version = "1", features = ["full"] }
+eyre = "0.6.8"
+hex = "0.4.3"
+ethers-core = "1.0.2"
+ethers-signers = "1.0.2"
