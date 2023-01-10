@@ -1,0 +1,11 @@
+[package]
+name = "test_ethers"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+may = "0.3.33"
+native-tls = "0.2.11"
+tungstenite = "0.18.0"
