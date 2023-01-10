@@ -33,6 +33,9 @@ async fn main() -> Result<()> {
     let block_number = current_block_parameters.clone().unwrap().number.unwrap();
     println!("Got block_number: {:?}", block_number);
 
+    let cycle_number = current_block_parameters.clone().unwrap().number.unwrap()/10;
+    println!("Cycle number (Shardeum general rule: roundDown(blockNumber/10) ): {:?}", cycle_number);
+
     let block_gas = current_block_parameters.clone().unwrap().gas_used;
     println!("Got block_gas: {:?}", block_gas);
     
