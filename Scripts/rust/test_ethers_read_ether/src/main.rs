@@ -10,13 +10,13 @@ use eyre::Result;
 #[tokio::main]
 async fn main() -> Result<()> {
 
-    // let rpc_goerli_infura_https = env::var("goerliHTTPS_InfuraAPIKey").expect("$goerliHTTPS_InfuraAPIKey is not set");
+    let rpc_goerli_infura_https = env::var("goerliHTTPS_InfuraAPIKey").expect("$goerliHTTPS_InfuraAPIKey is not set");
 
-    // let provider = Provider::<Http>::try_from(rpc_goerli_infura_https).expect("could not instantiate HTTP Provider");
+    let provider = Provider::<Http>::try_from(rpc_goerli_infura_https).expect("could not instantiate HTTP Provider");
 
-    let rpc_shardeum_https = "https://liberty20.shardeum.org/";
+    // let rpc_shardeum_https = "https://liberty20.shardeum.org/";
 
-    let provider = Provider::<Http>::try_from(rpc_shardeum_https).expect("could not instantiate HTTP Provider");
+    // let provider = Provider::<Http>::try_from(rpc_shardeum_https).expect("could not instantiate HTTP Provider");
 
     let chainid = provider.get_chainid().await?;
     println!("Got chainid: {}", chainid);
@@ -44,6 +44,12 @@ async fn main() -> Result<()> {
 
     let block_hash = current_block_parameters.clone().unwrap().hash.unwrap();
     println!("Got block_hash: {:?}", block_hash);
+
+    //Shardeum will not show transactions in bundles (blocks). 
+    //Use the Shardeum Explorer JSON URL view with filters to get transactions from cycle ranges: 
+    //https://docs.shardeum.org/smartContracts/events/pollEvents#reading-events-with-shardeum-cycles
+    let block_transactions = current_block_parameters.clone().unwrap().transactions;
+    println!("Got block_transactions: {:?}", block_transactions);
 
     let other_address_hex = "0x0000000000000000000000000000000000000000";
     let other_address = "0x0000000000000000000000000000000000000000".parse::<Address>()?;
