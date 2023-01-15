@@ -12,8 +12,8 @@ contract faucetSHM {
 
     function useFaucet() public {
         if(block.timestamp < userPreviousWithdrawTime[msg.sender] + 43200) {revert cooldown();} 
-        if(address(this).balance < 100 ether) {revert faucetNotFunded();}
+        if(address(this).balance < 50 ether) {revert faucetNotFunded();}
         userPreviousWithdrawTime[msg.sender] = block.timestamp; //Current faucet user address records current UNIX time for cooldown check. 
-        payable(msg.sender).transfer(100 ether);             //Send 20 LINK to current faucet user address.
+        payable(msg.sender).transfer(50 ether);             //Send 20 LINK to current faucet user address.
     }
 }
