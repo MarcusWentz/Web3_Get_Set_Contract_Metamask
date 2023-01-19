@@ -18,6 +18,8 @@ use ethers::{
     prelude::*,
 };
 
+// use primitive_types::H256;
+
 use eyre::Result;
 
 // Generate the type-safe contract bindings by providing the ABI and Bytecode in the same JSON file.
@@ -134,12 +136,24 @@ async fn send_set_tx(simple_storage_instance_tx: simple_storage::SimpleStorage<S
     // Good for transactions that don't have data.
     let tx_raw = TransactionRequest::new()
         .chain_id(5)
-        .to(contract_address)
+        .to(simple_storage_instance_tx.address())
         .data(simple_storage_instance_tx.set(U256::from(tv_sec)).calldata().unwrap())
         .value(0)
         .gas(200000)
-        .gas_price(3_000_000_000u32); //3000000000 wei = 3 Gwei
+        .gas_price(3_000_000_000u32) //3000000000 wei = 3 Gwei
+        .with_access_list(AccessList(vec![
+            AccessListItem { 
+                address: simple_storage_instance_tx.address(), 
+                storage_keys: vec![
+                    // H256::zero() //Same as //"0x0000000000000000000000000000000000000000000000000000000000000000"
+                    // H256([ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+                    "0x0000000000000000000000000000000000000000000000000000000000000000".parse::<H256>().unwrap()
+                ] 
+            }
+        ] ) ); //AccessList list with 
 
+        println!("Storage slot 0 value {:?}", H256::zero() );
+    
         // println!("test {:?}", simple_storage_instance_tx.set(U256::from(tv_sec)) );
         // println!("test {:?}", simple_storage_instance_tx.set(U256::from(tv_sec)).calldata().unwrap() );
 
