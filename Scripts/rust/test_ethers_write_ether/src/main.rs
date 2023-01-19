@@ -51,7 +51,21 @@ async fn main() -> Result<()> {
         .value(4444)
         .gas(200000)
         .gas_price(3_000_000_000u32) //3000000000 wei = 3 Gwei'
-        .with_access_list(AccessList::default()); //Empty accessList test.s
+        // .with_access_list(AccessList::default()); //Empty accessList test
+        // .with_access_list(AccessList(vec![])); //Empty accessList test
+        .with_access_list(AccessList(vec![
+            AccessListItem { 
+                address: signer_address, 
+                storage_keys: vec![] }
+            ] ) ); //AccessList list with wallet address with no storage slots test.
+        // .with_access_list(AccessList(vec![
+        //                                     AccessListItem { 
+        //                                         address: signer_address, 
+        //                                         storage_keys: vec![] },
+        //                                     AccessListItem { 
+        //                                         address: signer_address, 
+        //                                         storage_keys: vec![] }
+        //                                     ] ) ); //AccessList list with wallet address with no storage slots test. Repeat address twice to test syntax for multiple addresses in Rust vector.
 
     let tx_raw_hash = client.send_transaction(tx_raw, None).await?;
 
