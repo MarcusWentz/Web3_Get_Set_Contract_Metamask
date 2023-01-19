@@ -30,6 +30,7 @@ async function createAndSendTx() {
 
   const balanceBefore1 = await provider.getBalance("0x66C1d8A5ee726b545576A75380391835F8AAA43c");
   const balanceBefore2 = await provider.getBalance("0xD0E222A8b806E0B7e89dEcDCdFD6F9a2BeA9cdF6");
+  const balanceBefore3 = await provider.getBalance("0xBB4aEDcB7F5a8B8B7868287374519Fc3b7aAD5Fa");
 
   const txCount = await provider.getTransactionCount(signer.address);
 
@@ -38,9 +39,10 @@ async function createAndSendTx() {
     to: simpleStorageAddress,
     data: simpleStorageDeployed.methods.bulkSend([
       "0x66C1d8A5ee726b545576A75380391835F8AAA43c",
-      "0xD0E222A8b806E0B7e89dEcDCdFD6F9a2BeA9cdF6"
+      "0xD0E222A8b806E0B7e89dEcDCdFD6F9a2BeA9cdF6",
+      "0xBB4aEDcB7F5a8B8B7868287374519Fc3b7aAD5Fa"
       ]).encodeABI(),
-    value: "2000000000000000000", //2 ether SHM.
+    value: "3000000000000000000", //3 ether SHM.
     nonce:    web3.utils.toHex(txCount),
     gasLimit: web3.utils.toHex(300000), // Raise the gas limit to a much higher amount
     gasPrice: web3.utils.toHex(web3.utils.toWei('30', 'gwei')),
@@ -52,6 +54,10 @@ async function createAndSendTx() {
       },
       {
         address: "0xD0E222A8b806E0B7e89dEcDCdFD6F9a2BeA9cdF6",
+        storageKeys: []
+      },
+      {
+        address: "0xBB4aEDcB7F5a8B8B7868287374519Fc3b7aAD5Fa",
         storageKeys: []
       }
     ]
@@ -67,7 +73,8 @@ async function createAndSendTx() {
 
   const balanceAfter1 = await provider.getBalance("0x66C1d8A5ee726b545576A75380391835F8AAA43c");
   const balanceAfter2 = await provider.getBalance("0xD0E222A8b806E0B7e89dEcDCdFD6F9a2BeA9cdF6");
-  
+  const balanceAfter3 = await provider.getBalance("0xbb4aedcb7f5a8b8b7868287374519fc3b7aad5fa");
+
   console.log(balanceBefore1.toString())
   console.log(balanceAfter1.toString())
   expect(balanceAfter1.toString()).to.equal( (BigInt(balanceBefore1)+BigInt("1000000000000000000")).toString() );
@@ -78,6 +85,11 @@ async function createAndSendTx() {
   expect(balanceAfter2.toString()).to.equal( (BigInt(balanceBefore2)+BigInt("1000000000000000000")).toString() );
   console.log("Test 2 pass.")
   
+  console.log(balanceBefore3.toString())
+  console.log(balanceAfter3.toString())
+  expect(balanceAfter3.toString()).to.equal( (BigInt(balanceBefore3)+BigInt("1000000000000000000")).toString() );
+  console.log("Test 3 pass.")
+
   console.log("All tests passed.")
 
 }
