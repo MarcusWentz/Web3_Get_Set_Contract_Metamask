@@ -8,6 +8,7 @@ use ethers_signers::{LocalWallet};
 // use ethers_signers::{LocalWallet, Signer};
 // use ethers_providers::{Middleware, Provider, Http};
 // use ethers_providers::{Provider, Http};
+use ethers_core::types::transaction::eip2930::{AccessList,AccessListItem};
 use ethers_providers::{Provider};
 use ethers_core::types::{Address};
 use ethers_middleware::SignerMiddleware;
@@ -27,12 +28,12 @@ async fn main() -> Result<()> {
 
     // let rpc_goerli_infura_https = env::var("goerliHTTPS_InfuraAPIKey").expect("$goerliHTTPS_InfuraAPIKey is not set");
 
-    let _rpc_goerli_infura_wss = env::var("goerliWebSocketSecureEventsInfuraAPIKey").expect("$goerliWebSocketSecureEventsInfuraAPIKey is not set");
+    let rpc_goerli_infura_wss = env::var("goerliWebSocketSecureEventsInfuraAPIKey").expect("$goerliWebSocketSecureEventsInfuraAPIKey is not set");
 
     let private_key_wallet_string = env::var("devTestnetPrivateKey").expect("$devTestnetPrivateKey is not set");
 
     // let provider = Provider::<Http>::try_from(rpc_goerli_infura_https).expect("could not instantiate HTTP Provider");
-    let provider = Provider::<Ws>::connect(_rpc_goerli_infura_wss).await?;
+    let provider = Provider::<Ws>::connect(rpc_goerli_infura_wss).await?;
 
     // println!("provider {:?}:", provider);
 
@@ -49,11 +50,11 @@ async fn main() -> Result<()> {
     let client = SignerMiddleware::new_with_provider_chain(provider, signer).await.unwrap();
     // println!("client {:?}:", client);
 
-    let _address = "dbaA7dfBd9125B7a43457D979B1f8a1Bd8687f37".parse::<Address>()?; //0xdbaA7dfBd9125B7a43457D979B1f8a1Bd8687f37
+    let contract_address = "0xdbaA7dfBd9125B7a43457D979B1f8a1Bd8687f37".parse::<Address>()?; //0xdbaA7dfBd9125B7a43457D979B1f8a1Bd8687f37
 
-    let _client_arc = Arc::new(client);
+    let client_arc = Arc::new(client);
 
-    let simple_storage_instance = SimpleStorage::new(_address, Arc::clone(&_client_arc));
+    let simple_storage_instance = SimpleStorage::new(contract_address, Arc::clone(&client_arc));
 
     // let mut my_number: simple_storage::SimpleStorage = simple_storage_instance;
     // let mut my_number: simple_storage::SimpleStorage<M> = simple_storage_instance;
@@ -89,22 +90,62 @@ async fn send_set_tx(simple_storage_instance_tx: simple_storage::SimpleStorage<S
 
     let tv_sec = get_unix_time();
 
-    // Send smart contract data transaction with custom MSG.VALUE and gas parameters.
-    let _tx = simple_storage_instance_tx.set(U256::from(tv_sec))
-                .value(0)
-                .gas(200000)
-                .gas_price(3_000_000_000u32)
-                .send().await?.await?;
+    // // Send smart contract data transaction with custom MSG.VALUE and gas parameters.
+    // let _tx = simple_storage_instance_tx.set(U256::from(tv_sec))
+    //             .value(0)
+    //             .gas(200000)
+    //             .gas_price(3_000_000_000u32)
+    //             .access_list(AccessList(vec![
+    //                 AccessListItem { 
+    //                     address: simple_storage_instance_tx.address(), 
+    //                     storage_keys: vec![
+    //                         // 0x0000000000000000000000000000000000000000000000000000000000000000
+    //                     ] 
+    //                 }
+    //                 ] ) ) //AccessList list with wallet address with no storage slots test.
+    //             .send().await?.await?;
+
+
+        // let rpc_goerli_infura_https = env::var("goerliHTTPS_InfuraAPIKey").expect("$goerliHTTPS_InfuraAPIKey is not set");
+
+        let rpc_goerli_infura_wss = env::var("goerliWebSocketSecureEventsInfuraAPIKey").expect("$goerliWebSocketSecureEventsInfuraAPIKey is not set");
+
+        let private_key_wallet_string = env::var("devTestnetPrivateKey").expect("$devTestnetPrivateKey is not set");
+    
+        // let provider = Provider::<Http>::try_from(rpc_goerli_infura_https).expect("could not instantiate HTTP Provider");
+        let provider = Provider::<Ws>::connect(rpc_goerli_infura_wss).await?;
+    
+        // println!("provider {:?}:", provider);
+    
+        let signer = private_key_wallet_string.parse::<LocalWallet>()?;
+    
+        let signer_address = signer.address();
+        // println!("signer address: {}", signer_address);
+    
+        // println!("signer {:?}:", signer);
+    
+        // let block = provider.get_block(0).await?;
+        // println!("Got block: {:?}", block);
+    
+        let client = SignerMiddleware::new_with_provider_chain(provider, signer).await.unwrap();
+
+        let contract_address = "0xdbaA7dfBd9125B7a43457D979B1f8a1Bd8687f37".parse::<Address>()?; //0xdbaA7dfBd9125B7a43457D979B1f8a1Bd8687f37
 
     // Good for transactions that don't have data.
-    // let tx_raw = TransactionRequest::new()
-    //     .chain_id(5)
-    //     .to(_address)
-    //     .value(0)
-    //     .gas(200000)
-    //     .gas_price(3_000_000_000u32); //3000000000 wei = 3 Gwei
-    // let tx_raw_hash = client.send_transaction(tx_raw, None).await?;
-    // let _receipt_raw = tx_raw_hash.confirmations(2).await?;
+    let tx_raw = TransactionRequest::new()
+        .chain_id(5)
+        .to(contract_address)
+        .data(simple_storage_instance_tx.set(U256::from(tv_sec)).calldata().unwrap())
+        .value(0)
+        .gas(200000)
+        .gas_price(3_000_000_000u32); //3000000000 wei = 3 Gwei
+
+        // println!("test {:?}", simple_storage_instance_tx.set(U256::from(tv_sec)) );
+        // println!("test {:?}", simple_storage_instance_tx.set(U256::from(tv_sec)).calldata().unwrap() );
+
+        
+    let tx_raw_hash = client.send_transaction(tx_raw, None).await?;
+    let _receipt_raw = tx_raw_hash.confirmations(2).await?;
 
     println!("Tx mined.");
 
