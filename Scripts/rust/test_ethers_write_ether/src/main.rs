@@ -5,6 +5,7 @@ use std::env;
 use ethers_signers::{LocalWallet, Signer};
 use ethers_providers::{Middleware, Provider, Http};
 use ethers_core::types::{Address,TransactionRequest};
+use ethers_core::types::transaction::eip2930::{AccessList,AccessListItem};
 use ethers_middleware::SignerMiddleware;
 // use ethers_core::types::{Address, TransactionRequest};
 
@@ -49,8 +50,12 @@ async fn main() -> Result<()> {
         .to(signer_address)
         .value(4444)
         .gas(200000)
-        .gas_price(3_000_000_000u32); //3000000000 wei = 3 Gwei
+        .gas_price(3_000_000_000u32) //3000000000 wei = 3 Gwei'
+        .with_access_list(AccessList::default()); //Empty accessList test.s
+
     let tx_raw_hash = client.send_transaction(tx_raw, None).await?;
+
+    
     let _receipt_raw = tx_raw_hash.confirmations(2).await?;
 
     Ok(())
