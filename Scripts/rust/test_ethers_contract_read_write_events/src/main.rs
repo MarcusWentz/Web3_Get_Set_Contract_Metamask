@@ -50,11 +50,11 @@ async fn main() -> Result<()> {
     // println!("Got block: {:?}", block);
 
     let client = SignerMiddleware::new_with_provider_chain(provider, signer).await.unwrap();
-    // println!("client {:?}:", client);
+    println!("client {:?}:", client);
 
     let contract_address = "0xdbaA7dfBd9125B7a43457D979B1f8a1Bd8687f37".parse::<Address>()?; //0xdbaA7dfBd9125B7a43457D979B1f8a1Bd8687f37
 
-    let client_arc = Arc::new(client);
+    let client_arc = Arc::new(client.clone());
 
     let simple_storage_instance = SimpleStorage::new(contract_address, Arc::clone(&client_arc));
 
@@ -69,7 +69,7 @@ async fn main() -> Result<()> {
     println!("storedDataValue: {0}", stored_data_value);
 
     // send_set_tx(simple_storage_instance).await;
-    send_set_tx(simple_storage_instance.clone()).await.expect("Transaction function error"); //Clone the value to avoid Rust borrow checker error.
+    send_set_tx(client.clone(),simple_storage_instance.clone()).await.expect("Transaction function error"); //Clone the value to avoid Rust borrow checker error.
 
     subscribe_to_contact_events(simple_storage_instance.clone()).await.expect("Event function error."); //Clone the value to avoid Rust borrow checker error.
 
@@ -88,52 +88,11 @@ fn get_unix_time() -> usize {
     return tv_sec;
 }
 
-async fn send_set_tx(simple_storage_instance_tx: simple_storage::SimpleStorage<SignerMiddleware<ethers_providers::Provider<ethers_providers::Ws>, Wallet<ethers_core::k256::ecdsa::SigningKey>>>) -> Result<()> {
+async fn send_set_tx(client_tx: SignerMiddleware<ethers_providers::Provider<ethers_providers::Ws>, ethers_signers::Wallet<ethers_core::k256::ecdsa::SigningKey>>,
+                     simple_storage_instance_tx: simple_storage::SimpleStorage<SignerMiddleware<ethers_providers::Provider<ethers_providers::Ws>, Wallet<ethers_core::k256::ecdsa::SigningKey>>>) -> Result<()> {
 
     let tv_sec = get_unix_time();
 
-    // // Send smart contract data transaction with custom MSG.VALUE and gas parameters.
-    // let _tx = simple_storage_instance_tx.set(U256::from(tv_sec))
-    //             .value(0)
-    //             .gas(200000)
-    //             .gas_price(3_000_000_000u32)
-    //             .access_list(AccessList(vec![
-    //                 AccessListItem { 
-    //                     address: simple_storage_instance_tx.address(), 
-    //                     storage_keys: vec![
-    //                         // 0x0000000000000000000000000000000000000000000000000000000000000000
-    //                     ] 
-    //                 }
-    //                 ] ) ) //AccessList list with wallet address with no storage slots test.
-    //             .send().await?.await?;
-
-
-        // let rpc_goerli_infura_https = env::var("goerliHTTPS_InfuraAPIKey").expect("$goerliHTTPS_InfuraAPIKey is not set");
-
-        let rpc_goerli_infura_wss = env::var("goerliWebSocketSecureEventsInfuraAPIKey").expect("$goerliWebSocketSecureEventsInfuraAPIKey is not set");
-
-        let private_key_wallet_string = env::var("devTestnetPrivateKey").expect("$devTestnetPrivateKey is not set");
-    
-        // let provider = Provider::<Http>::try_from(rpc_goerli_infura_https).expect("could not instantiate HTTP Provider");
-        let provider = Provider::<Ws>::connect(rpc_goerli_infura_wss).await?;
-    
-        // println!("provider {:?}:", provider);
-    
-        let signer = private_key_wallet_string.parse::<LocalWallet>()?;
-    
-        let signer_address = signer.address();
-        // println!("signer address: {}", signer_address);
-    
-        // println!("signer {:?}:", signer);
-    
-        // let block = provider.get_block(0).await?;
-        // println!("Got block: {:?}", block);
-    
-        let client = SignerMiddleware::new_with_provider_chain(provider, signer).await.unwrap();
-
-        let contract_address = "0xdbaA7dfBd9125B7a43457D979B1f8a1Bd8687f37".parse::<Address>()?; //0xdbaA7dfBd9125B7a43457D979B1f8a1Bd8687f37
-
-    // Good for transactions that don't have data.
     let tx_raw = TransactionRequest::new()
         .chain_id(5)
         .to(simple_storage_instance_tx.address())
@@ -152,19 +111,27 @@ async fn send_set_tx(simple_storage_instance_tx: simple_storage::SimpleStorage<S
             }
         ] ) ); //AccessList list with 
 
-        println!("Storage slot 0 value {:?}", H256::zero() );
+    println!("Storage slot 0 value H256: {:?}", H256::zero() );
     
-        // println!("test {:?}", simple_storage_instance_tx.set(U256::from(tv_sec)) );
-        // println!("test {:?}", simple_storage_instance_tx.set(U256::from(tv_sec)).calldata().unwrap() );
+    // println!("test {:?}", simple_storage_instance_tx.set(U256::from(tv_sec)) );
+    // println!("test {:?}", simple_storage_instance_tx.set(U256::from(tv_sec)).calldata().unwrap() );
 
-        
-    let tx_raw_hash = client.send_transaction(tx_raw, None).await?;
-    let _receipt_raw = tx_raw_hash.confirmations(2).await?;
+    let tx_raw_hash = client_tx.send_transaction(tx_raw, None).await?;
+    
+    // let _receipt_raw = tx_raw_hash.confirmations(2).await?;
 
     println!("Tx mined.");
 
     let stored_data_value = simple_storage_instance_tx.stored_data().call().await?;
     println!("storedDataValue: {0}", stored_data_value);
+
+    // // Would not recommend sending transaction by function name since you cannot modify things like the accessList in a simple way.
+    // // Send smart contract data transaction with custom MSG.VALUE and gas parameters.
+    // let _tx = simple_storage_instance_tx.set(U256::from(tv_sec))
+    //             .value(0)
+    //             .gas(200000)
+    //             .gas_price(3_000_000_000u32)
+    //             .send().await?.await?;
 
     Ok(())
 
