@@ -1,5 +1,7 @@
 use std::env;
 use std::time::{SystemTime};
+use std::time::Duration;
+use std::thread::sleep;
 
 use ethers_signers::{LocalWallet};
 use ethers_core::types::transaction::eip2930::{AccessList,AccessListItem};
@@ -19,19 +21,22 @@ abigen!(SimpleStorage, "storeAbiBytecode.json",); // Generate the type-safe cont
 #[tokio::main]
 async fn main() -> Result<()> {
 
-    // let rpc_shardeum_https = env::var("shardeumHttpRpc").expect("$shardeumHttpRpc is not set");
+    let rpc_shardeum_https = env::var("shardeumHttpRpc").expect("$shardeumHttpRpc is not set");
 
-    let rpc_goerli_infura_https = env::var("goerliHTTPS_InfuraAPIKey").expect("$goerliHTTPS_InfuraAPIKey is not set");
+    // let rpc_goerli_infura_https = env::var("goerliHTTPS_InfuraAPIKey").expect("$goerliHTTPS_InfuraAPIKey is not set");
 
     let private_key_wallet_string = env::var("devTestnetPrivateKey").expect("$devTestnetPrivateKey is not set");
 
-    let provider = Provider::<Http>::try_from(rpc_goerli_infura_https).expect("could not instantiate HTTP Provider");
+    let provider = Provider::<Http>::try_from(rpc_shardeum_https).expect("could not instantiate HTTP Provider");
+
+    let chainid = provider.get_chainid().await?;
+    println!("Got chainid: {}", chainid);
 
     let signer = private_key_wallet_string.parse::<LocalWallet>()?;
 
     let client = SignerMiddleware::new_with_provider_chain(provider, signer).await.unwrap();
 
-    let contract_address = "0x0341eeb7ddb1171a3A2c5209F14Df86f4B211cF9".parse::<Address>()?; //0xdbaA7dfBd9125B7a43457D979B1f8a1Bd8687f37
+    let contract_address = "0x4A0aEd36b80b1Ba41f94D394d09f523f2a6817d9".parse::<Address>()?; //0xdbaA7dfBd9125B7a43457D979B1f8a1Bd8687f37
 
     let client_arc = Arc::new(client.clone());
 
@@ -68,7 +73,7 @@ async fn send_set_tx(client_tx: SignerMiddleware<ethers_providers::Provider<ethe
     println!("Transaction data for simple_storage_instance_tx.set(U256::from(tv_sec)).calldata().unwrap(): {:?}", simple_storage_instance_tx.set(U256::from(tv_sec)).calldata().unwrap() );
 
     let tx_raw = TransactionRequest::new()
-        .chain_id(5)
+        .chain_id(8081)
         .to(simple_storage_instance_tx.address())
         .data(simple_storage_instance_tx.set(U256::from(tv_sec)).calldata().unwrap())
         .value(0)
@@ -86,10 +91,15 @@ async fn send_set_tx(client_tx: SignerMiddleware<ethers_providers::Provider<ethe
         ] ) ); //AccessList list with 
     
     let tx_sent = client_tx.send_transaction(tx_raw, None).await?;
-    println!("tx sent hash: {:?}", tx_sent.tx_hash());
-    
-    // let _receipt_raw = tx_raw_hash.confirmations(2).await?; //This example uses an event listener, so it is not needed to have block confirmations
-    // println!("Tx mined.");
+    println!("Tx sent hash: {:?}", tx_sent.tx_hash());
+
+    println!("Wait for transction to be mined.");
+
+    sleep(Duration::from_millis(15000)); //Wait 15 seconds.
+
+    let stored_data_value_new = simple_storage_instance_tx.stored_data().call().await?;
+
+    println!("storedDataValue: {0}", stored_data_value_new);
 
     // // Would not recommend sending transaction by function name since you cannot modify things like the accessList in a simple way.
     // // Send smart contract data transaction with custom MSG.VALUE and gas parameters.

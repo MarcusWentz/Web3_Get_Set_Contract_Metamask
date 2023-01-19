@@ -8,7 +8,7 @@ const provider = new ethers.providers.JsonRpcProvider(rpcURL)
 const signer = new ethers.Wallet(Buffer.from(process.env.devTestnetPrivateKey, 'hex'), provider);
 console.log("User wallet address: " + signer.address)
 
-const simpleStorageAddress = '0xE8eb488bEe284ed5b9657D5fc928f90F40BC2d57'
+const simpleStorageAddress = '0x0341eeb7ddb1171a3A2c5209F14Df86f4B211cF9'
 const simpleStorageABI = [{"inputs":[{"internalType":"uint256","name":"x","type":"uint256"}],"name":"set","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"slot0","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}]
 
 const simpleStorageDeployed = new web3.eth.Contract(simpleStorageABI, simpleStorageAddress)
