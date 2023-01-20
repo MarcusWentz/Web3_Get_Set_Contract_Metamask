@@ -3,20 +3,20 @@ use std::convert::TryFrom;
 use std::env;
 
 use ethers_providers::{Middleware, Provider, Http};
-use ethers_core::types::{Address};
+use ethers_core::types::{Address,H256,U256};
 
 use eyre::Result;
 
 #[tokio::main]
 async fn main() -> Result<()> {
 
-    let rpc_goerli_infura_https = env::var("goerliHTTPS_InfuraAPIKey").expect("$goerliHTTPS_InfuraAPIKey is not set");
+    // let rpc_goerli_infura_https = env::var("goerliHTTPS_InfuraAPIKey").expect("$goerliHTTPS_InfuraAPIKey is not set");
 
-    let provider = Provider::<Http>::try_from(rpc_goerli_infura_https).expect("could not instantiate HTTP Provider");
+    // let provider = Provider::<Http>::try_from(rpc_goerli_infura_https).expect("could not instantiate HTTP Provider");
 
-    // let rpc_shardeum_https = "https://liberty20.shardeum.org/";
+    let rpc_shardeum_https = "https://liberty20.shardeum.org/";
 
-    // let provider = Provider::<Http>::try_from(rpc_shardeum_https).expect("could not instantiate HTTP Provider");
+    let provider = Provider::<Http>::try_from(rpc_shardeum_https).expect("could not instantiate HTTP Provider");
 
     let chainid = provider.get_chainid().await?;
     println!("Got chainid: {}", chainid);
@@ -45,19 +45,30 @@ async fn main() -> Result<()> {
     let block_hash = current_block_parameters.clone().unwrap().hash.unwrap();
     println!("Got block_hash: {:?}", block_hash);
 
-    //Shardeum will not show transactions in bundles (blocks). 
-    //Use the Shardeum Explorer JSON URL view with filters to get transactions from cycle ranges: 
-    //https://docs.shardeum.org/smartContracts/events/pollEvents#reading-events-with-shardeum-cycles
-    let block_transactions = current_block_parameters.clone().unwrap().transactions;
-    println!("Got block_transactions: {:?}", block_transactions);
+    if chainid == U256::from(5) { //Goerli
+        let tx_hash = "0x7bd590a4c9100402fb105f7de66c28a6236c56f4b254c634e53235958f7f50cc".parse::<H256>()?;
+        println!("tx_hash: {:?}", tx_hash);
+        let tx_parameters = provider.get_transaction(tx_hash).await?.unwrap();
+        println!("tx_parameters: {:?}", tx_parameters);
+        let block_transactions = current_block_parameters.clone().unwrap().transactions;
+        println!("Got block_transactions: {:?}", block_transactions);
+        let ens_balance = provider.get_balance("car.eth", None).await?;
+        println!("ENS address balance: {}", ens_balance);
+    }
+    if chainid == U256::from(8081) {//Shardeum Liberty 2.X
+        let tx_hash = "0xc0478ea8a26fa562ea8ff6640f2090ac8fa075704bb5f973ab0448a1f2ac22c3".parse::<H256>()?;
+        println!("tx_hash: {:?}", tx_hash);
+        let tx_parameters = provider.get_transaction(tx_hash).await?.unwrap();
+        println!("tx_parameters: {:?}", tx_parameters);
+        //Shardeum will not show transactions in bundles (blocks). 
+        //Use the Shardeum Explorer JSON URL view with filters to get transactions from cycle ranges: 
+        //https://docs.shardeum.org/smartContracts/events/pollEvents#reading-events-with-shardeum-cycles
+    }
 
     let other_address_hex = "0x0000000000000000000000000000000000000000";
     let other_address = "0x0000000000000000000000000000000000000000".parse::<Address>()?;
     let other_balance = provider.get_balance(other_address, None).await?;
     println!("Balance for address {}: {}",other_address_hex, other_balance);
-
-    // let ens_balance = provider.get_balance("car.eth", None).await?;
-    // println!("ENS address balance: {}", ens_balance);
 
     Ok(())
 
