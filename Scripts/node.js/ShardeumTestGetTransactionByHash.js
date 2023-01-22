@@ -18,8 +18,17 @@ async function createAndSendTx() {
     console.log(tx_info)
   }
   if(chainIdConnected == 8081) { //Shardeum Liberty 2.1
-    tx_info = await provider.getTransaction("0xc0478ea8a26fa562ea8ff6640f2090ac8fa075704bb5f973ab0448a1f2ac22c3")
-    console.log(tx_info)
+    // Success 
+    tx_info_decimal_pass = await provider.getTransaction("0x28fc8a687a31ff3a07086b7fc4a7986c758aaaba186387e1502ee1ced1317721") // 9 WEI, works.
+    // https://explorer-liberty20.shardeum.org/api/transaction?txHash=0x28fc8a687a31ff3a07086b7fc4a7986c758aaaba186387e1502ee1ced1317721
+
+    console.log(tx_info_decimal_pass)
+
+    // Fail
+    tx_info_hexadecimal_fail = await provider.getTransaction("0x08a0e3064c4c195aad793235f23a6dc2959f66f2adbef0b1ba611df4d945069b") // 10 WEI (hexadecimal: "a") works.
+    // https://explorer-liberty20.shardeum.org/api/transaction?txHash=0x08a0e3064c4c195aad793235f23a6dc2959f66f2adbef0b1ba611df4d945069b
+  
+    console.log(tx_info_hexadecimal_fail)
   }
 
 }
