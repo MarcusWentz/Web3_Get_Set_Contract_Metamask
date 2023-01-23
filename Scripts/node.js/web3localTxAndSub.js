@@ -13,34 +13,45 @@ const signer = new ethers.Wallet(Buffer.from(process.env.devTestnetPrivateKey, '
 const contractAddress = '0xdbaA7dfBd9125B7a43457D979B1f8a1Bd8687f37'
 const contractABI = [{"anonymous":false,"inputs":[],"name":"setEvent","type":"event"},{"inputs":[{"internalType":"uint256","name":"x","type":"uint256"}],"name":"set","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"storedData","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}]
 
-const contractDeployed = new web3.eth.Contract(contractABI, contractAddress)
+// const contractDeployed = new web3.eth.Contract(contractABI, contractAddress)
+
+const contractDeployed = new ethers.Contract(contractAddress, contractABI, signer);
 
 createAndSendTx();
 
 async function createAndSendTx() {
 
-  const chainIdConnected = await web3.eth.getChainId();
-  console.log("chainIdConnected: "+chainIdConnected)
+  // const chainIdConnected = await web3.eth.getChainId();
+  // console.log("chainIdConnected: "+chainIdConnected)
 
-  const storedData = await contractDeployed.methods.storedData().call()
-  console.log("storedData: "+storedData)
+  const connectedNetworkObject = await provider.getNetwork();
+  const chainIdConnected = connectedNetworkObject.chainId;
+  console.log("chainIdConnected: "+ chainIdConnected)
+
+  const storedData = await contractDeployed.storedData()
+  console.log("storedData: "+ storedData)
 
   const unixTIme = Date.now();
 
   const txCount = await provider.getTransactionCount(signer.address);
 
+  const callDataObject = await contractDeployed.populateTransaction.set(unixTIme);
+  const tx_data = callDataObject.data;
+
+  // const callDataObject = await contractDeployed.populateTransaction.set(unixTIme);
+
   const tx = signer.sendTransaction({
     chainId: chainIdConnected,
     to: contractAddress,
-    nonce:    web3.utils.toHex(txCount),
-    gasLimit: web3.utils.toHex(3000000000), // Raise the gas limit to a much higher amount
-    gasPrice: web3.utils.toHex(web3.utils.toWei('10', 'gwei')),
-    data: contractDeployed.methods.set(unixTIme).encodeABI()
+    // to: signer.address,
+    nonce:    txCount,
+    gasLimit: ethers.utils.hexlify(210000), // Raise the gas limit to a much higher amount
+    gasPrice: ethers.utils.hexlify(10000000000),
+    data: tx_data
   });
 
   await tx
   console.log(tx)
-
 
 }
 
