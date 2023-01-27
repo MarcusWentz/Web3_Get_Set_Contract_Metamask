@@ -65,7 +65,7 @@ async function getChainIdConnected() {
 
   const connectedNetworkObject = await provider.getNetwork();
   const chainIdConnected = connectedNetworkObject.chainId;
-  console.log("chainIdConnected: "+ chainIdConnected)
+  // console.log("chainIdConnected: "+ chainIdConnected)
   return chainIdConnected
 
 }
@@ -74,8 +74,8 @@ getDataOnChainToLoad()
 
 async function getDataOnChainToLoad(){
   let chainIdConnected = await getChainIdConnected();
-  console.log("hi")
-  console.log(chainIdConnected)
+  // console.log("hi")
+  // console.log(chainIdConnected)
 
   if(chainIdConnected == goerliChainId){
     getStoredData()
