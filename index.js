@@ -23,12 +23,22 @@ function checkAddressMissingMetamask() {
 }
 
 //Function called for getting Metamask accounts on Goerli. Used in every button in case the user forgets to click the top button.
-function enableMetamaskOnGoerli() {
+async function enableMetamaskOnGoerli() {
   //Get account details from Metamask wallet.
   getAccount();
   //Check if user is on the Goerli testnet. If not, alert them to change to Goerli.
   if(window.ethereum.networkVersion != 5){
-    alert("You are not on the Goerli Testnet! Please switch to Goerli and refresh page.")
+    // alert("You are not on the Goerli Testnet! Please switch to Goerli and refresh page.")
+    try{
+      await window.ethereum.request({
+          method: "wallet_switchEthereumChain",
+          params: [{
+             chainId: "0x5"
+          }]
+        })
+    } catch (error) {
+      alert("Failed to add the network with wallet_addEthereumChain request. Add the network with https://chainlist.org/ or do it manually. Error log: " + error.message)
+    }
   }
 }
 
