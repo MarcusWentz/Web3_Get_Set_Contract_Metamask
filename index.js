@@ -3,7 +3,7 @@
 
 //Empty array to be filled once Metamask is called.
 let accounts = [];
-document.getElementById("enableEthereumButton").innerHTML =  "Connect Metamask"
+document.getElementById("enableEthereumButton").innerHTML =  "Connect Metamask 🦊"
 
 //If Metamask is not detected the user will be told to install Metamask.
 function detectMetamaskInstalled(){
