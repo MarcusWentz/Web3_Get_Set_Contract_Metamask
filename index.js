@@ -59,12 +59,34 @@ const contractABI_JS = [{"anonymous":false,"inputs":[],"name":"setEvent","type":
 
 const contractDefined_JS = new ethers.Contract(contractAddress_JS, contractABI_JS, signer);
 
-if(window.ethereum.networkVersion == goerliChainId){
-  getStoredData()
+// let globalChainIdConnected = getChainIdConnected()
+
+async function getChainIdConnected() {
+
+  const connectedNetworkObject = await provider.getNetwork();
+  const chainIdConnected = connectedNetworkObject.chainId;
+  console.log("chainIdConnected: "+ chainIdConnected)
+  return chainIdConnected
+
 }
-if(window.ethereum.networkVersion != goerliChainId){
-  document.getElementById("getValueStateSmartContract").innerHTML =  "Install Metamask and select Goerli Testnet to have a Web3 provider to read blockchain data."
+
+getDataOnChainToLoad()
+
+async function getDataOnChainToLoad(){
+  let chainIdConnected = await getChainIdConnected();
+  console.log("hi")
+  console.log(chainIdConnected)
+
+  if(chainIdConnected == goerliChainId){
+    getStoredData()
+  }
+  if(chainIdConnected != goerliChainId){
+    document.getElementById("getValueStateSmartContract").innerHTML =  "Install Metamask and select Goerli Testnet to have a Web3 provider to read blockchain data."
+  }
+
 }
+
+
 
 //Function called for getting Metamask accounts on Goerli. Used in every button in case the user forgets to click the top button.
 async function enableMetamaskOnGoerli() {
@@ -162,17 +184,8 @@ async function sentTxAsync(x) {
 }
 
 //Get the latest event. Once the event is triggered, website will update value.
-// contractDefined_JS.events.setEvent({
-//      fromBlock: 'latest'
-//  }, function(error, eventResult){})
-//  .on('data', function(eventResult){
-//    console.log(eventResult)
-//    //Call the get function to get the most accurate present state for the value.
-//    contractDefined_JS.methods.storedData().call((err, balance) => {
-//       document.getElementById("getValueStateSmartContract").innerHTML =  balance
-//      })
-//    })
-//  .on('changed', function(eventResult){
-//      // remove event from local database
-//  })
-//  .on('error', console.error);
+contractDefined_JS.on("setEvent", () => {
+
+  getStoredData()
+
+});
