@@ -1,4 +1,4 @@
-Test website with Metamask.
+Test website with Metamask which also has some sample contracts and interaction scripts in Javascript, Python, Golang and Rust.
 
 Scripts used to control frontend and backend smart contract logic (in web3.js,web3.py,and Geth) :\
   -Send Ethereum to an address\
