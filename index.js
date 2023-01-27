@@ -110,23 +110,3 @@ contractDefined_JS.events.setEvent({
  })
  .on('error', console.error);
 
- //Changing the integer state in a function which will fire off an event.
- //Make sure values are in hex or Metamask will fail to load.
- //DO NOT SET A VALUE UNLESS THE CONTRACT NEEDS IT FOR MSG.VALUE REQUIRE STATEMENTS
- const sendEthButton = document.querySelector('.sendEthButton');
- sendEthButton.addEventListener('click', () => {
-   checkAddressMissingMetamask()
-   ethereum
-     .request({
-       method: 'eth_sendTransaction',
-       params: [
-         {
-           from: accounts[0],
-           to: '0xc1202e7d42655F23097476f6D48006fE56d38d4f',
-           value: '0x29a2241af62c0',
-         },
-       ],
-     })
-     .then((txHash) => console.log(txHash))
-     .catch((error) => console.error);
- });

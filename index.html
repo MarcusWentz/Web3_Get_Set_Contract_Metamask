@@ -1,38 +1,76 @@
 <html>
+
 <head>
-  <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-  <title>Home</title>
+  <title>Index</title>
   <!-- Bootstrap -->
   <!-- Latest compiled and minified CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-  <link rel="shortcut icon" type="png" href="Images/favicon.png">
+  <link rel="shortcut icon" type="png" href="favicon.png">
   <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
   <meta content="utf-8" http-equiv="encoding">
   <!-- Helps objects scale to mobile devices -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  </head>
+</head>
+
 <body style="background-color:black;">
 
 <div class="container">
-<div style="height:91%">
-  <div class="col text-center">
-    <img class="img-fluid" alt="Responsive image" src="Images/animation_600px_600px.gif"/><!--Set width to 40% of the screen width-->
-</div>
-</div>
+  <div style="height:30%">
+  <div class="row">
+    <div class="col text-center">
+      <button class="btn btn-outline-light" id=enableEthereumButton></button>
+    </div>
+  </div>
+ </div>
 </div>
 
 <div class="container">
+<div style="height:20%">
+  <div class="row">
     <div class="col text-center">
-      <form action="FrontEnd/BuyPage.html">
-        <input type="submit" class="btn btn-outline-light" value="Click to enter." />
-    </form>
+      <p style="color:white">storedData uint: </p>
+      <p style="color:white" id="getValueStateSmartContract"></p>
+    </div>
+  </div>
+ </div>
+</div>
+
+
+<div class="container">
+<div style="height:35%">
+  <div class="row">
+    <div class="col text-center">
+      <button class="changeStateInContractEvent btn btn-outline-light">"set(uint x)" Event uint valueChangeEventWenjs to absolute value: </button>
+    </div>
+  </div>
+    <div class="row">
+      <div class="col text-center">
+        <input type="text" style="text-align:center" id="setValueSmartContract" placeholder="input uint value">
+      </div>
+    </div>
   </div>
 </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col text-center">
+      <form action="AdminSupport.html">
+        <input type="submit" class="btn btn-outline-light" value="Admin control link for support." />
+    </form>
+    </div>
+  </div>
+</div>
+
 
   <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
   <!-- Include all compiled plugins (below), or include individual files as needed -->
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    <!-- <script src="app.js"></script> -->
+  <!-- WEB3 IMPORT -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.5.0-rc.0/web3.min.js"></script>
+  <!-- Needed to run javascript main library -->
+  <script src="index.js"></script>
+
 </body>
+
 </html>
