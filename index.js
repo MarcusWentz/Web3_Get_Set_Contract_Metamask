@@ -27,7 +27,8 @@ async function enableMetamaskOnGoerli() {
   //Get account details from Metamask wallet.
   getAccount();
   //Check if user is on the Goerli testnet. If not, alert them to change to Goerli.
-  if(window.ethereum.networkVersion != 5){
+  const goerliChainId = 5;
+  if(window.ethereum.networkVersion != goerliChainId){
     // alert("You are not on the Goerli Testnet! Please switch to Goerli and refresh page.")
     try{
       await window.ethereum.request({
@@ -37,7 +38,7 @@ async function enableMetamaskOnGoerli() {
           }]
         })
     } catch (error) {
-      alert("Failed to add the network with wallet_addEthereumChain request. Add the network with https://chainlist.org/ or do it manually. Error log: " + error.message)
+      alert("Failed to add the network at chainId " + goerliChainId + " with wallet_addEthereumChain request. Add the network with https://chainlist.org/ or do it manually. Error log: " + error.message)
     }
   }
 }
