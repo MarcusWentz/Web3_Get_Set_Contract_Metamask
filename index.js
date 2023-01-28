@@ -85,6 +85,11 @@ changeStateInContractEvent.addEventListener('click', () => {
     return
   }
 
+  if(BigInt(inputContractText) > (BigInt(2**256)-BigInt(1)) ) {
+    alert("Value is larger than uin256 max value ((2^256)-1).")
+    return
+  }
+
   sentTxAsync(inputContractText)
 
 })
