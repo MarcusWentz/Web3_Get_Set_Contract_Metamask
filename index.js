@@ -9,11 +9,17 @@ document.getElementById("enableEthereumButton").innerHTML =  "Connect Metamask ð
 const goerliChainId = 5;
 
 const provider = new ethers.providers.Web3Provider(window.ethereum); //Imported ethers from index.html with "<script src="https://cdn.ethers.io/lib/ethers-5.6.umd.min.js" type="text/javascript"></script>".
-const signer = provider.getSigner();
+
+// const signer = provider.getSigner(); //Do this when the user clicks "enableEthereumButton" which will call getAccount() to get the signer private key for the provider.  
+ 
 const contractAddress_JS = '0xdbaA7dfBd9125B7a43457D979B1f8a1Bd8687f37'
 const contractABI_JS = [{"anonymous":false,"inputs":[],"name":"setEvent","type":"event"},{"inputs":[{"internalType":"uint256","name":"x","type":"uint256"}],"name":"set","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"storedData","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}]
 
-const contractDefined_JS = new ethers.Contract(contractAddress_JS, contractABI_JS, signer);
+const contractDefined_JS = new ethers.Contract(contractAddress_JS, contractABI_JS, provider);
+
+
+// const contractDefined_JS = new ethers.Contract(contractAddress_JS, contractABI_JS, signer);
+
 
 getDataOnChainToLoad()
 
@@ -124,6 +130,7 @@ async function getChainIdConnected() {
 
 async function getAccount() {
   accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+  const signer = provider.getSigner();
   document.getElementById("enableEthereumButton").innerText = accounts[0].substr(0,5) + "..." +  accounts[0].substr(38,4)  
 }
 
