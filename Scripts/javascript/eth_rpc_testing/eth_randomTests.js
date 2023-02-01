@@ -9,7 +9,6 @@ const ethers = require("ethers");
   
   
   //TEST GOES HERE
-  //https://www.quicknode.com/docs/ethereum/eth_getCode
 
 
 })();
