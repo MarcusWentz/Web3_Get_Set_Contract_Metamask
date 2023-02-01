@@ -1,14 +1,20 @@
 const ethers = require("ethers");
 
-const rpcURL = process.env.goerliHTTPS_InfuraAPIKey // Your RPC URL goes here
+//Goerli
+// const provider = new ethers.providers.JsonRpcProvider(process.env.goerliHTTPS_InfuraAPIKey)
+// const contractAddress = '0x080FfD52b6c217C1B69a03446f2956580e25fd43'
 
-const provider = new ethers.providers.JsonRpcProvider(rpcURL)
+//Liberty 2.X
+const provider = new ethers.providers.JsonRpcProvider("https://liberty20.shardeum.org/")
+const contractAddress = '0x68611038f494bE3173F6F93DaEE756cA85aA4a54'
+
+const storageSlot = 0;
 
 storageLookup();
 
 async function storageLookup() {
 
-  const contents = await provider.getStorageAt("0xED51f057E0D28A60e7a139bEFacdD79ADEb94c62", 777)
+  const contents = await provider.getStorageAt(contractAddress,storageSlot)
   console.log(contents)
   
 }
