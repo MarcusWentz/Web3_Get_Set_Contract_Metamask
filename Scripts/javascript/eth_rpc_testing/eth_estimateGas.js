@@ -37,10 +37,10 @@ async function estimateGasTests() {
         to: contractAddress,
         data: txDataFail,
       });
-      console.log("❌ Test failed! Gas estimation should not be possible when REVERT opcode is executed.")
+      console.log("🔴 Test failed! Gas estimation should not be possible when REVERT opcode is executed.")
       console.log(estimateGasFail);
   } catch (error) {
-      console.log("✅ Test successful! RPC method eth_estimateGas as expected failed to estimate gas, transaction will most likely revert.")
+      console.log("🟢 Test successful! RPC method eth_estimateGas as expected failed to estimate gas, transaction will most likely revert.")
   }
 
 }

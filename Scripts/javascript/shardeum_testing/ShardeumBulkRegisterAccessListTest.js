@@ -1,8 +1,6 @@
-const Web3 = require('web3')
 const ethers = require("ethers")
 
-const rpcURL = "https://liberty20.shardeum.org/"
-const web3 = new Web3(rpcURL)
+const rpcURL = "https://sphinx.shardeum.org/"
 
 const { expect } = require("chai");
 
@@ -16,52 +14,45 @@ const provider = new ethers.providers.JsonRpcProvider(rpcURL)
 const signer = new ethers.Wallet(Buffer.from(process.env.devTestnetPrivateKey, 'hex'), provider);
 console.log("User wallet address: " + signer.address)
 
-const simpleStorageAddress = '0xc75e3e6b3697edda3be8d96f0690c58ccb990a84'
+const simpleStorageAddress = '0x26944D609d966F800738CC764CC962A3bFA9aFFe'
 const simpleStorageABI = [{"inputs":[{"internalType":"address[]","name":"myArray","type":"address[]"}],"name":"bulkSend","outputs":[],"stateMutability":"payable","type":"function"}]
 
-const simpleStorageDeployed = new web3.eth.Contract(simpleStorageABI, simpleStorageAddress)
+const simpleStorageDeployed = new ethers.Contract(simpleStorageAddress, simpleStorageABI, signer);
 
 createAndSendTx();
 
 async function createAndSendTx() {
 
-  const chainIdConnected = await web3.eth.getChainId();
+  const connectedNetworkObject = await provider.getNetwork();
+  const chainIdConnected = connectedNetworkObject.chainId;
   console.log("chainIdConnected: "+ chainIdConnected)
 
-  const balanceBefore1 = await provider.getBalance("0x66C1d8A5ee726b545576A75380391835F8AAA43c");
-  const balanceBefore2 = await provider.getBalance("0xD0E222A8b806E0B7e89dEcDCdFD6F9a2BeA9cdF6");
-  const balanceBefore3 = await provider.getBalance("0xBB4aEDcB7F5a8B8B7868287374519Fc3b7aAD5Fa");
+  const receiverAddress1 = "0x66C1d8A5ee726b545576A75380391835F8AAA43c"; //Wallet 1.
+  const receiverAddress2 = "0xD0E222A8b806E0B7e89dEcDCdFD6F9a2BeA9cdF6"; //Wallet 2.
+  const receiverAddress3 = "0x75228115053189d4B70144b2BBEE63bD491fe614"; //Proxy Wallet.
+
+  const balanceBefore1 = await provider.getBalance(receiverAddress1);
+  const balanceBefore2 = await provider.getBalance(receiverAddress2);
+  const balanceBefore3 = await provider.getBalance(receiverAddress3);
 
   const txCount = await provider.getTransactionCount(signer.address);
+
+  const callDataObject = await simpleStorageDeployed.populateTransaction.bulkSend([
+    receiverAddress1,
+    receiverAddress2,
+    receiverAddress3
+  ]);
+  const txData = callDataObject.data;
 
   const tx = signer.sendTransaction({
     chainId: chainIdConnected,
     to: simpleStorageAddress,
-    data: simpleStorageDeployed.methods.bulkSend([
-      "0x66C1d8A5ee726b545576A75380391835F8AAA43c",
-      "0xD0E222A8b806E0B7e89dEcDCdFD6F9a2BeA9cdF6",
-      "0xBB4aEDcB7F5a8B8B7868287374519Fc3b7aAD5Fa"
-      ]).encodeABI(),
-    value: "3000000000000000000", //3 ether SHM.
-    nonce:    web3.utils.toHex(txCount),
-    gasLimit: web3.utils.toHex(300000), // Raise the gas limit to a much higher amount
-    gasPrice: web3.utils.toHex(web3.utils.toWei('30', 'gwei')),
-    type: 1,
-    accessList: [
-      {
-        address: "0x66C1d8A5ee726b545576A75380391835F8AAA43c",
-        storageKeys: []
-      },
-      {
-        address: "0xD0E222A8b806E0B7e89dEcDCdFD6F9a2BeA9cdF6",
-        storageKeys: []
-      },
-      {
-        address: "0xBB4aEDcB7F5a8B8B7868287374519Fc3b7aAD5Fa",
-        storageKeys: []
-      }
-    ]
-
+    data: txData,
+    value:    ethers.utils.parseEther("3.0"), //3 ether SHM.
+    nonce:    ethers.utils.hexlify(txCount),
+    gasLimit: ethers.utils.hexlify(300000), // Raise the gas limit to a much higher amount
+    gasPrice: ethers.utils.hexlify(30000000000),
+ 
   });
 
   await tx
@@ -71,25 +62,40 @@ async function createAndSendTx() {
   console.log("WAIT FOR RESULTS: ")
   await timeout(15*timeMilliSec)
 
-  const balanceAfter1 = await provider.getBalance("0x66C1d8A5ee726b545576A75380391835F8AAA43c");
-  const balanceAfter2 = await provider.getBalance("0xD0E222A8b806E0B7e89dEcDCdFD6F9a2BeA9cdF6");
-  const balanceAfter3 = await provider.getBalance("0xbb4aedcb7f5a8b8b7868287374519fc3b7aad5fa");
+  const balanceAfter1 = await provider.getBalance(receiverAddress1);
+  const balanceAfter2 = await provider.getBalance(receiverAddress2);
+  const balanceAfter3 = await provider.getBalance(receiverAddress3);
 
   console.log(balanceBefore1.toString())
   console.log(balanceAfter1.toString())
-  expect(balanceAfter1.toString()).to.equal( (BigInt(balanceBefore1)+BigInt("1000000000000000000")).toString() );
-  console.log("Test 1 pass.")
+  try{
+    expect(BigInt(balanceAfter1).toString())
+    .to.equal( (BigInt(balanceBefore1)+BigInt("1000000000000000000")).toString() );
+  } catch (err) {
+    console.log("🔴 Test 1 fail. Error: " + err)
+    return;
+  }
 
   console.log(balanceBefore2.toString())
   console.log(balanceAfter2.toString())
-  expect(balanceAfter2.toString()).to.equal( (BigInt(balanceBefore2)+BigInt("1000000000000000000")).toString() );
-  console.log("Test 2 pass.")
+  try{
+    expect(BigInt(balanceAfter2).toString())
+    .to.equal( (BigInt(balanceBefore2)+BigInt("1000000000000000000")).toString() );
+  } catch (err) {
+    console.log("🔴 Test 2 fail. Error: " + err)
+    return;
+  }
   
   console.log(balanceBefore3.toString())
   console.log(balanceAfter3.toString())
-  expect(balanceAfter3.toString()).to.equal( (BigInt(balanceBefore3)+BigInt("1000000000000000000")).toString() );
-  console.log("Test 3 pass.")
+  try{
+    expect(BigInt(balanceAfter3).toString())
+    .to.equal( (BigInt(balanceBefore3)+BigInt("1000000000000000000")).toString() );
+  } catch (err) {
+    console.log("🔴 Test 3 fail. Error: " + err)
+    return;
+  }
 
-  console.log("All tests passed.")
+  console.log("🟢 All tests passed.")
 
 }

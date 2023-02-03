@@ -2,17 +2,18 @@ const ethers = require("ethers");
 (async () => {
 
   // Goerli
-  const provider = new ethers.providers.JsonRpcProvider(process.env.goerliHTTPS_InfuraAPIKey)
+  // const provider = new ethers.providers.JsonRpcProvider(process.env.goerliHTTPS_InfuraAPIKey)
 
   // //Liberty 2.X
-  // const provider = new ethers.providers.JsonRpcProvider("https://liberty20.shardeum.org/")
-  
-  
-  //TEST GOES HERE
-  const txReceipt = await provider.waitForTransaction( 
-    "0x8229ac8d9ecfa6ea4d9c5696a8ab2c463455ca0e9f99f0d351615b42784700eb"
-  );
-  console.log(txReceipt);
+  const provider = new ethers.providers.JsonRpcProvider("http://45.79.181.218:8080/")
+    
 
+
+  const filter = {
+    address: "0xc1202e7d42655F23097476f6D48006fE56d38d4f"
+  };
+  const filterId = await provider.send("eth_newFilter", [filter]);
+  console.log(filterId);
+  
 
 })();
