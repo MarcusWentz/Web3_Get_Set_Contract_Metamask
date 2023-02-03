@@ -52,6 +52,21 @@ async function createAndSendTx() {
     nonce:    ethers.utils.hexlify(txCount),
     gasLimit: ethers.utils.hexlify(300000), // Raise the gas limit to a much higher amount
     gasPrice: ethers.utils.hexlify(30000000000),
+    type: 1,
+    accessList: [
+      {
+        address: receiverAddress1,
+        storageKeys: []
+      },
+      {
+        address: receiverAddress2,
+        storageKeys: []
+      },
+      {
+        address: receiverAddress3,
+        storageKeys: []
+      }
+    ]
  
   });
 
