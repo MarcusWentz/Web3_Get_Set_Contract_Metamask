@@ -5,8 +5,8 @@ const ethers = require("ethers");
 // const contractAddress = '0x080FfD52b6c217C1B69a03446f2956580e25fd43'
 
 //Liberty 2.X
-const provider = new ethers.providers.JsonRpcProvider("https://liberty20.shardeum.org/")
-const contractAddress = '0x68611038f494bE3173F6F93DaEE756cA85aA4a54'
+const provider = new ethers.providers.JsonRpcProvider("https://sphinx.shardeum.org/")
+const contractAddress = '0x9228dA2e3724A12b4B0d2d621ea501829671cf52'
 
 const storageSlot = 0;
 
