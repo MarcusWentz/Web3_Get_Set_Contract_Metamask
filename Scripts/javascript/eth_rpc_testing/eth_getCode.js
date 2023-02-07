@@ -20,12 +20,11 @@ const contractAddress = '0x080FfD52b6c217C1B69a03446f2956580e25fd43'
 // const provider = new ethers.providers.JsonRpcProvider("https://liberty10.shardeum.org/")
 // const contractAddress = '0x886A2bc0507C29A3685980d3E02BE8f07A94f903'
 
-getCodeContracts();
+getCodeFromContractAddressLatestBlock();
 
-async function getCodeContracts() {
+async function getCodeFromContractAddressLatestBlock() {
 
   const code = await provider.getCode(contractAddress,"latest");
   console.log(code);
   
 }
-
