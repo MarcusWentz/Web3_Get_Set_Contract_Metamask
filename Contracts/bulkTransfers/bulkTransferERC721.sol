@@ -2,6 +2,7 @@
 pragma solidity 0.8.18;
 
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
 
 contract MultipleShardeumLogosNFT is ERC721URIStorage {
 
@@ -15,7 +16,7 @@ contract MultipleShardeumLogosNFT is ERC721URIStorage {
 
 }
 
-contract bulkSenderERC721 {
+contract bulkSenderERC721 { //Approve tokens to this contract for calling safeTransferFrom
 
     function bulkTransfer(address nftAddress, address[] calldata toList, uint256[] calldata tokenIds) external {
         for (uint256 i = 0; i < tokenIds.length;) {
@@ -25,3 +26,14 @@ contract bulkSenderERC721 {
     }
 
 }
+
+contract burnERC721 is IERC721Receiver { //0x6a4583868847e0b8B00E367293F5A5443Db8a09c
+
+    function onERC721Received(address, address, uint256, bytes memory) public virtual override returns (bytes4) {
+        return this.onERC721Received.selector;
+    }
+
+}
+
+//["0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2","0x4B20993Bc481177ec7E8f571ceCaE8A9e22C02db","0x6a4583868847e0b8B00E367293F5A5443Db8a09c"]
+//[3,4,5]
