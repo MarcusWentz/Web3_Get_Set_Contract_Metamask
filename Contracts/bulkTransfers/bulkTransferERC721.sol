@@ -27,7 +27,7 @@ contract bulkSenderERC721 { //Approve tokens to this contract for calling safeTr
 
 }
 
-contract burnERC721 is IERC721Receiver { //0x6a4583868847e0b8B00E367293F5A5443Db8a09c
+contract burnERC721 is IERC721Receiver { //Betanet 1.X 0x0b0C0C64373B88CCc23f2B8cc73881a0FE38A538
 
     function onERC721Received(address, address, uint256, bytes memory) public virtual override returns (bytes4) {
         return this.onERC721Received.selector;
@@ -35,5 +35,9 @@ contract burnERC721 is IERC721Receiver { //0x6a4583868847e0b8B00E367293F5A5443Db
 
 }
 
-//["0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2","0x4B20993Bc481177ec7E8f571ceCaE8A9e22C02db","0x6a4583868847e0b8B00E367293F5A5443Db8a09c"]
-//[3,4,5]
+//
+//(
+// 0xaa48eb1D528A492E87eD3529FF2fd21Ca56Ed3c5,
+// ["0x66C1d8A5ee726b545576A75380391835F8AAA43c","0xD0E222A8b806E0B7e89dEcDCdFD6F9a2BeA9cdF6","0x0b0C0C64373B88CCc23f2B8cc73881a0FE38A538"],
+// [0,1,2]
+//)
