@@ -17,9 +17,9 @@ contract MultipleShardeumLogosNFT is ERC721URIStorage {
 
 contract bulkSenderERC721 {
 
-    function bulkTransfer(address nftAddress, address to, uint256[] memory tokenIds) external {
+    function bulkTransfer(address nftAddress, address[] calldata toList, uint256[] calldata tokenIds) external {
         for (uint256 i = 0; i < tokenIds.length;) {
-            IERC721(nftAddress).safeTransferFrom(msg.sender, to, tokenIds[i]);
+            IERC721(nftAddress).safeTransferFrom(msg.sender, toList[i], tokenIds[i]);
             unchecked { i += 1; }
         }
     }
