@@ -19,7 +19,7 @@ contract PortalCube is ERC721URIStorage {
 contract bulkSenderERC721 { //Approve tokens to this contract for calling safeTransferFrom
 
     function bulkTransfer(address nftAddress, address[] calldata toList, uint256[] calldata tokenIds) external {
-        for (uint256 i = 0; i < tokenIds.length;) {
+        for (uint256 i = 0; i < toList.length;) {
             IERC721(nftAddress).safeTransferFrom(msg.sender, toList[i], tokenIds[i]);
             unchecked { i += 1; }
         }
