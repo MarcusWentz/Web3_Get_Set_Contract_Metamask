@@ -15,7 +15,7 @@ import (
 func main() {
 
 	client, err := ethclient.Dial(os.Getenv("goerliHTTPS_InfuraAPIKey"))
-    // client, err := ethclient.Dial("https://liberty10.shardeum.org")
+    // client, err := ethclient.Dial("https://liberty20.shardeum.org")
     if err != nil {
         log.Fatal(err)
     }
