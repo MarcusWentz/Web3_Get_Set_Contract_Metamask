@@ -18,6 +18,8 @@ const ethers = require("ethers");
 
   let callData = functionSelector + "000000000000000000000000" + sliceWalletToAddToData
 
+  console.log(callData)
+
   let callReturnData = await provider.call({
     from: fromWallet, 
     to: chainLinkTokenAddress,
