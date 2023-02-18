@@ -14,6 +14,10 @@ async function getLogsWithEventIndex() {
    fromBlock:contractDeployedBlock,
    toBlock:contractFirstTransactionBlock,
   });
-  console.log(addressTransactionLogs);
-  
+
+  console.log("event one() emitted at logIndex: " + addressTransactionLogs[0].logIndex);
+  console.log("event two() emitted at logIndex: " + addressTransactionLogs[1].logIndex);
+  console.log("event three() emitted at logIndex: " + addressTransactionLogs[2].logIndex);
+  console.log("event four() emitted at logIndex: " + addressTransactionLogs[3].logIndex);
+
 }
