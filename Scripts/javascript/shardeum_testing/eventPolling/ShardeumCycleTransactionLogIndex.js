@@ -1,7 +1,7 @@
 const https = require('https');
 
 let totalTransactions = ""
-let baseUrl = "https://explorer-sphinx.shardeum.org/api/transaction?txHash=0x984c937eaf83ea064db2bfa693fbf08a6cd008676ef9ee6ddeb0d8309fc54421"
+let baseUrl = "https://explorer-sphinx.shardeum.org/api/transaction?txHash=0xc36b485971a68b1371126d1d5f93002bd40f8fd29c861a8cc59709d20f162b78"
 
 let req = https.get(baseUrl, function(res) {
 	let data = '',
