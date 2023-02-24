@@ -32,7 +32,7 @@ async function createAndSendTx() {
 
 
   //Simple contract transaction.
-  const txSigned = await contractDeployed.set(unixTime); //Will compute the gas limit opcodes automatically and get the gas price.
+  const txSigned = await contractDeployed.set(unixTime); //Will compute the gas limit opcodes automatically and get the oracle gas price per gas unit.
 
   //Tune transaction with custom arguments: https://github.com/ethers-io/ethers.js/issues/40#issuecomment-841749793.
   // const txSigned = await contractDeployed.
