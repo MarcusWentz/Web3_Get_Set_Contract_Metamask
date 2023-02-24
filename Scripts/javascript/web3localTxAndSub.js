@@ -1,10 +1,10 @@
 const ethers = require("ethers")
 
-const rpcURL = process.env.goerliHTTPS_InfuraAPIKey // Your RPC URL goes here
+const rpcURL = process.env.goerliWebSocketSecureEventsInfuraAPIKey // Your RPC URL goes here
 
 // const rpcURL = "http://localhost:8545"// Your RPC URL goes here
 
-const provider = new ethers.providers.JsonRpcProvider(rpcURL)
+const provider = new ethers.providers.WebSocketProvider(rpcURL)
 const signer = new ethers.Wallet(Buffer.from(process.env.devTestnetPrivateKey, 'hex'), provider);
 
 const contractAddress = '0xdbaA7dfBd9125B7a43457D979B1f8a1Bd8687f37'
@@ -28,23 +28,38 @@ async function createAndSendTx() {
   const chainIdConnected = connectedNetworkObject.chainId;
   console.log("chainIdConnected: "+ chainIdConnected)
 
-  const unixTIme = Date.now();
+  const unixTime = Date.now();
 
-  const txCount = await provider.getTransactionCount(signer.address);
 
-  const callDataObject = await contractDeployed.populateTransaction.set(unixTIme);
-  const txData = callDataObject.data;
+  //Simple contract transaction.
+  const txSigned = await contractDeployed.set(unixTime); //Will compute the gas limit opcodes automatically and get the gas price.
 
-  const txSigned = signer.sendTransaction({
-    chainId: chainIdConnected,
-    to: contractAddress,
-    nonce:    txCount,
-    gasLimit: ethers.utils.hexlify(210000), // Raise the gas limit to a much higher amount
-    gasPrice: ethers.utils.hexlify(10000000000),
-    data: txData
-  });
+  //Tune transaction with custom arguments: https://github.com/ethers-io/ethers.js/issues/40#issuecomment-841749793.
+  // const txSigned = await contractDeployed.
+  //   set(
+  //     unixTime,
+  //   {
+  //    value: 0,                                          
+  //    gasPrice: ethers.utils.parseUnits('200', 'gwei'),  
+  //   }
+  // );
 
-  await txSigned
+  // Raw transaction (harder to use since the contract calls will automatically calculate the gas limit for you.)
+
+  // const txCount = await provider.getTransactionCount(signer.address); 
+
+  // const callDataObject = await contractDeployed.populateTransaction.set(unixTIme);
+  // const txData = callDataObject.data;
+
+  // const txSigned = await signer.sendTransaction({
+  //   chainId: chainIdConnected,
+  //   to: contractAddress,
+  //   nonce:    txCount,
+  //   gasLimit: ethers.utils.hexlify(210000), // Raise the gas limit to a much higher amount
+  //   gasPrice: ethers.utils.hexlify(10000000000),
+  //   data: txData
+  // });
+
   console.log(txSigned)
 
 }
