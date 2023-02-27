@@ -8,12 +8,15 @@ use ethers_core::types::{Address};
 use ethers_middleware::SignerMiddleware;
 // use ethers::utils::parse_units;
 use std::sync::Arc;
-
+//
 use ethers::{
     prelude::*,
 };
 
 use eyre::Result;
+
+// use futures::{executor, future, FutureExt}; // 0.3.5
+use futures::{future, FutureExt}; // 0.3.5
 
 abigen!(SimpleStorage, "storeAbiBytecode.json",); // Generate the type-safe contract bindings by providing the ABI and Bytecode in the same JSON file.
 
@@ -42,29 +45,41 @@ async fn main() -> Result<()> {
 
     println!("storedDataValue before transaction: {0}", stored_data_value);
 
-    // send_set_tx(simple_storage_instance).await;
-    send_set_tx(
-        // client.clone(),
-        simple_storage_instance.clone()
-    ).await.expect("Transaction function error"); //Clone the value to avoid Rust borrow checker error.
+    //Will wait for one async await function at a time.
+    // send_set_tx(
+    //     // client.clone(),
+    //     simple_storage_instance.clone()
+    // ).await.expect("Transaction function error"); //Clone the value to avoid Rust borrow checker error.
 
-    subscribe_to_contact_events(
-        simple_storage_instance.clone()
-    ).await.expect("Event function error."); //Clone the value to avoid Rust borrow checker error.
-    
+    // subscribe_to_contact_events(
+    //     simple_storage_instance.clone()
+    // ).await.expect("Event function error."); //Clone the value to avoid Rust borrow checker error.
+
+    //Will run both async await functions at the same time.
+
+    let listen_for_events = 
+        subscribe_to_contact_events(
+            simple_storage_instance.clone()
+        );
+
+    let send_transaction_for_event = 
+        send_set_tx(
+            // client.clone(),
+            simple_storage_instance.clone()
+        );
+
+    //How to execute multiple async functions at once and get the results
+    //https://stackoverflow.com/questions/63463579/how-to-execute-multiple-async-functions-at-once-and-get-the-results
+
+    let futures = vec![ 
+        listen_for_events.boxed(),     
+        send_transaction_for_event.boxed()
+    ];
+
+    let _results = future::join_all(futures).await;
+
     Ok(())
 
-}
-
-fn get_unix_time() -> usize {
-
-    let now = SystemTime::now(); //Credit: https://stackoverflow.com/questions/55849295/field-tv-sec-doesnt-exist-in-struct-systemtime
-    let now_str = format!("{:?}",now); //SystemTime { tv_sec: 1657846097, tv_nsec: 129747070 }
-    let now_str_digits_spaces: String = now_str.chars().filter(|c| c.is_digit(10) || *c == ',').collect(); //"1657846097,129747070"
-    let now_splitted: Vec<&str> = now_str_digits_spaces.split(",").collect(); //["1657846097", "129747070"]
-    let tv_sec:usize =  now_splitted[0].parse().unwrap(); //1657846097
-    println!("Unix Time Now: {:?}", tv_sec);
-    return tv_sec;
 }
 
 async fn send_set_tx(
@@ -72,9 +87,6 @@ async fn send_set_tx(
     simple_storage_instance: simple_storage::SimpleStorage<SignerMiddleware<ethers_providers::Provider<ethers_providers::Ws>, Wallet<ethers_core::k256::ecdsa::SigningKey>>>
     ) -> Result<()> 
 {
-
-    println!("Storage slot 0 value H256: {:?}", H256::zero() );
-
     let tv_sec = get_unix_time();
 
     let tx = simple_storage_instance.set(U256::from(tv_sec)).send().await?.await?; //Will compute the gas limit opcodes automatically and get the oracle gas price per gas unit.
@@ -89,6 +101,8 @@ async fn send_set_tx(
     println!("simple_storage_instance_tx.set(U256::from(tv_sec)) tx hash: {:?}", tx.unwrap().transaction_hash);
 
     // println!("Transaction data for simple_storage_instance_tx.set(U256::from(tv_sec)).calldata().unwrap(): {:?}", simple_storage_instance_tx.set(U256::from(tv_sec)).calldata().unwrap() );
+
+    // println!("accessList storage slot 0 value H256: {:?}", H256::zero() );
 
     // let tx_raw = TransactionRequest::new()
     //     .chain_id(5)
@@ -128,6 +142,7 @@ async fn subscribe_to_contact_events(simple_storage_instance_event: simple_stora
     let mut stream = events.stream().await?;
 
     println!("EVENT LISTENER START!");
+    println!("LISTEN FOR NEW EVENTS...");
 
     while let Some(Ok(_event)) = stream.next().await {
 
@@ -136,8 +151,21 @@ async fn subscribe_to_contact_events(simple_storage_instance_event: simple_stora
         let stored_data_value = simple_storage_instance_event.stored_data().call().await?;
         println!("storedDataValue: {0}", stored_data_value);
 
+        println!("LISTEN FOR NEW EVENTS...");
+
     }
 
     Ok(())
 
+}
+
+fn get_unix_time() -> usize {
+
+    let now = SystemTime::now(); //Credit: https://stackoverflow.com/questions/55849295/field-tv-sec-doesnt-exist-in-struct-systemtime
+    let now_str = format!("{:?}",now); //SystemTime { tv_sec: 1657846097, tv_nsec: 129747070 }
+    let now_str_digits_spaces: String = now_str.chars().filter(|c| c.is_digit(10) || *c == ',').collect(); //"1657846097,129747070"
+    let now_splitted: Vec<&str> = now_str_digits_spaces.split(",").collect(); //["1657846097", "129747070"]
+    let tv_sec:usize =  now_splitted[0].parse().unwrap(); //1657846097
+    println!("Unix Time Now: {:?}", tv_sec);
+    return tv_sec;
 }
