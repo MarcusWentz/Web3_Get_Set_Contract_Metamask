@@ -1,10 +1,10 @@
 const ethers = require("ethers");
 
-//Goerli
+// Goerli
 const provider = new ethers.providers.JsonRpcProvider(process.env.goerliHTTPS_InfuraAPIKey)
 const contractAddress = '0x080FfD52b6c217C1B69a03446f2956580e25fd43'
 
-//Betanet 1.X
+// Betanet 1.X
 // const provider = new ethers.providers.JsonRpcProvider("https://sphinx.shardeum.org/")
 // const contractAddress = '0xD55b6893779d64756Ed0162579f54F2Fc83bAC24'
 
@@ -14,33 +14,28 @@ const signer = new ethers.Wallet(Buffer.from(process.env.devTestnetPrivateKey, '
 
 const contractDeployed = new ethers.Contract(contractAddress, contractABI, signer);
 
-estimateGasTests()
+transactionCountTest()
 
-async function estimateGasTests() {
+async function transactionCountTest() {
 
-  const unixTIme = Date.now();
-  const callDataObjectSuccess = await contractDeployed.populateTransaction.set(unixTIme);
-  const txDataSuccess = callDataObjectSuccess.data;
-
-  const estimateGasSuccess = await provider.estimateGas({
-    to: contractAddress,
-    data: txDataSuccess,
-  });
-  console.log(estimateGasSuccess);
+  const txCountBefore = await provider.getTransactionCount(
+    "0xc1202e7d42655F23097476f6D48006fE56d38d4f",
+    "latest"
+  );
+  console.log(txCountBefore);
 
   const storedDataValue = await contractDeployed.storedData()
-  const callDataObjectFail = await contractDeployed.populateTransaction.set(storedDataValue);
-  const txDataFail = callDataObjectFail.data;
 
   try{
-      const estimateGasFail = await provider.estimateGas({
-        to: contractAddress,
-        data: txDataFail,
-      });
-      console.log("🔴 Test failed! Gas estimation should not be possible when REVERT opcode is executed.")
-      console.log(estimateGasFail);
-  } catch (error) {
-      console.log("🟢 Test successful! RPC method eth_estimateGas as expected failed to estimate gas, transaction will most likely revert.")
+    await contractDeployed.set(storedDataValue); //Will compute the gas limit opcodes automatically and get the oracle gas price per gas unit.
+  } catch {
+      console.log("Transaction failed as expected.")
   }
+
+const txCountAfter = await provider.getTransactionCount(
+  "0xc1202e7d42655F23097476f6D48006fE56d38d4f",
+  "latest"
+);
+console.log(txCountAfter);
 
 }
