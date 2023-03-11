@@ -44,7 +44,7 @@ contract contractSizeSpuriousDragonEIP170 is ChainlinkClient {
 
     constructor() {
         Owner = msg.sender;
-        setChainlinkToken(0x326C977E6efc84E512bB9C30f76E30c160eD06FB); // Goerli token
+        setChainlinkToken(0x326C977E6efc84E512bB9C30f76E30c160eD06FB); // Goerli Chainlink token
     }
     
     modifier contractOwnerCheck() {
