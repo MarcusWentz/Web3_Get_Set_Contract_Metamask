@@ -1,21 +1,20 @@
 //Source: https://ethereum.stackexchange.com/questions/131282/ethers-eip712-wont-work-with-strings
 const ethers = require("ethers")
 
-const rpcURL = process.env.goerliWebSocketSecureEventsInfuraAPIKey // Your RPC URL goes here
+const provider = new ethers.providers.JsonRpcProvider("https://sphinx.shardeum.org/")
 
-const provider = new ethers.providers.WebSocketProvider(rpcURL,5)
+// const rpcURL = process.env.goerliWebSocketSecureEventsInfuraAPIKey // Your RPC URL goes here
+// const provider = new ethers.providers.WebSocketProvider(rpcURL)
+
 const signer = new ethers.Wallet(Buffer.from(process.env.devTestnetPrivateKey, 'hex'), provider);
-
-const contractAddress = "0xFd5aBa459e4Dfa8a68C9a3FA8D7c47CE73a82F1c";
-const contractABI = [{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[{"components":[{"internalType":"address","name":"from","type":"address"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"value","type":"uint256"},{"internalType":"uint256","name":"gas","type":"uint256"},{"internalType":"uint256","name":"nonce","type":"uint256"},{"internalType":"bytes","name":"data","type":"bytes"}],"internalType":"struct MinimalForwarder.ForwardRequest","name":"req","type":"tuple"},{"internalType":"bytes","name":"signature","type":"bytes"}],"name":"execute","outputs":[{"internalType":"bool","name":"","type":"bool"},{"internalType":"bytes","name":"","type":"bytes"}],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"address","name":"from","type":"address"}],"name":"getNonce","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"components":[{"internalType":"address","name":"from","type":"address"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"value","type":"uint256"},{"internalType":"uint256","name":"gas","type":"uint256"},{"internalType":"uint256","name":"nonce","type":"uint256"},{"internalType":"bytes","name":"data","type":"bytes"}],"internalType":"struct MinimalForwarder.ForwardRequest","name":"req","type":"tuple"},{"internalType":"bytes","name":"signature","type":"bytes"}],"name":"verify","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"}]
-
-const contractDeployed = new ethers.Contract(contractAddress, contractABI, signer);
+const signerFalse = new ethers.Wallet(Buffer.from(process.env.devTestnetPrivateKeyTwo, 'hex'), provider);
 
 const domainSeparator = {
-  name: "MinimalForwarder",
+  // name: "MinimalForwarder",
   version: "1",
   chainId: 5,
-  verifyingContract: contractAddress,
+  // chainId: 8082,
+  // verifyingContract: contractAddressGoerli,
 };
 
 const types = {
@@ -30,7 +29,7 @@ const types = {
 }
 
 const ForwardRequest = {
-  from:  signer.address,
+  from:  "0xFd5aBa459e4Dfa8a68C9a3FA8D7c47CE73a82F1c",
   to:    signer.address,
   value: 0,
   gas:   300000,
@@ -58,18 +57,11 @@ async function verifySignature() {
     ForwardRequest,
     signatureWithEIP712
   );
+
   let ethersRecoverAddressCorrect = recovered_address == signer.address;
   console.log("ethers.utils.verifyTypedData recovered address correct:", ethersRecoverAddressCorrect);
-
-  // const addressNonce = await contractDeployed.getNonce(
-  //   signer.address
-  // );
-  // console.log(addressNonce)
-
-  const signatureValid = await contractDeployed.verify(
-    ForwardRequest,
-    signatureWithEIP712
-  );
-  console.log("MinimalForwarder.sol verify signature: ", signatureValid)
   
+  let ethersRecoverAddressOtherWallet = recovered_address != signerFalse.address;
+  console.log("ethers.utils.verifyTypedData recovered address reject other wallet:", ethersRecoverAddressOtherWallet);
+
 }
