@@ -1,32 +1,41 @@
 const ethers = require("ethers");
+
 (async () => {
 
-  // Goerli
-  // const provider = new ethers.providers.JsonRpcProvider(process.env.goerliHTTPS_InfuraAPIKey)
+  const provider = new ethers.providers.JsonRpcProvider("https://sphinx.shardeum.org/");
+  const blockHash = "0x8e084463bf192349feb8121c1e1de708ebb30701854cbce3a137b8fb8336cda5" //Cycle 42620
+  const blockHashCompare = "0x22e28e838b87f410f40ba7e2a07f713bdf4940abde9ba99b714f2810b828b972" //Cycle 0
 
-  // //Liberty 2.X
-  const provider = new ethers.providers.JsonRpcProvider("https://liberty20.shardeum.org/")
-  
-  const blockNum = await provider.getBlockNumber();
-  console.log(blockNum);
+  // const provider = new ethers.providers.JsonRpcProvider(process.env.mainnetHTTPS_QuicknodeAPIKey);
+  // const blockHash = "0x829df9bb801fc0494abf2f443423a49ffa32964554db71b098d332d87b70a48b" // Block 12909192
+  // const blockHashCompare = "0xd4e56740f876aef8c010b86a40d5f56745a118d0906a34e69aec8c0db1cb8fa3" //Block 0
 
-  //https://www.quicknode.com/docs/ethereum/eth_getBlockByHash
-  const blockDataByNumber = await provider.getBlock(611737);
-  console.log(blockDataByNumber);
+  const blockData = await provider.getBlock(
+    blockHash,
+    false
+  );
+  console.log(blockData);
 
-  const blockDataByHash = await provider.getBlock("0x402b13b86f813a1beb7dfc34a087a5426ac0030454aec352d9f7eb620f278743");
-  console.log(blockDataByHash);
+  const blockDataCompare = await provider.getBlock(
+    blockHashCompare,
+    false
+  );
+  console.log(blockDataCompare);
 
+  // console.log(JSON.stringify(blockData))
+  // console.log(JSON.stringify(blockDataCompare))
+
+  delete blockData.timestamp
+  delete blockDataCompare.timestamp
+  const blockDataStringRemoveTimestamp = JSON.stringify(blockData);
+  const blockDataCompareStringRemoveTimestamp = JSON.stringify(blockDataCompare);
+  console.log(blockDataStringRemoveTimestamp)
+  console.log(blockDataCompareStringRemoveTimestamp)
+
+  if ( blockDataStringRemoveTimestamp == blockDataCompareStringRemoveTimestamp ) {
+    console.log("🔴 Test failed!. Block data from block hash is identical with timestamp removed.")
+  } else {
+    console.log("🟢 Test successful! Block data from block hash is different with timestamp removed.")
+  }
 
 })();
-
-// curl
-// hash: 0x402b13b86f813a1beb7dfc34a087a5426ac0030454aec352d9f7eb620f278743
-// bundle: 611737
-
-// curl https://liberty20.shardeum.org/ \
-  // -X POST \
-  // -H "Content-Type: application/json" \
-  // --data '{"method":"eth_getBlockByHash","params":["0x402b13b86f813a1beb7dfc34a087a5426ac0030454aec352d9f7eb620f278743",false],"id":1,"jsonrpc":"2.0"}'
-
-// Block number keeps increasing with the same block number hash. 
