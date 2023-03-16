@@ -1,6 +1,6 @@
 import axios from "axios";
 
-test_eth_getBlockReceipts(42620)
+test_eth_getBlockByNumber(42620)
 
 async function eth_getBlockByNumber(cycleToEmulateBlock: number) {
 
@@ -18,7 +18,7 @@ async function eth_getBlockByNumber(cycleToEmulateBlock: number) {
 
 }
 
-async function test_eth_getBlockReceipts(cycleToEmulateBlock: number){
+async function test_eth_getBlockByNumber(cycleToEmulateBlock: number){
 
   let cycleData = await eth_getBlockByNumber(cycleToEmulateBlock);
   console.log("JSON object: ", cycleData);
