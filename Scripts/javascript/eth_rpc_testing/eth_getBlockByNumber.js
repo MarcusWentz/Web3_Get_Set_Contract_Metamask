@@ -3,14 +3,15 @@ const ethers = require("ethers");
 (async () => {
 
   // const provider = new ethers.providers.JsonRpcProvider("https://sphinx.shardeum.org/");
+  // const blockNumber = "0x8192"
 
   const provider = new ethers.providers.JsonRpcProvider(process.env.mainnetHTTPS_QuicknodeAPIKey);
+  const blockNumber = "0xc5043f"
   
-  const uncleCount = await provider.send("eth_getUncleCountByBlockHash", 
-   [
-    "0xa917fcc721a5465a484e9be17cda0cc5493933dd3bc70c9adbee192cb419c9d7",
-   ]
+  const blockData = await provider.getBlock(
+    blockNumber,
+    false
   );
-  console.log(uncleCount);
+  console.log(blockData);
 
 })();
