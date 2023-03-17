@@ -21,3 +21,9 @@ then
 or
 
        http-server
+
+Note: this example uses jQuery.
+
+For a similar template in React with GitHub pages support as well:
+
+https://github.com/MarcusWentz/react-ethers-template
