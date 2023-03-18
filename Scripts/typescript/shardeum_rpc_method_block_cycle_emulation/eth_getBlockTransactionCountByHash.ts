@@ -1,6 +1,3 @@
-//Javascript require
-// const axios = require('axios');
-//Typescript import
 import axios from "axios";
 
 test_eth_getBlockTransactionCountByHash("0xf2a9a9aa1e71d24f0f072f7ee3a2a46df1dd5b30ecdf44aa4742372470ebd1a4") //Cycle hash for cycle 2000
