@@ -1,6 +1,6 @@
 import axios from "axios";
 
-eth_getBlockReceipts(2000)
+test_eth_getBlockReceipts()
 
 async function eth_getBlockTransactionCountByNumber(cycleToEmulateBlock: number) {
 
@@ -17,9 +17,7 @@ async function eth_getBlockTransactionCountByNumber(cycleToEmulateBlock: number)
 
 }
 
-// let transactionArray = [];
-
-async function eth_getBlockReceipts(cycleToEmulateBlock: number){
+async function eth_getBlockReceipts(cycleToEmulateBlock: number): Promise<any[]> {
 
   // let total = await eth_getBlockTransactionCountByNumber(cycleToEmulateBlock);
   let transactionsInCycle = await eth_getBlockTransactionCountByNumber(cycleToEmulateBlock);
@@ -69,5 +67,15 @@ async function eth_getBlockReceipts(cycleToEmulateBlock: number){
 
     // console.log(filterPageIncrement)
   }
+
+  return []; //Used to hide compiler error even though we never hit this line since we return in a while loop above.
+}
+
+async function test_eth_getBlockReceipts() {
+
+  let transactionsFromBlockNumber =  await eth_getBlockReceipts(2000); 
+  console.log("Raw transactions: ", transactionsFromBlockNumber); 
+  console.log("First transaction hash: 0x" + transactionsFromBlockNumber[0].txId); 
+  console.log("Last transaction hash: 0x" + transactionsFromBlockNumber[8].txId); 
 
 }

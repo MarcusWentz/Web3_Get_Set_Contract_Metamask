@@ -75,12 +75,14 @@ async function eth_getBlockReceipts(cycleToEmulateBlock: number): Promise<any[]>
 
 async function eth_getTransactionByBlockNumberAndIndex(blockNumber: number, txIndex: number){
   let arrayTransactionsInOrder =  await eth_getBlockReceipts(2000);
-  return arrayTransactionsInOrder[txIndex].txId;
+  return arrayTransactionsInOrder[txIndex];
 }
 
 async function test_eth_getTransactionByBlockNumberAndIndex() {
 
-  let txIndex =  await eth_getTransactionByBlockNumberAndIndex(2000,0);
-  console.log(txIndex);
+  let txIndex =  await eth_getTransactionByBlockNumberAndIndex(2000,8); //Cycle 2000 with transaction 9/9 (index 8 we are counting from 0).
+  console.log(txIndex); //Raw Tx
+  console.log("Tx Id: " + txIndex.txId); 
+  console.log("Tx Hash: 0x" + txIndex.txId); 
 
 }
