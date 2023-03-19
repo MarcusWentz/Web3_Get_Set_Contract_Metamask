@@ -49,6 +49,9 @@
 .container {
     position: relative;
     padding: 30px;
+    /* margin-right: auto;
+    margin-left: auto; */
+    text-align: center;
 }
   
 .center {
