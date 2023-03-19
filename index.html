@@ -5,84 +5,67 @@
 
 <head>
   <title>Index</title>
-  <!-- Bootstrap -->
-  <!-- Latest compiled and minified CSS -->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <link rel="shortcut icon" type="png" href="favicon.png">
   <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
   <meta content="utf-8" http-equiv="encoding">
-  <link rel="stylesheet" href="sass/bootstrap.css">
-  <!-- Helps objects scale to mobile devices -->
+  <link rel="stylesheet" href="index.css">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
 <body style="background-color:black;">
 
-<div style="min-height: 5vh"></div>
+<!-- <div style="min-height: 5vh"></div> -->
 
 <div class="container">
-  <div style="min-height: 10vh">
-  <div class="row">
-    <div class="col text-center">
-      <button class="btn btn-outline-warning" id=enableEthereumButton></button>
+  <div style="min-height: 20vh">
+    <div class="center">
+      <button class="btn buttonConnectMetamask" id=enableEthereumButton></button>
     </div>
-  </div>
   </div>
 </div>
 
 <div class="container">
-<div style="min-height: 10vh">
-  <div class="row">
-    <div class="col text-center">
-      <p style="color:white">storedData uint: </p>
+  <div style="min-height: 25vh">
+    <div class="center">
+      <p style="color:white">storedData(): </p>
       <p style="color:white" id="getValueStateSmartContract"></p>
     </div>
-  </div>
  </div>
 </div>
 
 <div class="container">
- <div style="min-height: 6vh">
-  <div class="row">
-    <div class="col text-center">
-      <button class="changeStateInContractEvent btn btn-outline-light">"set(uint x)" Event uint valueChangeEventWenjs to absolute value: </button>
+ <div style="min-height: 5vh">
+    <div class="center">
+      <button class="changeStateInContractEvent btn buttonHighContrast">set(uint256 x)</button>
     </div>
-  </div>
  </div>
 </div>
-
-<div class="container">
-  <div style="min-height: 14vh">
-    <div class="row">
-      <div class="col text-center">
-        <input type="text" style="text-align:center" id="setValueSmartContract" placeholder="input uint value">
-      </div>
-    </div>
-  </div>
-</div>
-
-<div style="min-height: 5vh"></div>
 
 <div class="container">
   <div style="min-height: 5vh">
-  <div class="row">
-    <div class="col text-center">
-      <form action="https://github.com/MarcusWentz/Web3_Get_Set_Contract_Metamask">
-        <input type="submit" class="btn btn-outline-light" value="GitHub" />
-    </form>
+    <div class="center">
+        <input type="text" style="text-align:center" id="setValueSmartContract" placeholder="input uint value">
     </div>
   </div>
 </div>
 
-  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<div style="min-height: 5vh"></div>
+
+<div class="container">
+  <div style="min-height: 15vh">
+    <div class="center">
+      <form action="https://github.com/MarcusWentz/Web3_Get_Set_Contract_Metamask">
+        <input type="submit" class="btn buttonHighContrast" value="GitHub" />
+      </form>
+    </div>
+  </div> 
+</div>
+
+  <!-- jQuery -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-  <!-- Include all compiled plugins (below), or include individual files as needed -->
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-  <!-- WEB3 IMPORT -->
-  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.5.0-rc.0/web3.min.js"></script> -->
-  <!-- ethers.js -->
+  <!-- jQuery -->
   <script src="https://cdn.ethers.io/lib/ethers-5.6.umd.min.js" type="text/javascript"></script>
-  <!-- Main script logic -->
+  <!-- Javascript for this page source -->
   <script src="index.js"></script>
 
 </body>

@@ -1,0 +1,60 @@
+.buttonConnectMetamask {
+    background-color: #000000;
+    color: #ff7300;
+    border-style: solid;
+    border-color: #ff7300;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+  }
+  
+  .buttonConnectMetamask:hover {
+    background-color: #ff7300;
+    color: #000000;
+    border-style: solid;
+    border-color: #ff7300;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+  }
+  
+  .buttonHighContrast {
+    background-color: #000000;
+    color: #ffffff;
+    border-style: solid;
+    border-color: #ffffff;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+  }
+  
+  .buttonHighContrast:hover {
+    background-color: #ffffff;
+    color: #000000;
+    border-style: solid;
+    border-color: #ffffff;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+  }
+
+  .container {
+    position: relative;
+  }
+  
+  .center {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+  }
