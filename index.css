@@ -8,9 +8,9 @@
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
-  }
-  
-  .buttonConnectMetamask:hover {
+}
+
+.buttonConnectMetamask:hover {
     background-color: #ff7300;
     color: #000000;
     border-style: solid;
@@ -20,9 +20,9 @@
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
-  }
-  
-  .buttonHighContrast {
+}
+
+.buttonHighContrast {
     background-color: #000000;
     color: #ffffff;
     border-style: solid;
@@ -32,9 +32,9 @@
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
-  }
-  
-  .buttonHighContrast:hover {
+}
+
+.buttonHighContrast:hover {
     background-color: #ffffff;
     color: #000000;
     border-style: solid;
@@ -44,17 +44,18 @@
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
-  }
+}
 
-  .container {
+.container {
     position: relative;
-  }
+    padding: 30px;
+}
   
-  .center {
+.center {
     margin: 0;
     position: absolute;
     top: 50%;
     left: 50%;
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
-  }
+}

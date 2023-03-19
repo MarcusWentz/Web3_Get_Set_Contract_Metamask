@@ -5,6 +5,7 @@ detectMetamaskInstalled() //When the page is opened check for error handling iss
 
 let accounts = []; ////Empty array to be filled once Metamask is called.
 document.getElementById("enableEthereumButton").innerHTML =  "Connect Metamask 🦊"
+document.getElementById("getValueStateSmartContract").innerHTML =  "Loading..."
 
 const goerliChainId = 5;
 
