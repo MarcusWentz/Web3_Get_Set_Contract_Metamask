@@ -22,7 +22,7 @@ or
 
        http-server
 
-Note: this example uses jQuery.
+Note: this website example uses Vanilla Javascript.
 
 For a similar template in React with GitHub pages support as well:
 
