@@ -1,62 +1,36 @@
-const https = require('https');
+const axios = require('axios');
 
-let totalTransactions = ""
-let baseUrl = "https://explorer.liberty20.shardeum.org/api/transaction?startCycle=0&endCycle=1000&address=0x0000000000000000000000000000000000000000"
+let baseUrl = "https://explorer-sphinx.shardeum.org/api/transaction?startCycle=49330&endCycle=49330&address=0x6bd9e67bf927da1935b6eaea9bf22500c4e1f53a"
 
-let req = https.get(baseUrl, function(res) {
-	let data = '',
-		json_data;
+getTransactionsToAddressCycleRange(baseUrl)
 
-	res.on('data', function(stream) {
-		data += stream;
-	});
-	res.on('end', function() {
-
-		json_data = JSON.parse(data);
-		totalTransactions = json_data.totalTransactions
-		console.log(totalTransactions);
-
-    readJSONLoop(totalTransactions)
-
-	});
-});
-
-req.on('error', function(e) {
-    console.log(e.message);
-});
-
-
-function readJSONLoop(totalTransactions) {
+async function readJSONLoop(totalTransactions) {
 
 	let total = totalTransactions;
 	let pageIndex = 1
 
-	while (total>0) {
+	while ( total > 0 ) {
 
 		let filterUrl = baseUrl + "&page=" + pageIndex
-		let req = https.get(filterUrl, function(res) {
-			let data = '',
-				json_data;
-
-			res.on('data', function(stream) {
-				data += stream;
-			});
-			res.on('end', function() {
-
-				json_data = JSON.parse(data);
-				console.log(json_data);
-		    let pageIndex = 1;
-
-			});
-		});
-
-		req.on('error', function(e) {
-		    console.log(e.message);
-		});
-
-	  total -= 10;
-		pageIndex++;
 		console.log(filterUrl)
+
+		let responseRawJSON = await axios.get(filterUrl);
+		responseRawJSON = responseRawJSON.data;
+		console.log(responseRawJSON);
+
+	  	total -= 10;
+		pageIndex++;
 	}
 
+}
+
+async function getTransactionsToAddressCycleRange(baseUrl) {
+
+	let responseRawJSON = await axios.get(baseUrl);
+	let responseDataJSON = responseRawJSON.data;
+	let totalTransactions = responseDataJSON.totalTransactions
+	console.log(totalTransactions);
+
+	readJSONLoop(totalTransactions)
+    
 }
