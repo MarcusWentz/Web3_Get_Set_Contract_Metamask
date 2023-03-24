@@ -10,7 +10,7 @@ const contractAddress = '0x080FfD52b6c217C1B69a03446f2956580e25fd43'
 
 //Betanet 1.X
 // const provider = new ethers.providers.JsonRpcProvider("https://sphinx.shardeum.org/")
-// const contractAddress = '0x9228dA2e3724A12b4B0d2d621ea501829671cf52'
+// const contractAddress = '0x18e9437821bD2c69A5bCee1896eD18995E5a6A85'
 
 //Liberty 2.X
 // const provider = new ethers.providers.JsonRpcProvider("https://liberty20.shardeum.org/")
