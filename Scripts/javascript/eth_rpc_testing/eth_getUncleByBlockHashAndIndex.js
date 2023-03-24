@@ -2,9 +2,9 @@ const ethers = require("ethers");
 
 (async () => {
 
-  // const provider = new ethers.providers.JsonRpcProvider("https://sphinx.shardeum.org/");
+  const provider = new ethers.providers.JsonRpcProvider("https://sphinx.shardeum.org/");
 
-  const provider = new ethers.providers.JsonRpcProvider(process.env.mainnetHTTPS_QuicknodeAPIKey);
+  // const provider = new ethers.providers.JsonRpcProvider(process.env.mainnetHTTPS_QuicknodeAPIKey);
   
   const uncleParameters = await provider.send("eth_getUncleByBlockHashAndIndex", 
    [

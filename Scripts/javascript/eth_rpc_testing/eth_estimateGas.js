@@ -6,7 +6,7 @@ const contractAddress = '0x080FfD52b6c217C1B69a03446f2956580e25fd43'
 
 //Betanet 1.X
 // const provider = new ethers.providers.JsonRpcProvider("https://sphinx.shardeum.org/")
-// const contractAddress = '0xD55b6893779d64756Ed0162579f54F2Fc83bAC24'
+// const contractAddress = '0x18e9437821bD2c69A5bCee1896eD18995E5a6A85'
 
 const contractABI = [{"inputs":[],"name":"sameStorageValue","type":"error"},{"anonymous":false,"inputs":[],"name":"setOpenDataEvent","type":"event"},{"inputs":[{"internalType":"uint256","name":"x","type":"uint256"}],"name":"set","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"storedData","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}]
 
