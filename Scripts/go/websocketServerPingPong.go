@@ -29,8 +29,8 @@ func wsEndpoint(w http.ResponseWriter, r *http.Request) {
         log.Println(err)
     }
 
-    log.Println("Client Connected")
-    err = ws.WriteMessage(1, []byte("Server detected a client."))
+    log.Println("Client connected.")
+    err = ws.WriteMessage(1, []byte("Server detected a client. Server is listening for client messages..."))
     if err != nil {
         log.Println(err)
     }
@@ -40,10 +40,9 @@ func wsEndpoint(w http.ResponseWriter, r *http.Request) {
 
 func textMessagePingPong(conn *websocket.Conn) {
 
+    fmt.Println("Waiting for new inputs from client to play ping pong with...")
+
     for {
-
-        fmt.Println("Waiting for new inputs from client to play ping pong with...")
-
         // Read input from client.
         messageType, p, err := conn.ReadMessage()
         if err != nil {
@@ -53,7 +52,7 @@ func textMessagePingPong(conn *websocket.Conn) {
         fmt.Println("Ping " + string(p))
 
         // Write the same message back to client.
-        returnMessage := []byte("Pong " + string(p) )
+        returnMessage := []byte("Pong " + string(p) + "Server is listening for client messages...")
         fmt.Println(string(returnMessage))
         if err := conn.WriteMessage(messageType, returnMessage ); err != nil {
             log.Println(err)
