@@ -16,7 +16,6 @@ import (
 
     store "storeProject/contracts" //LOOK AT "go.mod" FOR YOUR RELATIVE PROJECT PATH TO FIND CONTRACT INTERFACE!
 
-    "github.com/ethereum/go-ethereum"
     "github.com/ethereum/go-ethereum/accounts/abi/bind"
     "github.com/ethereum/go-ethereum/common"
     "github.com/ethereum/go-ethereum/ethclient"
@@ -50,9 +49,7 @@ func main() {
 
      setUintValue := big.NewInt(444)
      SetStoredDataTx(setUintValue,client,auth,fromAddress,contract);
-
-     SubscribeToEvents(client, contractAddress, contract)
-
+     
 }
 
 func clientSetup(wssConnectionURL string) (client *ethclient.Client, chainID *big.Int) {
@@ -170,32 +167,3 @@ func SetStoredDataTx(setUintValue *big.Int, client *ethclient.Client, auth *bind
   return
 }
 
-func SubscribeToEvents(client *ethclient.Client, contractAddress common.Address, contract *store.Store) {
-  //Subscribe to events from smart contract address.
-  query := ethereum.FilterQuery{
-      Addresses: []common.Address{contractAddress},
-  }
-
-  logs := make(chan types.Log)
-  sub, err := client.SubscribeFilterLogs(context.Background(), query, logs)
-  if err != nil {
-      log.Fatal(err)
-  }
-
-  for {
-      select {
-      case err := <-sub.Err():
-          log.Fatal(err)
-      case vLog := <-logs:
-          fmt.Println("New Event Log:", vLog) // pointer to event log
-
-          storedData, err := contract.StoredData(&bind.CallOpts{})
-            if err != nil {
-                log.Fatal(err)
-          }
-          fmt.Println("storedData:", storedData)
-      }
-  }
-
-  return
-}

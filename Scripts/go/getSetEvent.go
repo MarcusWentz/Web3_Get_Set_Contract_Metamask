@@ -38,9 +38,9 @@ func main() {
 
     contractAddress := common.HexToAddress("0xdbaA7dfBd9125B7a43457D979B1f8a1Bd8687f37")
     contract := connectContractAddress(client,contractAddress)
- fmt.Println("contract type object: ")
- fmt.Printf("%T",contract)
- fmt.Println("")
+    fmt.Println("contract type object: ")
+    fmt.Printf("%T",contract)
+    fmt.Println("")
 
     auth, fromAddress := connectWallet(os.Getenv("devTestnetPrivateKey"),client,chainID)
 
@@ -50,9 +50,10 @@ func main() {
     currenUnixtTime := time.Now().Unix();
     fmt.Println("currenUnixtTime: ", currenUnixtTime )
     setUintValue := big.NewInt(currenUnixtTime)
-    SetStoredDataTx(setUintValue,client,auth,fromAddress,contract);
+    go SetStoredDataTx(setUintValue,client,auth,fromAddress,contract); //Go routine makes this run in parallel with everything below.
 
-    SubscribeToEvents(client, contractAddress, contract)
+    SubscribeToEvents(client, contractAddress, contract) //Run while go routine is running above.
+
 
 }
 
