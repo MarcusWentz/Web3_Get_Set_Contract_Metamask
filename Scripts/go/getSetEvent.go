@@ -50,6 +50,7 @@ func main() {
     currenUnixtTime := time.Now().Unix();
     fmt.Println("currenUnixtTime: ", currenUnixtTime )
     setUintValue := big.NewInt(currenUnixtTime)
+    
     go SetStoredDataTx(setUintValue,client,auth,fromAddress,contract); //Go routine makes this run in parallel with everything below.
 
     SubscribeToEvents(client, contractAddress, contract) //Run while go routine is running above.
