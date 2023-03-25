@@ -12,6 +12,7 @@ import (
     "context"
     "crypto/ecdsa"
     "math/big"
+    "time"
 
     store "storeProject/contracts" //LOOK AT "go.mod" FOR YOUR RELATIVE PROJECT PATH TO FIND CONTRACT INTERFACE!
 
@@ -25,31 +26,33 @@ import (
 
 func main() {
 
-     // Use this endpoint when you are running your own node on a specific chain (no events)
-     // client, chainID := clientSetup("http://localhost:8545")
+    // Use this endpoint when you are running your own node on a specific chain (no events)
+    // client, chainID := clientSetup("http://localhost:8545")
 
-     // Use this endpoint when you are running your own node on a specific chain (events allowed)
-     // client, chainID := clientSetup("ws://localhost:8546")
+    // Use this endpoint when you are running your own node on a specific chain (events allowed)
+    // client, chainID := clientSetup("ws://localhost:8546")
 
-     client, chainID := clientSetup(os.Getenv("goerliWebSocketSecureEventsInfuraAPIKey"))
+    client, chainID := clientSetup(os.Getenv("goerliWebSocketSecureEventsInfuraAPIKey"))
 
-     fmt.Println("chainID: ", chainID)
+    fmt.Println("chainID: ", chainID)
 
-     contractAddress := common.HexToAddress("0xdbaA7dfBd9125B7a43457D979B1f8a1Bd8687f37")
-     contract := connectContractAddress(client,contractAddress)
-     fmt.Println("contract type object: ")
-     fmt.Printf("%T",contract)
-     fmt.Println("")
+    contractAddress := common.HexToAddress("0xdbaA7dfBd9125B7a43457D979B1f8a1Bd8687f37")
+    contract := connectContractAddress(client,contractAddress)
+//  fmt.Println("contract type object: ")
+//  fmt.Printf("%T",contract)
+//  fmt.Println("")
 
-     auth, fromAddress := connectWallet(os.Getenv("devTestnetPrivateKey"),client,chainID)
+    auth, fromAddress := connectWallet(os.Getenv("devTestnetPrivateKey"),client,chainID)
 
-     storedData := getstoredData(contract)
-     fmt.Println("storedData:", storedData)
+    storedData := getstoredData(contract)
+    fmt.Println("storedData:", storedData)
 
-     setUintValue := big.NewInt(444)
-     SetStoredDataTx(setUintValue,client,auth,fromAddress,contract);
+    currenUnixtTime := time.Now().Unix();
+    fmt.Println("currenUnixtTime: ", currenUnixtTime )
+    setUintValue := big.NewInt(currenUnixtTime)
+    SetStoredDataTx(setUintValue,client,auth,fromAddress,contract);
 
-     SubscribeToEvents(client, contractAddress, contract)
+    SubscribeToEvents(client, contractAddress, contract)
 
 }
 
@@ -112,28 +115,29 @@ func getstoredData(contract *store.Store) (storedData *big.Int) {
 
 func SetStoredDataTx(setUintValue *big.Int, client *ethclient.Client, auth *bind.TransactOpts, fromAddress common.Address, contract *store.Store) {
 
-  gasPrice, err := client.SuggestGasPrice(context.Background())
-  if err != nil {
-      log.Fatal(err)
-  }
+    //OPTIONAL TRANSACTION PARAMETERS YOU CAN SET.
+    //   gasPrice, err := client.SuggestGasPrice(context.Background())
+    //   if err != nil {
+    //       log.Fatal(err)
+    //   }
 
-  nonce, err := client.PendingNonceAt(context.Background(), fromAddress)
-  if err != nil {
-      log.Fatal(err)
-  }
+    // nonce, err := client.PendingNonceAt(context.Background(), fromAddress)
+    // if err != nil {
+    //     log.Fatal(err)
+    // }
 
-  auth.Nonce = big.NewInt(int64(nonce))
-  auth.GasLimit = uint64(3000000) // in units
-  auth.GasPrice = gasPrice
-  auth.Value = big.NewInt(0)     // in wei
+    //   auth.Nonce = big.NewInt(int64(nonce))
+    //   auth.GasLimit = uint64(3000000) // GAS LIMIT IS COMPUTED AUTOMATICALLY BASED ON CONTRACT FUNCTION CALL 
+    //   auth.GasPrice = gasPrice
+    //   auth.Value = big.NewInt(0)     // 0 wei in this case, not needed.
 
-  tx, err := contract.Set(auth, setUintValue)
-  if err != nil {
-      log.Fatal(err)
-  }
-  fmt.Println("Tx hash:", tx.Hash().Hex()) // tx sent
+    tx, err := contract.Set(auth, setUintValue)
+    if err != nil {
+        log.Fatal(err)
+    }
+    fmt.Println("Tx hash:", tx.Hash().Hex()) // tx sent
 
-  return
+    return
 }
 
 func SubscribeToEvents(client *ethclient.Client, contractAddress common.Address, contract *store.Store) {
@@ -148,19 +152,22 @@ func SubscribeToEvents(client *ethclient.Client, contractAddress common.Address,
       log.Fatal(err)
   }
 
-  for {
-      select {
-      case err := <-sub.Err():
-          log.Fatal(err)
-      case vLog := <-logs:
-          fmt.Println("New Event Log:", vLog) // pointer to event log
+  fmt.Println("Event listener started.")
 
-          storedData, err := contract.StoredData(&bind.CallOpts{})
-            if err != nil {
-                log.Fatal(err)
-          }
-          fmt.Println("storedData:", storedData)
-      }
+  for {
+    fmt.Println("Listening for new event logs...")
+    select {
+    case err := <-sub.Err():
+        log.Fatal(err)
+    case vLog := <-logs:
+        fmt.Println("New Event Log:", vLog) // pointer to event log
+
+        storedData, err := contract.StoredData(&bind.CallOpts{})
+        if err != nil {
+            log.Fatal(err)
+        }
+        fmt.Println("storedData:", storedData)
+    }
   }
 
   return
