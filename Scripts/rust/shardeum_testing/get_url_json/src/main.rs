@@ -4,17 +4,15 @@ use serde_json;
 async fn main() -> Result<(), reqwest::Error> {
 
     let new_todo: serde_json::Value = reqwest::Client::new()
-        .get("http://api.open-notify.org/astros.json")
+        .get("https://explorer-sphinx.shardeum.org/api/transaction?startCycle=6928&endCycle=6928")
         .send()
         .await?
         .json()
         .await?;
 
     println!("JSON raw response: {:#?}", new_todo);
-    println!("{:#?}", new_todo["message"]);
-    println!("{:#?}", new_todo["number"]);
-    println!("{:#?}", new_todo["people"][0]["name"]);
-    println!("{:#?}", new_todo["people"][1]["name"]);
+    println!("{:#?}", new_todo["success"]);
+    println!("{:#?}", new_todo["totalTransactions"]);
 
     Ok(())
 }
