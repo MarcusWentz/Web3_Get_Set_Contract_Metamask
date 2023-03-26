@@ -8,20 +8,25 @@ import (
    "strconv"
 )
 
+func main() {
+   
+   baseUrl := "https://explorer-sphinx.shardeum.org/api/transaction?startCycle=";
+   transactionCount := getTransactionCount(6928, baseUrl)
+   log.Println(transactionCount)
+
+   readJsonLoop(transactionCount, baseUrl)
+
+}
+
 type transactionCountJson struct {
 	Success bool `json:"success"`
    TotalTransactions int `json:"totalTransactions"`
 }
 
-func main() {
-   transactionCount := gettransactionCount(6928)
-   log.Println(transactionCount)
-}
-
-func gettransactionCount(cycleNumber int) (x int) {
+func getTransactionCount(cycleNumber int, baseUrl string) (x int) {
 
    getRequestUrl := 
-      "https://explorer-sphinx.shardeum.org/api/transaction?startCycle="+
+      baseUrl +
       strconv.Itoa(cycleNumber)+
       "&endCycle="+
       strconv.Itoa(cycleNumber);
@@ -37,8 +42,6 @@ func gettransactionCount(cycleNumber int) (x int) {
       log.Fatalln(err)
    }
 
-   // log.Printf(string(rawBodyBytes))
-
    var transactionCountJsonInstance transactionCountJson
 
    err = json.Unmarshal(rawBodyBytes, &transactionCountJsonInstance)
@@ -46,7 +49,39 @@ func gettransactionCount(cycleNumber int) (x int) {
       log.Fatalln(err)
    }
 
-   // log.Println(transactionCountJsonInstance)
-   // log.Println(transactionCountJsonInstance.TotalTransactions)
    return transactionCountJsonInstance.TotalTransactions;
+}
+
+func readJsonLoop(totalTransactions int, baseUrl string) {
+
+   total := totalTransactions;
+   pageIndex := 1;
+
+   for total > 0 {
+
+      getRequestUrl := 
+         baseUrl+
+         strconv.Itoa(6928)+
+         "&endCycle="+
+         strconv.Itoa(6928)+
+         "&page=" + 
+         strconv.Itoa(pageIndex)
+      log.Println(getRequestUrl)
+
+      resp, err := http.Get(getRequestUrl)
+      if err != nil {
+         log.Fatalln(err)
+      }
+   
+      rawBodyBytes, err := ioutil.ReadAll(resp.Body)
+      if err != nil {
+         log.Fatalln(err)
+      }
+   
+      log.Printf(string(rawBodyBytes))
+
+      total -= 10;
+      pageIndex++;
+   }
+
 }
