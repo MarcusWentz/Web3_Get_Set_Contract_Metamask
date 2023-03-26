@@ -22,8 +22,6 @@ func main() {
 
    for {
 
-      time.Sleep(2 * time.Second)
-
       header, err := client.HeaderByNumber(context.Background(), nil)
       if err != nil {
          log.Fatal(err)
@@ -32,13 +30,17 @@ func main() {
       blockNumber := header.Number
       bigNumberTenBundlesPerCycle, _ := new(big.Int).SetString("10", 10)  //Value 10, decimal units also 10. 
       cycleNumber := new(big.Int).Div(blockNumber, bigNumberTenBundlesPerCycle)
-      log.Println(cycleNumber)
+      bigNumberOne, _ := new(big.Int).SetString("1", 10)  //Value 1, decimal units 10. 
+      cycleNumberMinusOne := new(big.Int).Sub(cycleNumber, bigNumberOne)
+      log.Println(cycleNumberMinusOne)
       
       baseUrl := "https://explorer-sphinx.shardeum.org/api/transaction?startCycle=";
-      transactionCount := getTransactionCount(cycleNumber, baseUrl)
+      transactionCount := getTransactionCount(cycleNumberMinusOne, baseUrl)
       log.Println(transactionCount)
 
-      readJsonLoop(cycleNumber,baseUrl,transactionCount)
+      readJsonLoop(cycleNumberMinusOne,baseUrl,transactionCount)
+
+      time.Sleep(60 * time.Second)
 
    }
 
