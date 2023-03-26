@@ -5,6 +5,7 @@ import (
    "log"
    "net/http"
    "encoding/json"
+   "strconv"
 )
 
 type transactionCountJson struct {
@@ -13,8 +14,20 @@ type transactionCountJson struct {
 }
 
 func main() {
+   transactionCount := gettransactionCount(6928)
+   log.Println(transactionCount)
+}
 
-   resp, err := http.Get("https://explorer-sphinx.shardeum.org/api/transaction?startCycle=6928&endCycle=6928")
+func gettransactionCount(cycleNumber int) (x int) {
+
+   getRequestUrl := 
+      "https://explorer-sphinx.shardeum.org/api/transaction?startCycle="+
+      strconv.Itoa(cycleNumber)+
+      "&endCycle="+
+      strconv.Itoa(cycleNumber);
+   log.Println(getRequestUrl)
+
+   resp, err := http.Get(getRequestUrl)
    if err != nil {
       log.Fatalln(err)
    }
@@ -24,7 +37,7 @@ func main() {
       log.Fatalln(err)
    }
 
-   log.Printf(string(rawBodyBytes))
+   // log.Printf(string(rawBodyBytes))
 
    var transactionCountJsonInstance transactionCountJson
 
@@ -33,7 +46,7 @@ func main() {
       log.Fatalln(err)
    }
 
-   log.Println(transactionCountJsonInstance)
-   log.Println(transactionCountJsonInstance.TotalTransactions)
-
+   // log.Println(transactionCountJsonInstance)
+   // log.Println(transactionCountJsonInstance.TotalTransactions)
+   return transactionCountJsonInstance.TotalTransactions;
 }
