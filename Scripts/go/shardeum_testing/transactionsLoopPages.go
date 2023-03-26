@@ -85,3 +85,17 @@ func readJsonLoop(totalTransactions int, baseUrl string) {
    }
 
 }
+
+func clientSetup(wssConnectionURL string) (client *ethclient.Client, chainID *big.Int) {
+
+   client, err := ethclient.Dial(wssConnectionURL)
+   if err != nil {
+       log.Fatal(err)
+   }
+ 
+   chainID, err = client.NetworkID(context.Background())
+   if err != nil {
+      log.Fatal(err)
+   }
+   return
+ }
