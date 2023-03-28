@@ -9,8 +9,8 @@ import (
 )
 
 func main() {
-    client, err := rpc.DialHTTP(os.Getenv("goerliHTTPS_InfuraAPIKey"))
-	// client, err := rpc.DialHTTP("https://liberty20.shardeum.org")
+	client, err := rpc.DialHTTP(os.Getenv("mainnetHTTPS_InfuraAPIKey"))
+	// client, err := rpc.DialHTTP("https://sphinx.shardeum.org/")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -22,8 +22,8 @@ func main() {
 
 	var result string
 
-	req := request{"0x326C977E6efc84E512bB9C30f76E30c160eD06FB", "0x70a0823100000000000000000000000066C1d8A5ee726b545576A75380391835F8AAA43c"}
-	// req := request{"0x8f01876ccd727fd703787ed477b7f71e1e3adbb1", "0x8da5cb5b"}
+	req := request{"0xcc13fc627effd6e35d2d2706ea3c4d7396c610ea", "0x8da5cb5b"}
+	// req := request{"0xA66CC96316A4dF10b96Dc3e62dAE184d04E93Ad9", "0x8da5cb5b"}
 	if err := client.Call(&result, "eth_call", req, "latest"); err != nil {
 		log.Fatal(err)
 	}

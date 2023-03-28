@@ -14,19 +14,19 @@ import (
 
 func main() {
 
-	client, err := ethclient.Dial(os.Getenv("goerliHTTPS_InfuraAPIKey"))
-    // client, err := ethclient.Dial("https://liberty20.shardeum.org")
+	client, err := ethclient.Dial(os.Getenv("mainnetHTTPS_InfuraAPIKey"))
+    // client, err := ethclient.Dial("https://sphinx.shardeum.org/")
     if err != nil {
         log.Fatal(err)
     }
 
-    //Goerli
-    tx_to := common.HexToAddress("0x326C977E6efc84E512bB9C30f76E30c160eD06FB")
-    tx_data := common.FromHex("0x70a0823100000000000000000000000066C1d8A5ee726b545576A75380391835F8AAA43c")
+    //Ethereum Mainnet
+    tx_to := common.HexToAddress("0xcc13fc627effd6e35d2d2706ea3c4d7396c610ea")
 
-    //Liberty 2.X
-	// tx_to := common.HexToAddress("0x8f01876ccd727fd703787ed477b7f71e1e3adbb1")
-    // tx_data := common.FromHex("0x8da5cb5b")
+    //Betanet 1.X
+	// tx_to := common.HexToAddress("0xA66CC96316A4dF10b96Dc3e62dAE184d04E93Ad9")
+
+    tx_data := common.FromHex("0x8da5cb5b")
 
 	callMsg := ethereum.CallMsg{
 		To:   &tx_to,
