@@ -6,7 +6,7 @@ const rpcURL = "https://sphinx.shardeum.org/"// Your RPC URL goes here
 const provider = new ethers.providers.JsonRpcProvider(rpcURL)
 const signer = new ethers.Wallet(Buffer.from(process.env.devTestnetPrivateKey, 'hex'), provider);
 
-const addressUniswapV2Router02 = '0x7e4c1fB31355f208709822c30e660C61615A2a37'
+const addressUniswapV2Router02 = '0x61716e3E7b5A6f11bB985f76E4195Fc55d7FCE9c'
 const abiUniswapV2Router02 = JSON.parse( fs.readFileSync('abiUniswapV2Router02.json') );
 
 const contractUniswapV2Router02 = new ethers.Contract(addressUniswapV2Router02, abiUniswapV2Router02, signer);
