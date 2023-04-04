@@ -15,7 +15,7 @@ const abiUniswapV2Router02 = JSON.parse( fs.readFileSync('abiUniswapV2Router02.j
 
 const contractUniswapV2Router02 = new ethers.Contract(addressUniswapV2Router02, abiUniswapV2Router02, signer);
 
-UniswapV2RouterAddLiquidityETH()
+UniswapV2RouterRemoveLiquidityETH()
 
 async function getWrappedTokenAddress() {  
 
@@ -29,7 +29,7 @@ async function getFactoryAddress() {
 	return storedData
   }
 
-async function UniswapV2RouterAddLiquidityETH() {
+async function UniswapV2RouterRemoveLiquidityETH() {
 
 	const connectedNetworkObject = await provider.getNetwork();
 	const chainIdConnected = connectedNetworkObject.chainId;
@@ -41,19 +41,21 @@ async function UniswapV2RouterAddLiquidityETH() {
 	let factoryAddress = await getFactoryAddress()
 	console.log("factoryAddress: " + factoryAddress)
 
+	//FOR REMOVING LIQUIDITY, MAKE SURE YOU PROVIDE APPROVAL FOR TOKEN A FOR ROUTER TO transferFrom
+	//FOR REMOVING LIQUIDITY, MAKE SURE YOU PROVIDE APPROVAL FOR TOKEN A FOR ROUTER TO transferFrom
+
 	// Helps with Shardeum Betanet 1.X nonce issue.
 	const txCount = await provider.getTransactionCount(signer.address); 
 
-	const txSigned = await contractUniswapV2Router02.addLiquidityETH(
+	const txSigned = await contractUniswapV2Router02.removeLiquidityETH(
 		tokenERC20Address,
 		2000,
-		1000,
-		1000,
+		2000,
+		2000,
 		signer.address,
 		"115792089237316195423570985008687907853269984665640564039457584007913129639935",
 		{
 			from: signer.address,
-			value: 2000,
 			nonce: txCount
 		}
 	); 
