@@ -20,13 +20,11 @@ const contractIERC20 = new ethers.Contract(tokenERC20Address, abiIERC20, signer)
 UniswapV2RouterAddLiquidityETH()
 
 async function getWrappedTokenAddress() {  
-
   const storedData = await contractUniswapV2Router02.WETH()
   return storedData
 }
 
 async function getFactoryAddress() {  
-
 	const storedData = await contractUniswapV2Router02.factory()
 	return storedData
 }
@@ -34,7 +32,7 @@ async function getFactoryAddress() {
 async function getApprovalERC20() {  
 	const storedData = await contractIERC20.allowance(signer.address,addressUniswapV2Router02)
 	return storedData
-  }
+}
 
 async function UniswapV2RouterAddLiquidityETH() {
 
