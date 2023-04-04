@@ -29,8 +29,8 @@ async function getFactoryAddress() {
 	return storedData
 }
 
-async function getGetAmountsOut(msgValueInput,wrappedTokenAddress) {  
-	const storedData = await contractUniswapV2Router02.getAmountsOut(msgValueInput,[wrappedTokenAddress,tokenERC20Address])
+async function getGetAmountsOut(msgValueInput,swapPath) {  
+	const storedData = await contractUniswapV2Router02.getAmountsOut(msgValueInput,swapPath)
 	return storedData
 }
 
@@ -46,8 +46,13 @@ async function UniswapV2RouterSwapETHForExactTokens() {
 	let factoryAddress = await getFactoryAddress()
 	console.log("factoryAddress: " + factoryAddress)
 
+	const tokenIn = wrappedTokenAddress;
+	const tokenOut = tokenERC20Address;
+	const swapPath = [tokenIn,tokenOut];
+	console.log("swapPath: ", swapPath);
+
 	let msgValueInput = 1041;
-	let getAmountsOutReturnArray = await getGetAmountsOut(msgValueInput,wrappedTokenAddress);
+	let getAmountsOutReturnArray = await getGetAmountsOut(msgValueInput,swapPath);
 	let amountOut = getAmountsOutReturnArray[1];
 	console.log("amountIn getAmountsOutReturnArray[0]: "  + getAmountsOutReturnArray[0])
 	console.log("amountOut getAmountsOutReturnArray[1]: " + amountOut)
@@ -57,7 +62,7 @@ async function UniswapV2RouterSwapETHForExactTokens() {
 
 	const txSigned = await contractUniswapV2Router02.swapETHForExactTokens(
 		amountOut,
-		[wrappedTokenAddress,tokenERC20Address],
+		swapPath,
 		signer.address,
 		"115792089237316195423570985008687907853269984665640564039457584007913129639935",
 		{

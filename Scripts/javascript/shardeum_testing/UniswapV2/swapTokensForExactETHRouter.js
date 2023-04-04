@@ -71,7 +71,7 @@ async function UniswapV2RouterSwapTokensForExactETH() {
 	const txSigned = await contractUniswapV2Router02.swapTokensForExactETH(
 		amountOut,
 		tokenERC20Input,
-		[tokenERC20Address,wrappedTokenAddress],
+		swapPath,
 		signer.address,
 		"115792089237316195423570985008687907853269984665640564039457584007913129639935",
 		{
