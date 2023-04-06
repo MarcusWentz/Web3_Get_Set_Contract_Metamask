@@ -27,3 +27,5 @@ Note: this website example uses Vanilla Javascript.
 For a similar template in React with GitHub pages support as well:
 
 https://github.com/MarcusWentz/react-ethers-template
+
+test
