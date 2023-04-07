@@ -17,7 +17,7 @@ const abiIERC20 = [{"anonymous":false,"inputs":[{"indexed":true,"internalType":"
 const contractUniswapV2Router02 = new ethers.Contract(addressUniswapV2Router02, abiUniswapV2Router02, signer);
 const contractIERC20 = new ethers.Contract(tokenERC20Address, abiIERC20, signer);
 
-UniswapV2RouterSwapTokensForExactETH()
+UniswapV2RouterSwapExactTokensForETH()
 
 async function getWrappedTokenAddress() {  
   const storedData = await contractUniswapV2Router02.WETH()
@@ -39,7 +39,7 @@ async function getApprovalERC20() {
 	return storedData
 }
 
-async function UniswapV2RouterSwapTokensForExactETH() {
+async function UniswapV2RouterSwapExactTokensForETH() {
 
 	const connectedNetworkObject = await provider.getNetwork();
 	const chainIdConnected = connectedNetworkObject.chainId;
