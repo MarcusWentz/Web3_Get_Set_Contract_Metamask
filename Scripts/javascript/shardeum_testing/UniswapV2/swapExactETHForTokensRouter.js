@@ -60,7 +60,7 @@ async function UniswapV2RouterSwapETHForExactTokens() {
 	// Helps with Shardeum Betanet 1.X nonce issue.
 	const txCount = await provider.getTransactionCount(signer.address); 
 
-	const txSigned = await contractUniswapV2Router02.swapETHForExactTokens(
+	const txSigned = await contractUniswapV2Router02.swapExactETHForTokens(
 		amountOut,
 		swapPath,
 		signer.address,
