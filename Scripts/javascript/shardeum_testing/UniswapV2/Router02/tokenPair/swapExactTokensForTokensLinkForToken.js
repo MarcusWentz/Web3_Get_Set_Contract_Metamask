@@ -16,10 +16,9 @@ const abiUniswapV2Router02 = JSON.parse( fs.readFileSync('../abiUniswapV2Router0
 const abiIERC20 = [{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":true,"internalType":"address","name":"spender","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Approval","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"from","type":"address"},{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Transfer","type":"event"},{"inputs":[{"internalType":"address","name":"owner","type":"address"},{"internalType":"address","name":"spender","type":"address"}],"name":"allowance","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"approve","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"balanceOf","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalSupply","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"transfer","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"from","type":"address"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"transferFrom","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"}]
 
 const contractUniswapV2Router02 = new ethers.Contract(addressUniswapV2Router02, abiUniswapV2Router02, signer);
-const contractIERC20 = new ethers.Contract(tokenERC20Address, abiIERC20, signer);
 const contractChainlink= new ethers.Contract(chainlinkTokenERC20Address, abiIERC20, signer);
 
-UniswapV2RouterAddLiquidity()
+UniswapV2RouterswapExactTokensForTokensLinkForToken()
 
 async function getWrappedTokenAddress() {  
   const storedData = await contractUniswapV2Router02.WETH()
@@ -31,8 +30,8 @@ async function getFactoryAddress() {
 	return storedData
 }
 
-async function getApprovalERC20() {  
-	const storedData = await contractIERC20.allowance(signer.address,addressUniswapV2Router02)
+async function getGetAmountsOut(tokenERC20Input,swapPath) {  
+	const storedData = await contractUniswapV2Router02.getAmountsOut(tokenERC20Input,swapPath)
 	return storedData
 }
 
@@ -41,7 +40,7 @@ async function getApprovalChainlink() {
 	return storedData
 }
 
-async function UniswapV2RouterAddLiquidity() {
+async function UniswapV2RouterswapExactTokensForTokensLinkForToken() {
 
 	const connectedNetworkObject = await provider.getNetwork();
 	const chainIdConnected = connectedNetworkObject.chainId;
@@ -53,22 +52,27 @@ async function UniswapV2RouterAddLiquidity() {
 	let factoryAddress = await getFactoryAddress()
 	console.log("factoryAddress: " + factoryAddress)
 
-	let approvalERC20 = await getApprovalERC20()
-	console.log("approvalERC20: " + approvalERC20)
-
 	let approvalChainlink = await getApprovalChainlink()
 	console.log("approvalChainlink: " + approvalChainlink)
-	
+
+	const tokenIn = chainlinkTokenERC20Address;
+	const tokenOut = tokenERC20Address;
+	const swapPath = [tokenIn,tokenOut];
+	console.log("swapPath: ", swapPath);
+
+	let tokenERC20Input = 1041;
+	let getAmountsOutReturnArray = await getGetAmountsOut(tokenERC20Input,swapPath);
+	let amountOut = getAmountsOutReturnArray[1];
+	console.log("amountIn getAmountsOutReturnArray[0]: "  + getAmountsOutReturnArray[0])
+	console.log("amountOut getAmountsOutReturnArray[1]: " + amountOut)
+
 	// Helps with Shardeum Betanet 1.X nonce issue.
 	const txCount = await provider.getTransactionCount(signer.address); 
 
-	const txSigned = await contractUniswapV2Router02.addLiquidity(
-		tokenERC20Address,
-		chainlinkTokenERC20Address,
-		2000,
-		2000,
-		1000,
-		1000,
+	const txSigned = await contractUniswapV2Router02.swapExactTokensForTokens(
+		tokenERC20Input,
+		amountOut,
+		swapPath,
 		signer.address,
 		"115792089237316195423570985008687907853269984665640564039457584007913129639935",
 		{
