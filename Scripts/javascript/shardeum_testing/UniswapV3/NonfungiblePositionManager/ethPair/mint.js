@@ -1,6 +1,8 @@
 const ethers = require("ethers")
 const fs = require('fs');
 const Pool = require('@uniswap/v3-sdk').Pool;
+const Position = require('@uniswap/v3-sdk').Position;
+const nearestUsableTick = require('@uniswap/v3-sdk').nearestUsableTick;
 const Token = require('@uniswap/sdk-core').Token;
 
 const rpcURL = process.env.sepoliaInfuraHttps
@@ -65,34 +67,46 @@ async function NonfungiblePositionManagerMint() {
     	poolData.sqrtPriceX96.toString(), // We set sqrtPriceX96=2^96 in UniswapV3Pool with function initialize(sqrtPriceX96) to have a 1/1 ratio https://www.youtube.com/watch?v=EV23xTgWsnY
     	poolData.liquidity.toString(),
     	poolData.tick
-  	)
-
-	// Helps with Shardeum Betanet 1.X nonce issue.
-	const txCount = await provider.getTransactionCount(signer.address); 
+  	)	
+  	
+  	const position = new Position({
+    	pool: pool,
+    	liquidity: ethers.utils.parseEther('1'),
+    	tickLower: nearestUsableTick(poolData.tick, poolData.tickSpacing) - poolData.tickSpacing * 2,
+    	tickUpper: nearestUsableTick(poolData.tick, poolData.tickSpacing) + poolData.tickSpacing * 2,
+  	})
+  	
+	const { amount0: amount0Desired, amount1: amount1Desired} = position.mintAmounts
 	
-	// const structParams = {
- //    	token0: wrappedTokenAddress,
- //    	token1: 0x18e9437821bD2c69A5bCee1896eD18995E5a6A85,
- //    	fee: poolData.fee, ???
- //    	tickLower: nearestUsableTick(poolData.tick, poolData.tickSpacing) - poolData.tickSpacing * 2, ???
- //    	tickUpper: nearestUsableTick(poolData.tick, poolData.tickSpacing) + poolData.tickSpacing * 2, ???
- //    	amount0Desired: amount0Desired.toString(), ???
- //    	amount1Desired: amount1Desired.toString(), ???
- //    	amount0Min: 0,
- //    	amount1Min: 0,
- //    	recipient: signer.address,
- //    	deadline: "115792089237316195423570985008687907853269984665640564039457584007913129639935"
- //  	}
+	const structParams = {
+    	token0: wrappedTokenAddress,
+    	token1: tokenERC20Address,
+    	fee: poolData.fee, 
+    	tickLower: nearestUsableTick(poolData.tick, poolData.tickSpacing) - poolData.tickSpacing * 2,
+    	tickUpper: nearestUsableTick(poolData.tick, poolData.tickSpacing) + poolData.tickSpacing * 2,
+    	amount0Desired: amount0Desired.toString(), 
+    	amount1Desired: amount1Desired.toString(), 
+    	amount0Min: 0,
+    	amount1Min: 0,
+    	recipient: signer.address,
+    	deadline: "115792089237316195423570985008687907853269984665640564039457584007913129639935"
+  	}
+  	  	
+  	// Helps with Shardeum Betanet 1.X nonce issue.
+	const txCount = await provider.getTransactionCount(signer.address); 
 
-	// const txSigned = await contractUniswapV2Router02.addLiquidityETH(
-	// 	structParams,
-	// 	{
-	// 		value: 2000,
-	// 		nonce: txCount
-	// 	}
-	// ); 
+	//Reverts with NonfungiblePositionManager.computeAddress(0x) => () right now based on Tenderly feedback
+	//
+	const txSigned = await contractNonfungiblePositionManager.mint(
+		structParams,
+		{
+			// value: 2000,
+			gasLimit: '1000000', //Generally you do not need to do this. Use this for now. 
+			nonce: txCount
+		}
+	); 
 
-	// console.log(txSigned)
+	console.log(txSigned)
 
 }
 
