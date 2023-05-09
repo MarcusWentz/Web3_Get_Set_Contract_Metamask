@@ -67,7 +67,6 @@ async function main() {
   const state = await getPoolState(poolContract)
 
   const signer = new ethers.Wallet(Buffer.from(process.env.devTestnetPrivateKey, 'hex'), provider);
-  const connectedWallet = signer.connect(provider)
 
   const swapRouterContract = new ethers.Contract(
     swapRouterAddress,
