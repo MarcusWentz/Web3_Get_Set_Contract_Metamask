@@ -25,17 +25,17 @@ async fn main() -> Result<()> {
 
     // let rpc_goerli_infura_https = env::var("goerliHTTPS_InfuraAPIKey").expect("$goerliHTTPS_InfuraAPIKey is not set");
 
-    let rpc_goerli_infura_wss = env::var("goerliWebSocketSecureEventsInfuraAPIKey").expect("$goerliWebSocketSecureEventsInfuraAPIKey is not set");
+    let rpc_sepolia_infura_wss = env::var("sepoliaInfuraWSS").expect("$sepoliaInfuraWSS is not set");
 
     let private_key_wallet_string = env::var("devTestnetPrivateKey").expect("$devTestnetPrivateKey is not set");
 
-    let provider = Provider::<Ws>::connect(rpc_goerli_infura_wss).await?;
+    let provider = Provider::<Ws>::connect(rpc_sepolia_infura_wss).await?;
 
     let signer = private_key_wallet_string.parse::<LocalWallet>()?;
 
     let client = SignerMiddleware::new_with_provider_chain(provider, signer).await.unwrap();
 
-    let contract_address = "0xdbaA7dfBd9125B7a43457D979B1f8a1Bd8687f37".parse::<Address>()?; //0xdbaA7dfBd9125B7a43457D979B1f8a1Bd8687f37
+    let contract_address = "0xBBE97Afb978E19033e0BDa692E6034F5b3B91312".parse::<Address>()?; //0xdbaA7dfBd9125B7a43457D979B1f8a1Bd8687f37
 
     let client_arc = Arc::new(client.clone());
 
