@@ -1,0 +1,66 @@
+{
+  "format": 1,
+  "restore": {
+    "/home/marcuswentz/github/Web3_Get_Set_Contract_Metamask/Scripts/c#/get_latest_block/nethereumapp.csproj": {}
+  },
+  "projects": {
+    "/home/marcuswentz/github/Web3_Get_Set_Contract_Metamask/Scripts/c#/get_latest_block/nethereumapp.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/marcuswentz/github/Web3_Get_Set_Contract_Metamask/Scripts/c#/get_latest_block/nethereumapp.csproj",
+        "projectName": "nethereumapp",
+        "projectPath": "/home/marcuswentz/github/Web3_Get_Set_Contract_Metamask/Scripts/c#/get_latest_block/nethereumapp.csproj",
+        "packagesPath": "/home/marcuswentz/.nuget/packages/",
+        "outputPath": "/home/marcuswentz/github/Web3_Get_Set_Contract_Metamask/Scripts/c#/get_latest_block/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/marcuswentz/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "Nethereum.Web3": {
+              "target": "Package",
+              "version": "[4.14.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/home/marcuswentz/.dotnet/sdk/6.0.100/RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}
