@@ -64,11 +64,11 @@ async function createAndSendTx() {
 
 }
 
-contractDeployed.on("setEvent", (event) => {
+contractDeployed.on("setEvent", (eventDetected) => {
 
   console.log("EVENT DETECTED! EVENT LOG: ")
 
-  console.log(event)
+  console.log(eventDetected)
 
   console.log("NEW STATE VALUE: ")
 
