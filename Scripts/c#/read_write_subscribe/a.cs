@@ -1,8 +1,9 @@
 ﻿using System; //Will need to install dotnet: https://stackoverflow.com/a/70334945 
 using System.Threading.Tasks; //Run with: dotnet run
 using Nethereum.Web3; // Install with: dotnet add package Nethereum.Web3
-using Nethereum.Web3.Accounts; // dotnet add package Nethereum.Web3.Accounts
+using Nethereum.Web3.Accounts; 
 using Nethereum.Contracts; // dotnet add package Nethereum.Contracts
+using System.Numerics; //Used for bigInt types. // dotnet add package System.Numerics
 
 namespace nethereumapp { //Guide: https://www.quicknode.com/guides/ethereum-development/getting-started/connecting-to-blockchains/how-to-connect-to-ethereum-using-net-nethereum/#connecting-with-ethereum
     class Program {
@@ -23,13 +24,12 @@ namespace nethereumapp { //Guide: https://www.quicknode.com/guides/ethereum-deve
             var contractAbi = @"[{'anonymous':false,'inputs':[],'name':'setEvent','type':'event'},{'inputs':[{'internalType':'uint256','name':'x','type':'uint256'}],'name':'set','outputs':[],'stateMutability':'nonpayable','type':'function'},{'inputs':[],'name':'storedData','outputs':[{'internalType':'uint256','name':'','type':'uint256'}],'stateMutability':'view','type':'function'}]";
             var contractDeployed = web3.Eth.GetContract(contractAbi, contractAddress);
 
-            // var balanceFunction = contractDeployed.GetFunction("storedData");
-            // var balance = await contractDeployed.GetFunction("storedData").CallDeserializingToObjectAsync<GetBalanceOutputDTO>(account.Address);
+            var storedDataValue = await contractDeployed.GetFunction("storedData").CallAsync<BigInteger>(); //From guide: https://www.atmosera.com/blog/interfacing-net-ethereum-blockchain-smart-contracts-nethereum/
+            Console.WriteLine("storedDataValue: {0}", storedDataValue);
 
             // latestBlockNumber = await web3.Eth.Blocks.GetBlockNumber.SendRequestAsync();
             // Console.WriteLine($"Latest Block Number is: {latestBlockNumber}");
             
-            // var contractAddress = transactionReceipt.ContractAddress;
         }
     }
 }
