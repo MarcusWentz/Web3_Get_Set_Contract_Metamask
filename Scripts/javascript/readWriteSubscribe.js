@@ -64,9 +64,13 @@ async function createAndSendTx() {
 
 }
 
-contractDeployed.on("setEvent", () => {
+contractDeployed.on("setEvent", (event) => {
 
-  console.log("EVENT DETECTED! NEW STATE VALUE: ")
+  console.log("EVENT DETECTED! EVENT LOG: ")
+
+  console.log(event)
+
+  console.log("NEW STATE VALUE: ")
 
   getStoredData()
 
