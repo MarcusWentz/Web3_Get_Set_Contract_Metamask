@@ -4,6 +4,7 @@ using Nethereum.Web3; // Install with: dotnet add package Nethereum.Web3
 using Nethereum.Web3.Accounts; 
 using Nethereum.Contracts; // dotnet add package Nethereum.Contracts
 using System.Numerics; //Used for bigInt types. // dotnet add package System.Numerics
+using Nethereum.Hex.HexTypes; // dotnet add package Nethereum.Hex.HexTypes
 
 namespace nethereumapp { //Guide: https://www.quicknode.com/guides/ethereum-development/getting-started/connecting-to-blockchains/how-to-connect-to-ethereum-using-net-nethereum/#connecting-with-ethereum
     class Program {
@@ -26,6 +27,20 @@ namespace nethereumapp { //Guide: https://www.quicknode.com/guides/ethereum-deve
 
             var storedDataValue = await contractDeployed.GetFunction("storedData").CallAsync<BigInteger>(); //From guide: https://www.atmosera.com/blog/interfacing-net-ethereum-blockchain-smart-contracts-nethereum/
             Console.WriteLine("storedDataValue: {0}", storedDataValue);
+
+            var unixTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            Console.WriteLine("unixTime: {0}", unixTime);
+
+            var tx = await contractDeployed.GetFunction("set").SendTransactionAsync(
+                account.Address,           // tx signer
+                new HexBigInteger(400000), // gasLimit
+                new HexBigInteger(0),      // msg.value
+                unixTime                   // Input argument: (x uint256)
+            );
+            Console.WriteLine("tx: {0}", tx);
+
+            // var storedDataValue = await contractDeployed.GetFunction("storedData").CallAsync<BigInteger>(); //From guide: https://www.atmosera.com/blog/interfacing-net-ethereum-blockchain-smart-contracts-nethereum/
+            // Console.WriteLine("storedDataValue: {0}", storedDataValue);
 
             // latestBlockNumber = await web3.Eth.Blocks.GetBlockNumber.SendRequestAsync();
             // Console.WriteLine($"Latest Block Number is: {latestBlockNumber}");
