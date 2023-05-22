@@ -10,17 +10,22 @@ const contractAddress = '0x6332Be1AE08e9ca4D69f1b69a03194d74fAc29A7'
 
 // const contractDeployed = new ethers.Contract(contractAddress, contractABI, signer);
 
+let eventNameTypeTopicHashed = ethers.utils.id("eventCounter(uint256,uint256,uint256,uint256,uint256,uint256)");
+console.log("Computed vs Etherscan eventNameTypeTopicHashed value:")
+console.log(eventNameTypeTopicHashed)
+console.log("0xe17fd3920d01fd5e94390b54b8612d51d3e0ececece27bb5a2e8708cd62ab549")
+
 filter = {
     address: contractAddress,
-//     topics: [
-//         // the name of the event, parnetheses containing the data type of each event, no spaces
-//         ethers.utils.id("eventCounter(uint256 indexed a, uint256 indexed b, uint256 indexed c, uint256 d, uint256 e, uint256 f)")
-//     ]
+    topics: [
+        eventNameTypeTopicHashed, //Event name with types hashed 32 bytes.
+        "0x0000000000000000000000000000000000000000000000000000000000000003", //Topic [0]
+        "0x0000000000000000000000000000000000000000000000000000000000000004", //Topic [1]
+        "0x0000000000000000000000000000000000000000000000000000000000000005"  //Topic [2]
+    ]
 }
 
 provider.on(filter, (event) => {
-    // do whatever you want here
-    // I'm pretty sure this returns a promise, so don't forget to resolve it
     console.log("EVENT DETECTED! NEW STATE VALUE:")
     console.log(event)
 
