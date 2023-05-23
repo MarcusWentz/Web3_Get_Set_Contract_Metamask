@@ -31,13 +31,21 @@ namespace nethereumapp { //Guide: https://www.quicknode.com/guides/ethereum-deve
             var storedDataValue = await contractDeployed.GetFunction("storedData").CallAsync<BigInteger>(); //From guide: https://www.atmosera.com/blog/interfacing-net-ethereum-blockchain-smart-contracts-nethereum/
             Console.WriteLine("storedDataValue: {0}", storedDataValue);
 
+            var fromSigner = account.Address;
+            Console.WriteLine("fromSigner: {0}", fromSigner);
+            var gasLimitRaw = new HexBigInteger(400000);
+            var gasPriceNow = await web3.Eth.GasPrice.SendRequestAsync(); // eth_gasPrice request
+            Console.WriteLine("gasPriceNow: {0}", gasPriceNow);
+            var msgValue = new HexBigInteger(0);
+            
             var unixTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             Console.WriteLine("unixTime: {0}", unixTime);
 
             var tx = await contractDeployed.GetFunction("set").SendTransactionAsync(
-                account.Address,           // tx signer
-                new HexBigInteger(400000), // gasLimit
-                new HexBigInteger(0),      // msg.value
+                fromSigner,           
+                gasLimitRaw, 
+                gasPriceNow,
+                msgValue,      
                 unixTime                   // Input argument: (x uint256)
             );
             Console.WriteLine("tx: {0}", tx);
