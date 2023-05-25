@@ -50,14 +50,21 @@ async function UniswapV2RouterRemoveLiquidityETH() {
 	let approvalERC20 = await getApprovalERC20()
 	console.log("approvalERC20: " + approvalERC20)
 
+	// const txApproveMoreUniswapV2LiquidityTokens = await contractIERC20.approve(
+	// 	addressUniswapV2Router02,
+	// 	7000
+	// ); 
+
+	// console.log(txApproveMoreUniswapV2LiquidityTokens)
+	
 	// Helps with Shardeum Betanet 1.X nonce issue.
 	const txCount = await provider.getTransactionCount(signer.address); 
 
 	const txSigned = await contractUniswapV2Router02.removeLiquidityETH(
 		tokenERC20Address,
 		2000,
-		2000,
-		2000,
+		1000,
+		1000,
 		signer.address,
 		"115792089237316195423570985008687907853269984665640564039457584007913129639935",
 		{

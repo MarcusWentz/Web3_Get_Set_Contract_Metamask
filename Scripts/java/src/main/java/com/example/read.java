@@ -1,9 +1,9 @@
-package com.example; 
+package com.example; //Run: mvn clean
 import java.io.IOException;
-import java.math.BigInteger;
-import java.time.Instant;
+import java.math.BigInteger; //
+import java.time.Instant;   //Upgrade Maven: https://www.digitalocean.com/community/tutorials/install-maven-linux-ubuntu
 // import org.web3j.protocol.Web3j; //Maven library which goes into pom.xml found here: https://github.com/web3j/web3j#maven
-// import org.web3j.protocol.http.HttpService; 
+// import org.web3j.protocol.http.HttpService;
 
 public class read {
     public static void main(String[] args) { //Click "Run" in VSCodium above this main function.
