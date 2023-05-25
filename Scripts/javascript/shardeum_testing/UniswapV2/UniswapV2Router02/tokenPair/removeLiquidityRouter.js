@@ -58,8 +58,8 @@ async function UniswapV2RouterRemoveLiquidity() {
 		tokenERC20Address,
 		chainlinkTokenERC20Address,
 		2000,
-		2000,
-		2000,
+		1000,
+		1000,
 		signer.address,
 		"115792089237316195423570985008687907853269984665640564039457584007913129639935",
 		{
