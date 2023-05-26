@@ -9,9 +9,6 @@ public class Main {
 
     public static void main(String[] args) {
         String rpcUrlSepoliaHttps = System.getenv("sepoliaInfuraHttps"); // Set in Modify Run Configuration: https://www.youtube.com/watch?v=oYfd9pDXip8
-        System.out.println("rpcUrlSepoliaHttps: " + rpcUrlSepoliaHttps);
-        long unixTimestamp = Instant.now().getEpochSecond();
-        System.out.println("unixTimestamp: " + unixTimestamp);
 
         Web3j web3 = Web3j.build(new HttpService(rpcUrlSepoliaHttps));
 
@@ -19,7 +16,6 @@ public class Main {
             EthChainId chainId = web3.ethChainId().send();
             System.out.println("chainId: " + chainId.getChainId().longValue());
         } catch (IOException e) {
-            System.out.println("web3: " + web3);
             e.printStackTrace();
         }
 
@@ -27,9 +23,14 @@ public class Main {
             BigInteger blockNumber = web3.ethBlockNumber().send().getBlockNumber();
             System.out.println("Latest Ethereum block number: " + blockNumber);
         } catch (IOException e) {
-            System.out.println("web3: " + web3);
             e.printStackTrace();
         }
+
+        long unixTimestamp = Instant.now().getEpochSecond();
+        System.out.println("unixTimestamp: " + unixTimestamp);
+
+        String contractAddress = "0xBBE97Afb978E19033e0BDa692E6034F5b3B91312";
+        //Look into generated Solidity wrapper types to automatically compute contract types: https://ethereum.stackexchange.com/a/13397
 
     }
 }
