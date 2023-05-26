@@ -32,5 +32,7 @@ public class Main {
         String contractAddress = "0xBBE97Afb978E19033e0BDa692E6034F5b3B91312";
         //Look into generated Solidity wrapper types to automatically compute contract types: https://ethereum.stackexchange.com/a/13397
 
+        //Generated wrapper Java file with command: web3j generate solidity -a=contracts/store.abi -b=contracts/store.bin -o=contracts -p=store
+
     }
 }
