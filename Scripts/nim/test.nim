@@ -6,15 +6,18 @@
 
 import ethers #nimable install ethers
 import chronos
+import os
 
 proc testFunction(): Future[int] {.async.} =
     #await sleepAsync(100.milliseconds)
-    let provider = JsonRpcProvider.new("https://endpoints.omniatech.io/v1/eth/sepolia/public")
+    let rpcURL = getEnv("sepoliaInfuraWSS");
+    let provider = JsonRpcProvider.new(rpcURL)
     echo provider.type()
     let accounts = await provider.listAccounts()
     echo accounts.type()
     let chainId =  await provider.getChainId()
     echo chainId
+
     return 1
 
 echo waitFor testFunction() # prints "1"
