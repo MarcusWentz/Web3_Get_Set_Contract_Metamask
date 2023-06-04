@@ -1,4 +1,4 @@
-#Run with: //nim c -r --verbosity:0 test.nim
+#Run with: nim c -r --verbosity:0 test.nim
 
 #Set the following after you unzip the tar file: 
 #export PATH="/usr/bin:$PATH"  
@@ -11,7 +11,9 @@ import os
 proc testFunction(): Future[int] {.async.} =
     #await sleepAsync(100.milliseconds)
     let rpcURL = getEnv("sepoliaInfuraWSS");
+    let privateKey = getEnv("devTestnetPrivateKey");
     let provider = JsonRpcProvider.new(rpcURL)
+    let signer = Wallet.new(privateKey, provider)
     echo provider.type()
     let accounts = await provider.listAccounts()
     echo accounts.type()
@@ -24,12 +26,13 @@ proc testFunction(): Future[int] {.async.} =
     let contractAddress = Address.init("0xBBE97Afb978E19033e0BDa692E6034F5b3B91312")
     echo contractAddress.get()
    
-    let contractInstance = contractSimpleStorage.new(contractAddress.get(), provider)
+    # let contractInstance = contractSimpleStorage.new(contractAddress.get(), provider)
+    let contractInstance = contractSimpleStorage.new(contractAddress.get(), signer)
 
     let storedDataValue = await contractInstance.storedData()
     echo storedDataValue
 
-
+    let contractInstanceWithSigner = contractInstance.connect(signer)
 
     return 1
 
