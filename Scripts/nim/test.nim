@@ -18,6 +18,13 @@ proc testFunction(): Future[int] {.async.} =
     let chainId =  await provider.getChainId()
     echo chainId
 
+    type contractSimpleStorage = ref object of Contract
+    proc storedData(token: contractSimpleStorage): UInt256 {.contract, view.}
+
+    let contractAddress = Address.init("0xBBE97Afb978E19033e0BDa692E6034F5b3B91312")
+    echo contractAddress.get()
+    let contractInstance = contractSimpleStorage.new(contractAddress.get(), provider)
+
     return 1
 
 echo waitFor testFunction() # prints "1"
