@@ -6,7 +6,7 @@
 
 import ethers #Documentation: https://github.com/status-im/nim-ethers #Install with: nimable install ethers 
 import chronos
-import os
+import std/[os,times,math]
 
 proc testFunction(): Future[int] {.async.} =
     #await sleepAsync(100.milliseconds)
@@ -36,8 +36,9 @@ proc testFunction(): Future[int] {.async.} =
     let contractInstanceWithSigner = contractInstance.connect(signer)
 
     # let transaction = await contractInstanceWithSigner.set(42.u256)
-    await contractInstanceWithSigner.set(42.u256)
-    # echo transaction
+    let timeNowRoundDown = int(floor(epochTime()))
+    echo timeNowRoundDown
+    await contractInstanceWithSigner.set(timeNowRoundDown.u256)
 
     return 1
 
