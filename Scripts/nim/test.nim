@@ -16,10 +16,6 @@ proc testFunction(): Future[int] {.async.} =
     let provider = JsonRpcProvider.new(rpcURL)
     let signer = Wallet.new(privateKey, provider)
     
-    # echo provider.type()
-    # let accounts = await provider.listAccounts()
-    # echo accounts.type()
-
     let chainId =  await provider.getChainId()
     echo chainId
 
@@ -37,15 +33,16 @@ proc testFunction(): Future[int] {.async.} =
     let storedDataValue = await contractInstance.storedData()
     echo storedDataValue
 
+    proc eventListener(setEvent: setEvent) =
+        echo "EVENT DETECTED!"
+        
+    let eventSubscription = await contractInstance.subscribe(setEvent, eventListener)
+    echo eventSubscription.type()
+    echo "LISTENING FOR EVENTS..."
+
     let timeNowRoundDown = int(floor(epochTime()))
     echo timeNowRoundDown
     await contractInstance.set(timeNowRoundDown.u256)
 
-    # proc handleTransfer(setEvent: setEvent) =
-    #     echo "received transfer: ", setEvent
-
-    #     let subscription = await token.subscribe(Transfer, handleTransfer)
-
-    return 1
-
-echo waitFor testFunction() # prints "1"
+asyncCheck testFunction()
+runForever()
