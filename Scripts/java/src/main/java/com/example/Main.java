@@ -2,9 +2,9 @@ import java.io.IOException; //Run in IntelliJ Java IDE with Maven support librar
 import java.math.BigInteger;
 import java.time.Instant;   //Upgrade Maven: https://www.digitalocean.com/community/tutorials/install-maven-linux-ubuntu
 
-import org.web3j.crypto.Credentials;
-import org.web3j.crypto.WalletUtils;
-import org.web3j.protocol.Web3j; //Maven library which goes into pom.xml found here: https://github.com/web3j/web3j#maven
+import org.web3j.crypto.Credentials; //IntelliJ Import: File > Project Structure > Libraries > + > From Maven
+import org.web3j.crypto.WalletUtils; //org.web3.crypto
+import org.web3j.protocol.Web3j; //org.web3.core
 import org.web3j.protocol.core.methods.response.EthChainId;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.tx.gas.DefaultGasProvider;
@@ -14,7 +14,7 @@ public class Main {
     public static void main(String[] args) {
 
         String rpcUrlSepoliaHttps = System.getenv("sepoliaInfuraHttps"); // Set in Modify Run Configuration: https://www.youtube.com/watch?v=oYfd9pDXip8
-        String privateKey = System.getenv("devTestnetPrivateKey"); // Set in Modify Run Configuration: https://www.youtube.com/watch?v=oYfd9pDXip8
+        String privateKey = System.getenv("devTestnetPrivateKey"); // IntelliJ variables: make sure you remove string quotes around values
 
         Web3j web3 = Web3j.build(new HttpService(rpcUrlSepoliaHttps));
 
