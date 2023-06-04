@@ -21,18 +21,23 @@ proc testFunction(): Future[int] {.async.} =
     echo chainId
 
     type contractSimpleStorage = ref object of Contract
-    proc storedData(token: contractSimpleStorage): UInt256 {.contract, view.}
+    proc storedData(token: contractSimpleStorage): UInt256 {.contract, view.} # Read function
+    proc set(token: contractSimpleStorage, x: UInt256) {.contract.} # Write function
 
     let contractAddress = Address.init("0xBBE97Afb978E19033e0BDa692E6034F5b3B91312")
     echo contractAddress.get()
    
-    # let contractInstance = contractSimpleStorage.new(contractAddress.get(), provider)
-    let contractInstance = contractSimpleStorage.new(contractAddress.get(), signer)
+    let contractInstance = contractSimpleStorage.new(contractAddress.get(), provider)
+    # let contractInstance = contractSimpleStorage.new(contractAddress.get(), signer)
 
     let storedDataValue = await contractInstance.storedData()
     echo storedDataValue
 
     let contractInstanceWithSigner = contractInstance.connect(signer)
+
+    # let transaction = await contractInstanceWithSigner.set(42.u256)
+    await contractInstanceWithSigner.set(42.u256)
+    # echo transaction
 
     return 1
 
