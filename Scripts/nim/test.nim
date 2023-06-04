@@ -25,6 +25,9 @@ proc testFunction(): Future[int] {.async.} =
     echo contractAddress.get()
     let contractInstance = contractSimpleStorage.new(contractAddress.get(), provider)
 
+    let storedDataValue = await contractInstance.storedData()
+    echo storedDataValue
+
     return 1
 
 echo waitFor testFunction() # prints "1"
