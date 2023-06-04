@@ -9,7 +9,7 @@ import chronos
 import std/[os,times,math]
 
 proc testFunction(): Future[int] {.async.} =
-    #await sleepAsync(100.milliseconds)
+
     let rpcURL = getEnv("sepoliaInfuraWSS");
     let privateKey = getEnv("devTestnetPrivateKey");
   
@@ -27,7 +27,6 @@ proc testFunction(): Future[int] {.async.} =
     let contractAddress = Address.init("0xBBE97Afb978E19033e0BDa692E6034F5b3B91312")
     echo contractAddress.get()
    
-    # let contractInstance = contractSimpleStorage.new(contractAddress.get(), provider)
     let contractInstance = contractSimpleStorage.new(contractAddress.get(), signer)
 
     let storedDataValue = await contractInstance.storedData()
@@ -44,5 +43,7 @@ proc testFunction(): Future[int] {.async.} =
     echo timeNowRoundDown
     await contractInstance.set(timeNowRoundDown.u256)
 
-asyncCheck testFunction()
+    return 1
+
+echo waitFor testFunction()
 runForever()
