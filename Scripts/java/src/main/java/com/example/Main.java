@@ -7,6 +7,7 @@ import org.web3j.crypto.Credentials; //IntelliJ Import: File > Project Structure
 import org.web3j.crypto.WalletUtils; //org.web3.crypto
 import org.web3j.protocol.Web3j; //org.web3.core
 import org.web3j.protocol.core.methods.response.EthChainId;
+import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.tx.gas.DefaultGasProvider;
 import org.example.store.Store;
@@ -34,24 +35,27 @@ public class Main {
             e.printStackTrace();
         }
 
-        long unixTimestamp = Instant.now().getEpochSecond();
-        System.out.println("unixTimestamp: " + unixTimestamp);
-
         String contractAddress = "0xBBE97Afb978E19033e0BDa692E6034F5b3B91312";
-        //Look into generated Solidity wrapper types to automatically compute contract types: https://ethereum.stackexchange.com/a/13397
 
-        //Generated wrapper Java file with command: web3j generate solidity -a=contracts/store.abi -b=contracts/store.bin -o=contracts -p=store
-
-        //READ THIS: https://blogs.oracle.com/javamagazine/post/blockchain-using-cryptocurrency-with-java
         DefaultGasProvider contractGasProvider = new DefaultGasProvider();
         System.out.println("contractGasProvider: " + contractGasProvider);
         Credentials credentials = Credentials.create(privateKey);
         System.out.println("credentials : " + credentials);
 
+        //Solidity wrapper types to automatically compute contract types: https://ethereum.stackexchange.com/a/13397
+        //Generated wrapper Java file with command: web3j generate solidity -a=contracts/store.abi -b=contracts/store.bin -o=contracts -p=store
         Store contract = Store.load(contractAddress, web3, credentials, contractGasProvider);
 
         BigInteger storedDataValue = contract.storedData().send();
         System.out.println("storedDataValue : " + storedDataValue);
+
+        long unixTimestampLong = Instant.now().getEpochSecond();
+        String unixTimestampString = Long.toString(unixTimestampLong);
+        BigInteger unixTimestampBigInt = new BigInteger(unixTimestampString);
+        System.out.println("unixTimestampBigInt: " + unixTimestampBigInt);
+
+        TransactionReceipt tx = contract.set(unixTimestampBigInt).send();
+        System.out.println("tx : " + tx);
 
     }
 }
