@@ -1,4 +1,4 @@
-package store;
+package org.example.store;
 
 import io.reactivex.Flowable;
 import io.reactivex.functions.Function;
@@ -29,7 +29,7 @@ import org.web3j.tx.gas.ContractGasProvider;
  * <p>Auto generated code.
  * <p><strong>Do not modify!</strong>
  * <p>Please use the <a href="https://docs.web3j.io/command_line.html">web3j command line tools</a>,
- * or the org.web3j.codegen.SolidityFunctionWrapperGenerator in the 
+ * or the org.web3j.codegen.SolidityFunctionWrapperGenerator in the
  * <a href="https://github.com/web3j/web3j/tree/master/codegen">codegen module</a> to update.
  *
  * <p>Generated with web3j version 1.4.2.
@@ -42,7 +42,7 @@ public class Store extends Contract {
 
     public static final String FUNC_STOREDDATA = "storedData";
 
-    public static final Event SETEVENT_EVENT = new Event("setEvent", 
+    public static final Event SETEVENT_EVENT = new Event("setEvent",
             Arrays.<TypeReference<?>>asList());
     ;
 
@@ -95,15 +95,15 @@ public class Store extends Contract {
 
     public RemoteFunctionCall<TransactionReceipt> set(BigInteger x) {
         final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(
-                FUNC_SET, 
-                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Uint256(x)), 
+                FUNC_SET,
+                Arrays.<Type>asList(new org.web3j.abi.datatypes.generated.Uint256(x)),
                 Collections.<TypeReference<?>>emptyList());
         return executeRemoteCallTransaction(function);
     }
 
     public RemoteFunctionCall<BigInteger> storedData() {
-        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_STOREDDATA, 
-                Arrays.<Type>asList(), 
+        final org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(FUNC_STOREDDATA,
+                Arrays.<Type>asList(),
                 Arrays.<TypeReference<?>>asList(new TypeReference<Uint256>() {}));
         return executeRemoteCallSingleValueReturn(function, BigInteger.class);
     }
