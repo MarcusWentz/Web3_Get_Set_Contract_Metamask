@@ -76,8 +76,7 @@ public class Main {
         EthFilter filter = new EthFilter(DefaultBlockParameterName.LATEST, DefaultBlockParameterName.LATEST, contractAddress);
 
         web3jWebsocket.ethLogFlowable(filter).subscribe(event -> {
-            System.out.println("Event received");
-            System.out.println(event);
+            System.out.println("Event received. Event log: " + event);
             BigInteger storedDataValueEvent = contract.storedData().send();
             System.out.println("storedDataValueEvent : " + storedDataValueEvent);
         }, error -> {
