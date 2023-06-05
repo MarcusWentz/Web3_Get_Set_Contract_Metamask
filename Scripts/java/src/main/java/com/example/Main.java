@@ -2,16 +2,18 @@ import java.io.IOException; //Run in IntelliJ Java IDE with Maven support librar
 import java.math.BigInteger;
 import java.time.Instant;   //Upgrade Maven: https://www.digitalocean.com/community/tutorials/install-maven-linux-ubuntu
 
+import org.example.store.Store;
 import org.web3j.crypto.Credentials; //IntelliJ Import: File > Project Structure > Libraries > + > From Maven
 import org.web3j.crypto.WalletUtils; //org.web3.crypto
 import org.web3j.protocol.Web3j; //org.web3.core
 import org.web3j.protocol.core.methods.response.EthChainId;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.tx.gas.DefaultGasProvider;
+import org.example.store.Store;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
 
         String rpcUrlSepoliaHttps = System.getenv("sepoliaInfuraHttps"); // Set in Modify Run Configuration: https://www.youtube.com/watch?v=oYfd9pDXip8
         String privateKey = System.getenv("devTestnetPrivateKey"); // IntelliJ variables: make sure you remove string quotes around values
@@ -46,6 +48,11 @@ public class Main {
         Credentials credentials = Credentials.create(privateKey);
         System.out.println("credentials : " + credentials);
 
+        Store contract = Store.load(contractAddress, web3, credentials, contractGasProvider);
+
+        BigInteger storedDataValue = contract.storedData().send();
+        System.out.println("storedDataValue : " + storedDataValue);
 
     }
 }
+
