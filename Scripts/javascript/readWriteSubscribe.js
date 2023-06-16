@@ -1,8 +1,11 @@
-const ethers = require("ethers")
+const ethers = require("ethers") // npm i ethers@5.7.2 https://github.com/smartcontractkit/full-blockchain-solidity-course-js/discussions/5139#discussioncomment-5444517
 
 const rpcURL = process.env.sepoliaInfuraWSS // Your RPC URL goes here
 
 // const rpcURL = "http://localhost:8545"// Your RPC URL goes here
+
+// const provider = new ethers.providers.WebSocketProvider("wss://ws.test.taiko.xyz")
+// const contractAddress = '0x090b750b9B5251828E16360Fd69100dc4c674e71'
 
 const provider = new ethers.providers.WebSocketProvider(rpcURL)
 const signer = new ethers.Wallet(Buffer.from(process.env.devTestnetPrivateKey, 'hex'), provider);
