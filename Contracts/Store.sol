@@ -1,12 +1,15 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.18;
 
-contract SmileDao {
+contract SimpleStorage {
+    uint256 public storedData; //Do not set 0 manually it wastes gas!
 
-    mapping(address => bool) public smileDaoMember;
+    event setEvent();
+    
 
-    function setMember() public {
-        smileDaoMember[msg.sender] = true;
+    function set(uint256 x) public {
+        storedData = x;
+        emit setEvent();
     }
 
 }
