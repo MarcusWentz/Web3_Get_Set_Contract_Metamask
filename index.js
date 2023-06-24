@@ -7,13 +7,13 @@ let accounts = []; ////Empty array to be filled once Metamask is called.
 document.getElementById("enableEthereumButton").innerHTML =  "Connect Metamask 🦊"
 document.getElementById("getValueStateSmartContract").innerHTML =  "Loading..."
 
-const goerliChainId = 5;
+const sepoliaChainId = 11155111;
 
 const provider = new ethers.providers.Web3Provider(window.ethereum); //Imported ethers from index.html with "<script src="https://cdn.ethers.io/lib/ethers-5.6.umd.min.js" type="text/javascript"></script>".
 
 // const signer = provider.getSigner(); //Do this when the user clicks "enableEthereumButton" which will call getAccount() to get the signer private key for the provider.  
  
-const contractAddress_JS = '0xdbaA7dfBd9125B7a43457D979B1f8a1Bd8687f37'
+const contractAddress_JS = '0xBBE97Afb978E19033e0BDa692E6034F5b3B91312'
 const contractABI_JS = [{"anonymous":false,"inputs":[],"name":"setEvent","type":"event"},{"inputs":[{"internalType":"uint256","name":"x","type":"uint256"}],"name":"set","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"storedData","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}]
 
 const contractDefined_JS = new ethers.Contract(contractAddress_JS, contractABI_JS, provider);
@@ -27,11 +27,11 @@ getDataOnChainToLoad()
 async function getDataOnChainToLoad(){
   let chainIdConnected = await getChainIdConnected();
 
-  if(chainIdConnected == goerliChainId){
+  if(chainIdConnected == sepoliaChainId){
     getStoredData()
   }
-  if(chainIdConnected != goerliChainId){
-    document.getElementById("getValueStateSmartContract").innerHTML =  "Install Metamask and select Goerli Testnet to have a Web3 provider to read blockchain data."
+  if(chainIdConnected != sepoliaChainId){
+    document.getElementById("getValueStateSmartContract").innerHTML =  "Install Metamask and select Sepolia Testnet to have a Web3 provider to read blockchain data."
   }
 
 }
@@ -39,7 +39,7 @@ async function getDataOnChainToLoad(){
 async function getStoredData() {
   let storedDataCallValue = await contractDefined_JS.storedData()
   if(storedDataCallValue === undefined){
-    document.getElementById("getValueStateSmartContract").innerHTML =  "Install Metamask and select Goerli Testnet to have a Web3 provider to read blockchain data."
+    document.getElementById("getValueStateSmartContract").innerHTML =  "Install Metamask and select Sepolia Testnet to have a Web3 provider to read blockchain data."
   }
   else{
     document.getElementById("getValueStateSmartContract").innerHTML =  storedDataCallValue
@@ -77,7 +77,7 @@ contractDefined_JS.on("setEvent", () => {
 const ethereumButton = document.querySelector('#enableEthereumButton');
 ethereumButton.addEventListener('click', () => {
     detectMetamaskInstalled()
-    enableMetamaskOnGoerli()
+    enableMetamaskOnSepolia()
 });
 
 // MODIFY CONTRACT STATE WITH SET FUNCTION WITH PREDEFINED DATA FROM WEB3.JS
@@ -108,7 +108,7 @@ function detectMetamaskInstalled(){
   }
   catch(missingMetamask) {
      alert("Metamask not detected in browser! Install Metamask browser extension, then refresh page!")
-     document.getElementById("getValueStateSmartContract").innerHTML =  "Install Metamask and select Goerli Testnet to have a Web3 provider to read blockchain data."
+     document.getElementById("getValueStateSmartContract").innerHTML =  "Install Metamask and select Sepolia Testnet to have a Web3 provider to read blockchain data."
 
   }
 
@@ -135,23 +135,23 @@ async function getAccount() {
   document.getElementById("enableEthereumButton").innerText = accounts[0].substr(0,5) + "..." +  accounts[0].substr(38,4)  
 }
 
-async function enableMetamaskOnGoerli() {
+async function enableMetamaskOnSepolia() {
   //Get account details from Metamask wallet.
   getAccount();
-  //Check if user is on the Goerli testnet. If not, alert them to change to Goerli.
-  if(window.ethereum.networkVersion != goerliChainId){
-    // alert("You are not on the Goerli Testnet! Please switch to Goerli and refresh page.")
+  //Check if user is on the Sepolia testnet. If not, alert them to change to Sepolia.
+  if(window.ethereum.networkVersion != sepoliaChainId){
+    // alert("You are not on the Sepolia Testnet! Please switch to Sepolia and refresh page.")
     try{
       await window.ethereum.request({
           method: "wallet_switchEthereumChain",
           params: [{
-             chainId: "0x5"
+             chainId: "0xaa36a7"
           }]
         })
       location.reload(); 
-      // alert("Failed to add the network at chainId " + goerliChainId + " with wallet_addEthereumChain request. Add the network with https://chainlist.org/ or do it manually. Error log: " + error.message)
+      // alert("Failed to add the network at chainId " + sepoliaChainId + " with wallet_addEthereumChain request. Add the network with https://chainlist.org/ or do it manually. Error log: " + error.message)
     } catch (error) {
-      alert("Failed to add the network at chainId " + goerliChainId + " with wallet_addEthereumChain request. Add the network with https://chainlist.org/ or do it manually. Error log: " + error.message)
+      alert("Failed to add the network at chainId " + sepoliaChainId + " with wallet_addEthereumChain request. Add the network with https://chainlist.org/ or do it manually. Error log: " + error.message)
     }
   }
 }
