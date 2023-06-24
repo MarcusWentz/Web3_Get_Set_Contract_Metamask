@@ -6,6 +6,7 @@ Golang
 Rust
 C#
 Python
+Nim
 Java
 ```
 
