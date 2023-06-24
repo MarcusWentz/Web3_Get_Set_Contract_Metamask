@@ -1,4 +1,13 @@
-Test website with Metamask which also has some sample contracts and interaction scripts in Javascript, Python, Golang and Rust.
+Test website with Metamask which also has some sample contracts and interaction scripts
+
+```
+Javascript
+Golang
+Rust
+C#
+Python
+Java
+```
 
 Scripts used to control frontend and backend smart contract logic (in web3.js,web3.py,and Geth) :\
   -Send Ethereum to an address\
@@ -14,6 +23,8 @@ Try the project via GitHub pages:\
 
 Run locally for testing with:
 
+⚠️ Node.js version v16.14.2 is recommended to avoid errors running the website locally. ⚠️
+
        npm install http-server
 then
 
@@ -27,5 +38,3 @@ Note: this website example uses Vanilla Javascript.
 For a similar template in React with GitHub pages support as well:
 
 https://github.com/MarcusWentz/react-ethers-template
-
-test
