@@ -8,6 +8,7 @@ C#
 Python
 Nim
 Java
+Typescript
 ```
 
 Scripts used to control frontend and backend smart contract logic (in web3.js,web3.py,and Geth) :\
