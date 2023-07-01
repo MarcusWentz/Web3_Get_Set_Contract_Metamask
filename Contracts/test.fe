@@ -24,7 +24,7 @@ contract simple_storage { //Note: This contract was compiled using with Linux Mi
         self.storage_slot_0 = ctx.block_timestamp()
     }
 
-    fn set(mut self, mut ctx: Context, input: u256) {
+    pub fn set(mut self, mut ctx: Context, input: u256) {
         if input == self.storage_slot_0 {
             revert error_same_value()
         }
@@ -32,7 +32,7 @@ contract simple_storage { //Note: This contract was compiled using with Linux Mi
         ctx.emit(event_value_update(value: input)) 
     }
 
-    fn owner_time_store(mut self, mut ctx: Context) {
+    pub fn owner_time_store(mut self, mut ctx: Context) {
         if ctx.msg_sender() != self.owner {
             revert error_same_value()
         }
