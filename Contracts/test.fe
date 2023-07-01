@@ -5,9 +5,19 @@ struct event_value_update {
     pub value: u256
 }
 
-contract simple_storage { //Note: Compiled in Linux Mint version 21 with "ldd -v" as 2.35. The Fe binary executes the Fe contract inside project folder simple_storage with command: "./fe_amd64 build simple_storage"
+contract simple_storage { //Note: This contract was compiled using with Linux Mint 21 which has "ldd -v" 2.35 with the binary inside a project folder with command "./fe_amd64 build a"
+    // pub storage_slot_0: u256 //public variables not supported yet in Fe 0.23.0
+    // pub owner: address      //public variables not supported yet in Fe 0.23.0
     storage_slot_0: u256
     owner: address
+
+    pub fn storage_slot_0(self) -> u256 { // Manually return storage_slot_0 since we can't use pub yet automatically.
+        return self.storage_slot_0
+    }
+
+    pub fn owner(self) -> address { // Manually return owner since we can't use pub yet automatically.
+        return self.owner
+    }
 
     pub fn __init__(mut self, ctx: Context) { //constructor
         self.owner = ctx.msg_sender()
