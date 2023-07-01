@@ -5,7 +5,7 @@ struct event_value_update {
     pub value: u256
 }
 
-contract simple_storage { //Note: This contract was compiled using with Linux Mint 21 which has "ldd -v" 2.35 with the binary inside a project folder with command "./fe_amd64 build a"
+contract simple_storage { //Note: Compiled in Linux Mint version 21 with "ldd -v" as 2.35. The Fe binary executes the Fe contract inside project folder a with command: "./fe_amd64 build a"
     storage_slot_0: u256
     owner: address
 
