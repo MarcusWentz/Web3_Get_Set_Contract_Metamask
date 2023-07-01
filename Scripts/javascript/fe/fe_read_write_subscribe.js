@@ -4,7 +4,7 @@ const rpcURL = process.env.sepoliaInfuraWSS // Your RPC URL goes here
 const provider = new ethers.providers.WebSocketProvider(rpcURL)
 const signer = new ethers.Wallet(Buffer.from(process.env.devTestnetPrivateKey, 'hex'), provider);
 
-const contractAddress = '0xf6dBC8162D01BfC288fD6BE3Dd92c0778DADFdf1'
+const contractAddress = '0xbf1Ce7005951e92B0A23cB3ed6F4BfA897631FEA'
 const contractAbi = [{"type":"constructor","name":"__init__","inputs":[],"outputs":[],"stateMutability":"payable"},{"type":"function","name":"storage_slot_0","inputs":[],"outputs":[{"name":"","type":"uint256"}],"stateMutability":"view"},{"type":"function","name":"owner","inputs":[],"outputs":[{"name":"","type":"address"}],"stateMutability":"view"},{"type":"function","name":"set","inputs":[{"name":"input","type":"uint256"}],"outputs":[],"stateMutability":"payable"},{"type":"function","name":"owner_time_store","inputs":[],"outputs":[],"stateMutability":"payable"},{"type":"event","name":"error_same_value","inputs":[],"anonymous":false},{"type":"event","name":"event_value_update","inputs":[{"name":"value","type":"uint256","indexed":false}],"anonymous":false},{"type":"event","name":"Context","inputs":[],"anonymous":false}];
 const contractDeployed = new ethers.Contract(contractAddress, contractAbi, signer);
 
@@ -37,7 +37,7 @@ async function createAndSendTx() {
   // const txSigned = await contractDeployed.owner_time_store(); //Will compute the gas limit opcodes automatically and get the oracle gas price per gas unit.
 
   const unixTime = Date.now();
-  const txSigned = await contractDeployed.owner(unixTime); //Will compute the gas limit opcodes automatically and get the oracle gas price per gas unit.
+  const txSigned = await contractDeployed.set(unixTime); //Will compute the gas limit opcodes automatically and get the oracle gas price per gas unit.
  
   console.log(txSigned) 
 }
