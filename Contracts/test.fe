@@ -1,0 +1,32 @@
+//MIT
+struct error_same_value {}  
+
+struct event_value_update {
+    pub value: u256
+}
+
+contract simple_storage { //Note: This contract was compiled using with Linux Mint 21 which has "ldd -v" 2.35 with the binary inside a project folder with command "./fe_amd64 build a"
+    storage_slot_0: u256
+    owner: address
+
+    pub fn __init__(mut self, ctx: Context) { //constructor
+        self.owner = ctx.msg_sender()
+        self.storage_slot_0 = ctx.block_timestamp()
+    }
+
+    fn set(mut self, mut ctx: Context, input: u256) {
+        if input == self.storage_slot_0 {
+            revert error_same_value()
+        }
+        self.storage_slot_0 = input
+        ctx.emit(event_value_update(value: input)) 
+    }
+
+    fn owner_time_store(mut self, mut ctx: Context) {
+        if ctx.msg_sender() != self.owner {
+            revert error_same_value()
+        }
+        self.storage_slot_0 = ctx.block_timestamp()
+        ctx.emit(event_value_update(value: ctx.block_timestamp())) 
+    }
+}
