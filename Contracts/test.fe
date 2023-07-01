@@ -1,4 +1,4 @@
-//MIT
+// SPDX-License-Identifier: MIT
 struct error_same_value {}  
 
 struct event_value_update {
