@@ -1,12 +1,12 @@
 const ethers = require("ethers") // npm i ethers@5.7.2 https://github.com/smartcontractkit/full-blockchain-solidity-course-js/discussions/5139#discussioncomment-5444517
 
-// const rpcURL = "ws://127.0.0.1:8545"
-const rpcURL = process.env.sepoliaInfuraWSS // Your RPC URL goes here
+const rpcURL = "ws://127.0.0.1:8545"
+// const rpcURL = process.env.sepoliaInfuraWSS // Your RPC URL goes here
 const provider = new ethers.providers.WebSocketProvider(rpcURL)
-const signer = new ethers.Wallet(Buffer.from(process.env.devTestnetPrivateKey, 'hex'), provider);
-// const signer = new ethers.Wallet(Buffer.from(process.env.anvilPrivateKey, 'hex'), provider);
+// const signer = new ethers.Wallet(Buffer.from(process.env.devTestnetPrivateKey, 'hex'), provider);
+const signer = new ethers.Wallet(Buffer.from(process.env.anvilPrivateKey, 'hex'), provider);
 
-const contractAddress = '0x994Aa3f9AeBE58a3E0FbBf21321b29e6c44e4D23'
+const contractAddress = '0x3347b4d90ebe72befb30444c9966b2b990ae9fcb'
 
 createAndSendTx()
 getStoredData()
@@ -43,21 +43,29 @@ async function createAndSendTx() {
   // const txSigned = await contractDeployed.owner_time_store(); //Will compute the gas limit opcodes automatically and get the oracle gas price per gas unit.
 
   const unixTime = Date.now();
-  const timeBytes32 = ethers.utils.hexZeroPad(ethers.utils.hexlify(unixTime), 32)
+  // const timeBytes32 = ethers.utils.hexZeroPad(ethers.utils.hexlify(unixTime), 32)
   // const timeBytes32 = ethers.utils.hexZeroPad(ethers.utils.hexlify(0), 32)
+  const timeBytes32 = ethers.utils.hexZeroPad(ethers.utils.hexlify(5), 32)
   const txData = getFunctionSelectorHex("setValue(uint256)") + timeBytes32.slice(2,timeBytes32.length)
   console.log(txData)
 
+  // const response = await provider.send("eth_call", [
+  //   {
+  //     "to": contractAddress,
+  //     "data": txData,
+  //   },
+  //   "latest",
+  // ]);
+  // console.log(response)
+
   const txSigned = await signer.sendTransaction({
     to: contractAddress,
+    // gasLimit: 500000,
     data: txData
   });
 
   console.log(txSigned)
 
-  // const txSigned = await contractDeployed.set(unixTime); //Will compute the gas limit opcodes automatically and get the oracle gas price per gas unit.
- 
-  // console.log(txSigned) 
 }
 
 let eventNameTypeTopicHashed = ethers.utils.id("valueUpdated()");

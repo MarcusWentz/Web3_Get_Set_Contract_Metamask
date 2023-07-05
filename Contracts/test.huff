@@ -1,4 +1,5 @@
-// Interface
+// SPDX-License-Identifier: MIT
+// Comiled output bytecode with: huffc test.huff -a -b -v
 #define function setValue(uint256) nonpayable returns ()
 #define function getValue() nonpayable returns (uint256)
 
@@ -29,33 +30,88 @@
 
    // Complicated example with revert logic.
 
-    // Read uint256 from calldata, remember to read from byte 4 to allow for the function selector! 
-    0x04            // [0x04]
-    calldataload    // [calldataValue]
+       // Program counter test:
+    // https://www.evm.codes/playground
+    // Mnemonic opcodes:
+    // PUSH1 0x01 // "PUSH1 0x00" does not jump and stops the program counter before going to next opcode JUMPDEST to keep execution paths isolated.
+    // PUSH1 0x0b // Program counter value.
+    // JUMPI      // Jump to JUMPDEST at program counter value 0x0b if conditional value is not 0x00.
+    // PUSH1 0x01 // Path not jumping.
+    // PUSH1 0x00 
+    // SSTORE     // slot0 = 1.
+    // STOP       // Stop program counter before going forward.
+    // JUMPDEST   // Program counter
+    // PUSH1 0x05 // Path when you jump.
+    // PUSH1 0x00 
+    // SSTORE     // slot0 = 5
 
-    //Copy value in stack
+    // // Read uint256 from calldata, remember to read from byte 4 to allow for the function selector! 
+    // 0x04            // [0x04]
+    // calldataload    // [calldataValue]
+
+    // //Copy value in stack
     // dup1            // [calldataValue,calldataValue]
 
     // // // // Read uint256 from storage
-    // [VALUE]          // [value_ptr,calldataValue]
-    // sload            // [value,calldataValue]
+    // [VALUE]          // [value_ptr,calldataValue,calldataValue]
+    // sload            // [value,calldataValue,calldataValue]
 
     // // Check if the calldata value is the same.
-    // eq               // [value==calldataValue,calldataValue]
-    // not           // [value==calldataValue,calldataValue]
-    // notZero        // [sameValueProgramCounter,value==calldataValue,calldataValue]
+    // eq               // [value==calldataValue,calldataValue] //Logic is correct with test storage.
+    // errorSameValue   // [errorSameValueProgramCounterJumpDest,value==calldataValue,calldataValue]
     // jumpi            // [calldataValue]
 
-    // notZero:
-    // // Get pointer and store
-    [VALUE]         // [value_ptr, value]
+    // errorSameValue:
+    //     0x05
+    //     [VALUE]         // [value_ptr,0x05,calldataValue]
+    //     sstore          // []
+    //     // 0x00 0x00 revert
+    //     return
+    
+    // // // Get pointer and store
+    // [VALUE]         // [value_ptr,calldataValue]
+    // sstore          // []
+
+    // __EVENT_HASH(valueUpdated) // [sig]
+    // 0x00 0x00                  // [memoryOffset,memoryLength,eventSig]
+    // log1                       // []  //log0 does not use eventSig. Use log1 to activate the eventSig. log2 to log4 activate more indexed topics. memoryOffset and memoryLength are used for other event arguments. 
+
+    0x04                             // [0x04]
+    calldataload                     // [n]
+
+    // check if n % 2 == 0
+    0x05                             // [n, n]
+    eq                               // [5<eq]
+
+    // [VALUE]         // [value_ptr,0x02]
+    // sstore          // []
+
+    // // jump if even
+    even                             // [0x11, n % 2 == 0, n]
+    jumpi                            // [n]
+
+    // logic for odd case:
+    // 2 * (3 * n + 1) / 2 == (6 * n + 2) / 2 == 3 * n + 1
+    // note: multiply by 6 and add 2 (instead of x3 and + 1) so we can always div / 2 to skip a jump to save bytecode
+    // 0x06                             // [0x06, n]
+    // mul                              // [6 * n]
+    // 0x02                             // [0x02, 6 * n]
+    // add                              // [6 * n + 2]
+    0x01            // [0x01]
+    [VALUE]         // [value_ptr,0x01]
     sstore          // []
+    stop            // Stop the program counter before it continues to even. Do not return anything since we have nothing in memory to avoid revert from stack underflow.
 
-    __EVENT_HASH(valueUpdated) // [sig]
-    0x00 0x00                  // [memoryOffset,memoryLength,eventSig]
-    log1                       // []  //log0 does not use eventSig. Use log1 to activate the eventSig. log2 to log4 activate more indexed topics. memoryOffset and memoryLength are used for other event arguments. 
+    even:                            // [n]
+      0x02                           // [0x02, n]
+      [VALUE]         // [value_ptr,0x02]
+      sstore          // []
 
-    // 0x00 0x00 revert
+    //   returndatasize  // -> 0        // [0, n / 2]
+    //   mstore                         // []
+    //   0x20                           // [0x20]
+    //   returndatasize  // -> 0        // [0x20, 0]
+    //   return
 
 }
 
