@@ -1,0 +1,93 @@
+// Interface
+#define function setValue(uint256) nonpayable returns ()
+#define function getValue() nonpayable returns (uint256)
+
+// Event
+#define event valueUpdated()
+
+// Storage
+#define constant VALUE = FREE_STORAGE_POINTER()
+
+// External function macros
+
+// setValue(uint256)
+#define macro SET_VALUE() = takes(0) returns(0) {
+
+   // Simple example with no revert or event argument logic.
+
+   //  // Read uint256 from calldata, remember to read from byte 4 to allow for the function selector! 
+   //  0x04            // [0x04]
+   //  calldataload    // [value]
+
+   //  // Get pointer and store
+   //  [VALUE]         // [value_ptr, value]
+   //  sstore          // []
+
+   //  __EVENT_HASH(valueUpdated) // [sig]
+   //  0x00 0x00                  // [offset,length,sig]
+   //  log0                       // []
+
+   // Complicated example with revert logic.
+
+    // Read uint256 from calldata, remember to read from byte 4 to allow for the function selector! 
+    0x04            // [0x04]
+    calldataload    // [calldataValue]
+
+    //Copy value in stack
+    // dup1            // [calldataValue,calldataValue]
+
+    // // // // Read uint256 from storage
+    // [VALUE]          // [value_ptr,calldataValue]
+    // sload            // [value,calldataValue]
+
+    // // Check if the calldata value is the same.
+    // eq               // [value==calldataValue,calldataValue]
+    // not           // [value==calldataValue,calldataValue]
+    // notZero        // [sameValueProgramCounter,value==calldataValue,calldataValue]
+    // jumpi            // [calldataValue]
+
+    // notZero:
+    // // Get pointer and store
+    [VALUE]         // [value_ptr, value]
+    sstore          // []
+
+    __EVENT_HASH(valueUpdated) // [sig]
+    0x00 0x00                  // [memoryOffset,memoryLength,eventSig]
+    log1                       // []  //log0 does not use eventSig. Use log1 to activate the eventSig. log2 to log4 activate more indexed topics. memoryOffset and memoryLength are used for other event arguments. 
+
+    // 0x00 0x00 revert
+
+}
+
+// getValue()
+#define macro GET_VALUE() = takes(0) returns(0) {
+    // Read uint256 from storage
+    [VALUE]         // [value_ptr]
+    sload           // [value]
+
+    // Store the return value in memory
+    0x00            // [0x00, value]
+    mstore          // []
+
+    // Return the first 32 bytes of memory containing our uint256
+    0x20            // [0x20]
+    0x00            // [0x00, 0x20]
+    return          // []
+}
+
+// Main
+#define macro MAIN() = takes(0) returns(0) {
+    // Get the function selector
+    0x00 calldataload 0xe0 shr
+
+    dup1 __FUNC_SIG(setValue) eq setValue jumpi // Compare function selector to setValue(uint256)
+    dup1 __FUNC_SIG(getValue) eq getValue jumpi // Compare the function selector to getValue()
+
+    // dispatch
+    setValue:
+        SET_VALUE()
+    getValue:
+        GET_VALUE()
+
+    0x00 0x00 revert
+}

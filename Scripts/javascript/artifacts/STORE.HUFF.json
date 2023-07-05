@@ -1,0 +1,55 @@
+{
+  "file": {
+    "path": "store.huff",
+    "source": "// Interface\n#define function setValue(uint256) nonpayable returns ()\n#define function getValue() nonpayable returns (uint256)\n\n// Event\n#define event valueUpdated()\n\n// Storage\n#define constant VALUE = FREE_STORAGE_POINTER()\n\n// External function macros\n\n// setValue(uint256)\n#define macro SET_VALUE() = takes(0) returns(0) {\n\n   // Simple example with no revert or event argument logic.\n\n   //  // Read uint256 from calldata, remember to read from byte 4 to allow for the function selector! \n   //  0x04            // [0x04]\n   //  calldataload    // [value]\n\n   //  // Get pointer and store\n   //  [VALUE]         // [value_ptr, value]\n   //  sstore          // []\n\n   //  __EVENT_HASH(valueUpdated) // [sig]\n   //  0x00 0x00                  // [offset,length,sig]\n   //  log0                       // []\n\n   // Complicated example with revert logic.\n\n    // Read uint256 from calldata, remember to read from byte 4 to allow for the function selector! \n    0x04            // [0x04]\n    calldataload    // [calldataValue]\n\n    //Copy value in stack\n    // dup1            // [calldataValue,calldataValue]\n\n    // // // // Read uint256 from storage\n    // [VALUE]          // [value_ptr,calldataValue]\n    // sload            // [value,calldataValue]\n\n    // // Check if the calldata value is the same.\n    // eq               // [value==calldataValue,calldataValue]\n    // not           // [value==calldataValue,calldataValue]\n    // notZero        // [sameValueProgramCounter,value==calldataValue,calldataValue]\n    // jumpi            // [calldataValue]\n\n    // notZero:\n    // // Get pointer and store\n    [VALUE]         // [value_ptr, value]\n    sstore          // []\n\n    __EVENT_HASH(valueUpdated) // [sig]\n    0x00 0x00                  // [memoryOffset,memoryLength,eventSig]\n    log1                       // []  //log0 does not use eventSig. Use log1 to activate the eventSig. log2 to log4 activate more indexed topics. memoryOffset and memoryLength are used for other event arguments. \n\n    // 0x00 0x00 revert\n\n}\n\n// getValue()\n#define macro GET_VALUE() = takes(0) returns(0) {\n    // Read uint256 from storage\n    [VALUE]         // [value_ptr]\n    sload           // [value]\n\n    // Store the return value in memory\n    0x00            // [0x00, value]\n    mstore          // []\n\n    // Return the first 32 bytes of memory containing our uint256\n    0x20            // [0x20]\n    0x00            // [0x00, 0x20]\n    return          // []\n}\n\n// Main\n#define macro MAIN() = takes(0) returns(0) {\n    // Get the function selector\n    0x00 calldataload 0xe0 shr\n\n    dup1 __FUNC_SIG(setValue) eq setValue jumpi // Compare function selector to setValue(uint256)\n    dup1 __FUNC_SIG(getValue) eq getValue jumpi // Compare the function selector to getValue()\n\n    // dispatch\n    setValue:\n        SET_VALUE()\n    getValue:\n        GET_VALUE()\n\n    0x00 0x00 revert\n}",
+    "access": null,
+    "dependencies": []
+  },
+  "bytecode": "605a8060093d393df360003560e01c8063552410771461001c5780632096525514610049575b6004356000557fc5ab16f1bddb259b10fe689dea60d8cce8e149cda6275168becc5bc11b2fc35460006000a15b60005460005260206000f360006000fd",
+  "runtime": "60003560e01c8063552410771461001c5780632096525514610049575b6004356000557fc5ab16f1bddb259b10fe689dea60d8cce8e149cda6275168becc5bc11b2fc35460006000a15b60005460005260206000f360006000fd",
+  "abi": {
+    "constructor": null,
+    "functions": {
+      "getValue": {
+        "name": "getValue",
+        "inputs": [],
+        "outputs": [
+          {
+            "name": "",
+            "kind": {
+              "Uint": 256
+            },
+            "internal_type": null
+          }
+        ],
+        "constant": false,
+        "state_mutability": "NonPayable"
+      },
+      "setValue": {
+        "name": "setValue",
+        "inputs": [
+          {
+            "name": "",
+            "kind": {
+              "Uint": 256
+            },
+            "internal_type": null
+          }
+        ],
+        "outputs": [],
+        "constant": false,
+        "state_mutability": "NonPayable"
+      }
+    },
+    "events": {
+      "valueUpdated": {
+        "name": "valueUpdated",
+        "inputs": [],
+        "anonymous": false
+      }
+    },
+    "errors": {},
+    "receive": false,
+    "fallback": false
+  }
+}
