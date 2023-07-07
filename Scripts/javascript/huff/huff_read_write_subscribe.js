@@ -6,10 +6,11 @@ const provider = new ethers.providers.WebSocketProvider(rpcURL)
 // const signer = new ethers.Wallet(Buffer.from(process.env.devTestnetPrivateKey, 'hex'), provider);
 const signer = new ethers.Wallet(Buffer.from(process.env.anvilPrivateKey, 'hex'), provider);
 
-const contractAddress = '0x8a791620dd6260079bf849dc5567adc3f2fdc318'
+const contractAddress = '0x09635f643e140090a9a8dcd712ed6285858cebef'
 
 createAndSendTx()
 getStoredData()
+getOwner()
 
 async function getStoredData() {  
   const response = await provider.send("eth_call", [
@@ -19,7 +20,33 @@ async function getStoredData() {
     },
     "latest",
   ]);
-  console.log(response)
+  console.log("getValue() " + response)
+  
+  const storage_slot_0 = await provider.getStorageAt(
+    contractAddress,
+    "0x0",
+    "latest"
+  );
+  console.log("storage_slot_0() " + storage_slot_0);
+
+}
+
+async function getOwner() {  
+  const response = await provider.send("eth_call", [
+    {
+      "to": contractAddress,
+      "data": getFunctionSelectorHex("getOwner()"),
+    },
+    "latest",
+  ]);
+  console.log("getOwner() " + response)
+
+  const storage_slot_1 = await provider.getStorageAt(
+    contractAddress,
+    "0x1",
+    "latest"
+  );
+  console.log("storage_slot_1() " + storage_slot_1);
 
 }
 
@@ -43,9 +70,9 @@ async function createAndSendTx() {
   // const txSigned = await contractDeployed.owner_time_store(); //Will compute the gas limit opcodes automatically and get the oracle gas price per gas unit.
 
   const unixTime = Date.now();
-  // const timeBytes32 = ethers.utils.hexZeroPad(ethers.utils.hexlify(unixTime), 32)
+  const timeBytes32 = ethers.utils.hexZeroPad(ethers.utils.hexlify(unixTime), 32)
   // const timeBytes32 = ethers.utils.hexZeroPad(ethers.utils.hexlify(0), 32)
-  const timeBytes32 = ethers.utils.hexZeroPad(ethers.utils.hexlify(5), 32)
+  // const timeBytes32 = ethers.utils.hexZeroPad(ethers.utils.hexlify(5), 32)
   const txData = getFunctionSelectorHex("setValue(uint256)") + timeBytes32.slice(2,timeBytes32.length)
   console.log(txData)
 

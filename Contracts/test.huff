@@ -1,7 +1,9 @@
 // SPDX-License-Identifier: MIT
 // Comiled output bytecode with: huffc test.huff -a -b -v
-#define function setValue(uint256) nonpayable returns ()
 #define function getValue() nonpayable returns (uint256)
+#define function getOwner() nonpayable returns (address)
+#define function setValue(uint256) nonpayable returns ()
+#define function ownerSetTime() nonpayable returns ()
 
 // Event
 #define event valueUpdated()
@@ -9,6 +11,9 @@
 // Storage
 #define constant VALUE = FREE_STORAGE_POINTER()
 #define constant OWNER = FREE_STORAGE_POINTER()
+
+//Constants
+// #define constant OWNER = 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266 // Anvil address.
 
 // External function macros
 
@@ -121,7 +126,7 @@
 }
 
 // getOwner()
-#define macro GET_VALUE() = takes(0) returns(0) {
+#define macro GET_OWNER() = takes(0) returns(0) {
     // Read uint256 from storage
     [OWNER]         // [value_ptr]
     sload           // [value]
@@ -131,34 +136,32 @@
     mstore          // []
 
     // Return the first 32 bytes of memory containing our uint256
-    0x20            // [0x20]
-    0x00            // [0x00, 0x20]
+    0x14            // size (20 bytes)
+    0x0c            // offset (12 bytes)
     return          // []
 }
 
 #define macro CONSTRUCTOR() = takes(0) returns(0) {
     timestamp             // [block.timestamp]
-    [VALUE]               // [owner_ptr,msg.sender]
+    [VALUE]               // [owner_ptr,block.timestamp]
     sstore                // []
-    // caller                // [msg.sender]
-    // [OWNER]               // [owner_ptr,msg.sender]
-    // sstore                // []
+    caller                // [msg.sender]
+    [OWNER]               // [owner_ptr,msg.sender]
+    sstore                // []
 
     // Experiment: add immutable variable in raw bytecode instead of storage: https://ethereum.stackexchange.com/questions/132944/solidity-immutable-equivalent-in-huff
 
-    // caller                                                          // [msg.sender] // 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266 target owner value
-    0xabcffffffffffffffffffffffffffffffffffffffffffffffffffffffffffdef // [testUint256]
-    0x00            // [0x00, testUint256]
-    mstore          // []
+    // Load uint256 value into memory. 
+    // 0xabcffffffffffffffffffffffffffffffffffffffffffffffffffffffffffdef // [testUint256]
+    // 0x00            // [0x00, testUint256]
+    // mstore          // []
 
-    0x20               // uint256 is 32 bytes, represents size of data
-    // 0x14            // address is 20 bytes, represents size of data
-    dup1 codesize sub  // offset of data in bytecode
-    0x00               // offset in memory
-    codecopy           // copy the data
+    // Write memory value to contract bytecode. 
+    // 0x20               // uint256 is 32 bytes, represents size of data
+    // dup1 codesize sub  // offset of data in bytecode
+    // 0x00               // offset in memory
+    // codecopy           // copy the data
 
-    //42600055604480600d3d393df360003560e01c8063552410771461001c5780632096525514610033575b600435806000541461002d57600055005b60006000fd5b60005460005260206000f360006000fd
-    //4260005533600052602080380360003960448060193d393df360003560e01c8063552410771461001c5780632096525514610033575b600435806000541461002d57600055005b60006000fd5b60005460005260206000f360006000fd
     //426000557fabcffffffffffffffffffffffffffffffffffffffffffffffffffffffffffdef600052602080380360003960448060393d393df360003560e01c8063552410771461001c5780632096525514610033575b600435806000541461002d57600055005b60006000fd5b60005460005260206000f360006000fd
 
 }
@@ -170,12 +173,18 @@
 
     dup1 __FUNC_SIG(setValue) eq setValue jumpi // Compare function selector to setValue(uint256)
     dup1 __FUNC_SIG(getValue) eq getValue jumpi // Compare the function selector to getValue()
+    dup1 __FUNC_SIG(getOwner) eq getOwner jumpi // Compare the function selector to getValue()
+    // dup1 __FUNC_SIG(ownerSetTime) eq ownerSetTime jumpi // Compare the function selector to getValue()
 
     // dispatch
-     setValue:
+    setValue:
         SET_VALUE()
     getValue:
         GET_VALUE()
+    getOwner:
+        GET_OWNER()
+    // ownerSetTime:
+    //     OWNER_SET_TIME()
 
     0x00 0x00 revert
 }
