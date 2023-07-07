@@ -137,18 +137,29 @@
 }
 
 #define macro CONSTRUCTOR() = takes(0) returns(0) {
-    timestamp             // [msg.sender]
+    timestamp             // [block.timestamp]
     [VALUE]               // [owner_ptr,msg.sender]
     sstore                // []
-    // caller             // [msg.sender]
-    // [OWNER]            // [owner_ptr,msg.sender]
-    // sstore             // []
+    // caller                // [msg.sender]
+    // [OWNER]               // [owner_ptr,msg.sender]
+    // sstore                // []
 
-    // Experiment: add owner as immutable in raw bytecode instead of storage: https://ethereum.stackexchange.com/questions/132944/solidity-immutable-equivalent-in-huff
-    // 0x20               // 32, represents size of data
-    // dup1 codesize sub  // offset of data in bytecode
-    // 0x00               // offset in memory
-    // codecopy           // copy the data
+    // Experiment: add immutable variable in raw bytecode instead of storage: https://ethereum.stackexchange.com/questions/132944/solidity-immutable-equivalent-in-huff
+
+    // caller                                                          // [msg.sender] // 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266 target owner value
+    0xabcffffffffffffffffffffffffffffffffffffffffffffffffffffffffffdef // [testUint256]
+    0x00            // [0x00, testUint256]
+    mstore          // []
+
+    0x20               // uint256 is 32 bytes, represents size of data
+    // 0x14            // address is 20 bytes, represents size of data
+    dup1 codesize sub  // offset of data in bytecode
+    0x00               // offset in memory
+    codecopy           // copy the data
+
+    //42600055604480600d3d393df360003560e01c8063552410771461001c5780632096525514610033575b600435806000541461002d57600055005b60006000fd5b60005460005260206000f360006000fd
+    //4260005533600052602080380360003960448060193d393df360003560e01c8063552410771461001c5780632096525514610033575b600435806000541461002d57600055005b60006000fd5b60005460005260206000f360006000fd
+    //426000557fabcffffffffffffffffffffffffffffffffffffffffffffffffffffffffffdef600052602080380360003960448060393d393df360003560e01c8063552410771461001c5780632096525514610033575b600435806000541461002d57600055005b60006000fd5b60005460005260206000f360006000fd
 
 }
 
@@ -161,7 +172,7 @@
     dup1 __FUNC_SIG(getValue) eq getValue jumpi // Compare the function selector to getValue()
 
     // dispatch
-    setValue:
+     setValue:
         SET_VALUE()
     getValue:
         GET_VALUE()
