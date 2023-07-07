@@ -20,23 +20,7 @@
 // setValue(uint256)
 #define macro SET_VALUE() = takes(0) returns(0) {
 
-   // Simple example with no revert or event argument logic.
-
-   //  // Read uint256 from calldata, remember to read from byte 4 to allow for the function selector! 
-   //  0x04            // [0x04]
-   //  calldataload    // [value]
-
-   //  // Get pointer and store
-   //  [VALUE]         // [value_ptr, value]
-   //  sstore          // []
-
-   //  __EVENT_HASH(valueUpdated) // [sig]
-   //  0x00 0x00                  // [offset,length,sig]
-   //  log0                       // []
-
-   // Complicated example with revert logic.
-
-       // Program counter test:
+    // Program counter test:
     // https://www.evm.codes/playground
     // Mnemonic opcodes:
     // PUSH1 0x01 // "PUSH1 0x00" does not jump and stops the program counter before going to next opcode JUMPDEST to keep execution paths isolated.
@@ -51,61 +35,55 @@
     // PUSH1 0x00 
     // SSTORE     // slot0 = 5
 
-    // // Read uint256 from calldata, remember to read from byte 4 to allow for the function selector! 
-    // 0x04            // [0x04]
-    // calldataload    // [calldataValue]
-
-    // //Copy value in stack
-    // dup1            // [calldataValue,calldataValue]
-
-    // // // // Read uint256 from storage
-    // [VALUE]          // [value_ptr,calldataValue,calldataValue]
-    // sload            // [value,calldataValue,calldataValue]
-
-    // // Check if the calldata value is the same.
-    // eq               // [value==calldataValue,calldataValue] //Logic is correct with test storage.
-    // errorSameValue   // [errorSameValueProgramCounterJumpDest,value==calldataValue,calldataValue]
-    // jumpi            // [calldataValue]
-
-    // errorSameValue:
-    //     0x05
-    //     [VALUE]         // [value_ptr,0x05,calldataValue]
-    //     sstore          // []
-    //     // 0x00 0x00 revert
-    //     return
-    
-    // // // Get pointer and store
-    // [VALUE]         // [value_ptr,calldataValue]
-    // sstore          // []
-
-    // __EVENT_HASH(valueUpdated) // [sig]
-    // 0x00 0x00                  // [memoryOffset,memoryLength,eventSig]
-    // log1                       // []  //log0 does not use eventSig. Use log1 to activate the eventSig. log2 to log4 activate more indexed topics. memoryOffset and memoryLength are used for other event arguments. 
-
+    //Get calldata which has a 4 byte offset (first 4 bytes are the function signature hash)
     0x04                             // [0x04]
     calldataload                     // [valueCalldata]
 
-    dup1                             // [valueCalldata,valueCalldata]
-    
+    //Copy the calldata value in case we need it to update storage (will be consumed once by eq with owner address), then check if we have the same value in storage already [if so, revert].
+    dup1                             // [valueCalldata,valueCalldata]    
     [VALUE]                          // [value_ptr,valueCalldata,valueCalldata]
     sload                            // [value,valueCalldata,valueCalldata]
     eq                               // [value==valueCalldata,valueCalldata]
     errorSameValue                   // [errorSameValueJumpDestination,value==valueCalldata,valueCalldata]
     jumpi                            // [valueCalldata] //Jump to errorSameValue if calldata and storage are equal.
 
-    // logic for odd case:
-    // 2 * (3 * n + 1) / 2 == (6 * n + 2) / 2 == 3 * n + 1
-    // note: multiply by 6 and add 2 (instead of x3 and + 1) so we can always div / 2 to skip a jump to save bytecode
-    // 0x06                             // [0x06, n]
-    // mul                              // [6 * n]
-    // 0x02                             // [0x02, 6 * n]
-    // add                              // [6 * n + 2]
-    [VALUE]         // [value_ptr,0x01]
-    sstore          // []
-    stop            // Stop the program counter before it continues to even. Do not return anything since we have nothing in memory to avoid revert from stack underflow.
+    //Path calldata does not match storage. Record calldata in storage then emit an event. 
+    [VALUE]                         // [value_ptr,valueCalldata]
+    sstore                          // []
+    __EVENT_HASH(valueUpdated)      // [sig]
+    0x00 0x00                       // [memoryOffset,memoryLength,eventSig]
+    log1                            // []  // log0 does not use eventSig. Use log1 to activate the eventSig. log2 to log4 activate more indexed topics. memoryOffset and memoryLength are used for other event arguments. 
+    stop                            // Stop the program counter before it countinues to the revert path.
 
+    //Jump here if calldata is the same as storage to revert.
     errorSameValue:
         0x00 0x00 revert
+
+}
+
+// ownerSetTime()
+#define macro OWNER_SET_TIME() = takes(0) returns(0) {
+
+    //See if msg.sender (caller) equals the owner address. If so, jump over revert and record block.timestamp in storage.
+    caller                           // [msg.sender]
+    [OWNER]                          // [owner_ptr,msg.sender]
+    sload                            // [owner,msg.sender]
+    eq                               // [owner==msg.sender]
+    ownerIsCaller                    // [ownerIsCallerJumpDestination,owner==msg.sender]
+    jumpi                            // [] //Jump to ownerIsCaller if owner is the caller.
+
+    //Revert since msg.sender is not the owner. 
+    0x00 0x00 revert                 // If the caller is not equal to the owner, revert.
+
+    //Record block.timestamp then emit an event. 
+    ownerIsCaller:
+        timestamp                  // [block.timestamp]
+        [VALUE]                    // [value_ptr,block.timestamp]
+        sstore                     // []
+        __EVENT_HASH(valueUpdated) // [sig]
+        0x00 0x00                  // [memoryOffset,memoryLength,eventSig]
+        log1                       // []  //log0 does not use eventSig. Use log1 to activate the eventSig. log2 to log4 activate more indexed topics. memoryOffset and memoryLength are used for other event arguments. 
+        stop                       // Stop program counter from going back to main which has revert logic at the end. 
 
 }
 
@@ -174,7 +152,7 @@
     dup1 __FUNC_SIG(setValue) eq setValue jumpi // Compare function selector to setValue(uint256)
     dup1 __FUNC_SIG(getValue) eq getValue jumpi // Compare the function selector to getValue()
     dup1 __FUNC_SIG(getOwner) eq getOwner jumpi // Compare the function selector to getValue()
-    // dup1 __FUNC_SIG(ownerSetTime) eq ownerSetTime jumpi // Compare the function selector to getValue()
+    dup1 __FUNC_SIG(ownerSetTime) eq ownerSetTime jumpi // Compare the function selector to getValue()
 
     // dispatch
     setValue:
@@ -183,8 +161,8 @@
         GET_VALUE()
     getOwner:
         GET_OWNER()
-    // ownerSetTime:
-    //     OWNER_SET_TIME()
+    ownerSetTime:
+        OWNER_SET_TIME()
 
     0x00 0x00 revert
 }
