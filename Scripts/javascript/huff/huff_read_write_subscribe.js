@@ -6,7 +6,7 @@ const provider = new ethers.providers.WebSocketProvider(rpcURL)
 // const signer = new ethers.Wallet(Buffer.from(process.env.devTestnetPrivateKey, 'hex'), provider);
 const signer = new ethers.Wallet(Buffer.from(process.env.anvilPrivateKey, 'hex'), provider);
 
-const contractAddress = '0x3347b4d90ebe72befb30444c9966b2b990ae9fcb'
+const contractAddress = '0x8a791620dd6260079bf849dc5567adc3f2fdc318'
 
 createAndSendTx()
 getStoredData()
