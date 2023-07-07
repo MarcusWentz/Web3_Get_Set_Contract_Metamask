@@ -77,18 +77,15 @@
     // log1                       // []  //log0 does not use eventSig. Use log1 to activate the eventSig. log2 to log4 activate more indexed topics. memoryOffset and memoryLength are used for other event arguments. 
 
     0x04                             // [0x04]
-    calldataload                     // [n]
+    calldataload                     // [valueCalldata]
 
-    // check if n % 2 == 0
-    0x05                             // [n, n]
-    eq                               // [5<eq]
-
-    // [VALUE]         // [value_ptr,0x02]
-    // sstore          // []
-
-    // // jump if even
-    even                             // [0x11, n % 2 == 0, n]
-    jumpi                            // [n]
+    dup1                             // [valueCalldata,valueCalldata]
+    
+    [VALUE]                          // [value_ptr,valueCalldata,valueCalldata]
+    sload                            // [value,valueCalldata,valueCalldata]
+    eq                               // [value==valueCalldata,valueCalldata]
+    errorSameValue                   // [errorSameValueJumpDestination,value==valueCalldata,valueCalldata]
+    jumpi                            // [valueCalldata] //Jump to errorSameValue if calldata and storage are equal.
 
     // logic for odd case:
     // 2 * (3 * n + 1) / 2 == (6 * n + 2) / 2 == 3 * n + 1
@@ -97,21 +94,12 @@
     // mul                              // [6 * n]
     // 0x02                             // [0x02, 6 * n]
     // add                              // [6 * n + 2]
-    0x01            // [0x01]
     [VALUE]         // [value_ptr,0x01]
     sstore          // []
     stop            // Stop the program counter before it continues to even. Do not return anything since we have nothing in memory to avoid revert from stack underflow.
 
-    even:                            // [n]
-      0x02                           // [0x02, n]
-      [VALUE]         // [value_ptr,0x02]
-      sstore          // []
-
-    //   returndatasize  // -> 0        // [0, n / 2]
-    //   mstore                         // []
-    //   0x20                           // [0x20]
-    //   returndatasize  // -> 0        // [0x20, 0]
-    //   return
+    errorSameValue:
+        0x00 0x00 revert
 
 }
 
