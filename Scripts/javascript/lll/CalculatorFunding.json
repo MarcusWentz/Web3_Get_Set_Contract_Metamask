@@ -1,0 +1,118 @@
+{
+    "CalculatorFunding" : {
+        "_info" : {
+            "comment" : "Math opcodes and MSG.VALUE (ETH) Tx from user to contract.",
+            "filling-rpc-server" : "evm version 1.12.1-unstable-c2db667c-20230707",
+            "filling-tool-version" : "retesteth-0.3.1-cancun+commit.eb1b09c9.Linux.g++",
+            "generatedTestHash" : "9f9ea6301c33c2bd44a2825a1f7c25715d3d587d627fdb7b398fdb0dc2975e7d",
+            "lllcversion" : "Version: 0.5.14-develop.2023.7.8+commit.b2b86751.Linux.g++",
+            "solidity" : "Version: 0.8.17+commit.8df45f5f.Linux.g++",
+            "source" : "src/GeneralStateTestsFiller/stExample/CalculatorFundingFiller.yml",
+            "sourceHash" : "0ec390190ff9801c45c99097db2574ca9dd65f172474508e64307548cf4bca0f"
+        },
+        "env" : {
+            "currentBaseFee" : "0x0a",
+            "currentCoinbase" : "0x2adc25665018aa1fe0e6bc666dac8fc2697ff9ba",
+            "currentDifficulty" : "0x020000",
+            "currentGasLimit" : "0x05f5e100",
+            "currentNumber" : "0x01",
+            "currentRandom" : "0x0000000000000000000000000000000000000000000000000000000000020000",
+            "currentTimestamp" : "0x03e8",
+            "previousHash" : "0x5e20a0453cecd065ea59c37ac63e079ee08998b6045136a8ce6635c7912ec0b6"
+        },
+        "post" : {
+            "Berlin" : [
+                {
+                    "hash" : "0xaae5fc7a6ed1a0aff35d9397be68b449abbf8e8844cca523925d1c574445707c",
+                    "indexes" : {
+                        "data" : 0,
+                        "gas" : 0,
+                        "value" : 0
+                    },
+                    "logs" : "0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347",
+                    "txbytes" : "0xf863808203e88404c4b40094095e7baea6a6c7c4c2dfeb977efac326af552d8702801ca0ff3ae454ab182b54913349efa53495db7ef808fdbb0f39df42c138822a59699aa03d6e6382b134858bd10fc9286a09e929cab5b1a7d7005a9b18ec44d6c87bcc44"
+                }
+            ],
+            "Istanbul" : [
+                {
+                    "hash" : "0x3a057b3183a621ec53466996d022059e08662480e88646f2ea0c3d4fceb625bb",
+                    "indexes" : {
+                        "data" : 0,
+                        "gas" : 0,
+                        "value" : 0
+                    },
+                    "logs" : "0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347",
+                    "txbytes" : "0xf863808203e88404c4b40094095e7baea6a6c7c4c2dfeb977efac326af552d8702801ca0ff3ae454ab182b54913349efa53495db7ef808fdbb0f39df42c138822a59699aa03d6e6382b134858bd10fc9286a09e929cab5b1a7d7005a9b18ec44d6c87bcc44"
+                }
+            ],
+            "London" : [
+                {
+                    "hash" : "0x82646d288376261a8b9e2cf5ce13120a5b420ef0b5e40b71a16560f11a2f6674",
+                    "indexes" : {
+                        "data" : 0,
+                        "gas" : 0,
+                        "value" : 0
+                    },
+                    "logs" : "0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347",
+                    "txbytes" : "0xf863808203e88404c4b40094095e7baea6a6c7c4c2dfeb977efac326af552d8702801ca0ff3ae454ab182b54913349efa53495db7ef808fdbb0f39df42c138822a59699aa03d6e6382b134858bd10fc9286a09e929cab5b1a7d7005a9b18ec44d6c87bcc44"
+                }
+            ],
+            "Merge" : [
+                {
+                    "hash" : "0x82646d288376261a8b9e2cf5ce13120a5b420ef0b5e40b71a16560f11a2f6674",
+                    "indexes" : {
+                        "data" : 0,
+                        "gas" : 0,
+                        "value" : 0
+                    },
+                    "logs" : "0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347",
+                    "txbytes" : "0xf863808203e88404c4b40094095e7baea6a6c7c4c2dfeb977efac326af552d8702801ca0ff3ae454ab182b54913349efa53495db7ef808fdbb0f39df42c138822a59699aa03d6e6382b134858bd10fc9286a09e929cab5b1a7d7005a9b18ec44d6c87bcc44"
+                }
+            ],
+            "Shanghai" : [
+                {
+                    "hash" : "0x82646d288376261a8b9e2cf5ce13120a5b420ef0b5e40b71a16560f11a2f6674",
+                    "indexes" : {
+                        "data" : 0,
+                        "gas" : 0,
+                        "value" : 0
+                    },
+                    "logs" : "0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347",
+                    "txbytes" : "0xf863808203e88404c4b40094095e7baea6a6c7c4c2dfeb977efac326af552d8702801ca0ff3ae454ab182b54913349efa53495db7ef808fdbb0f39df42c138822a59699aa03d6e6382b134858bd10fc9286a09e929cab5b1a7d7005a9b18ec44d6c87bcc44"
+                }
+            ]
+        },
+        "pre" : {
+            "0x095e7baea6a6c7c4c2dfeb977efac326af552d87" : {
+                "balance" : "0x00",
+                "code" : "0x600160010160005500",
+                "nonce" : "0x00",
+                "storage" : {
+                }
+            },
+            "0xa94f5374fce5edbc8e2a8697c15331677e6ebf0b" : {
+                "balance" : "0x0cb49b44ba602d800000",
+                "code" : "0x",
+                "nonce" : "0x00",
+                "storage" : {
+                }
+            }
+        },
+        "transaction" : {
+            "data" : [
+                "0x"
+            ],
+            "gasLimit" : [
+                "0x04c4b400"
+            ],
+            "gasPrice" : "0x03e8",
+            "nonce" : "0x00",
+            "secretKey" : "0x45a915e4d060149eb4365960e6a7a45f334393093061116b197e3240065ff2d8",
+            "sender" : "0xa94f5374fce5edbc8e2a8697c15331677e6ebf0b",
+            "to" : "0x095e7baea6a6c7c4c2dfeb977efac326af552d87",
+            "value" : [
+                "0x02"
+            ]
+        }
+    }
+}

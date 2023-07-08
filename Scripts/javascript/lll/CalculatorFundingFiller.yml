@@ -1,0 +1,87 @@
+CalculatorFunding:
+  env:
+    currentCoinbase: 2adc25665018aa1fe0e6bc666dac8fc2697ff9ba
+    currentDifficulty: 0x20000
+    currentGasLimit: 10_000_0000
+    currentNumber: 1
+    currentTimestamp: 1000
+    previousHash: 5e20a0453cecd065ea59c37ac63e079eecode08998b6045136a8ce6635c7912ec0b6
+
+  _info:
+    comment: "Math opcodes and MSG.VALUE (ETH) Tx from user to contract."
+
+  pre:
+    095e7baea6a6c7c4c2dfeb977efac326af552d87: #Smart contract address.
+      # balance: 8 #WEI the contract holds.
+      balance: 0 #WEI the contract holds.
+      code: | #EVM opcodes for the smart contract at this address. Language: Lisp Like Language (lll) [very low level EVM language].
+        {
+                [[0]]  (ADD 1 1)                  ;SSTORE[0] = 1+1 = 2
+                ;[[1]]  (SUB 6 2)                  ;SSTORE[1] = 6-2 = 4
+                ;[[2]]  (DIV 12 2)                 ;SSTORE[2] = 12/2 = 6
+                ;[[3]]  (MUL 4 2)                  ;SSTORE[3] = 4*2 = 8
+                ;[[4]]  (ADD 5 (ADD 3 2))          ;SSTORE[4] = 5+(3+2) = 10
+                ;[[5]]  (TIMESTAMP)                ;SSTORE[5] = 1000 => 0x03e8
+                ;[[6]]  (XOR 2 1)                  ;SSTORE[6] = XOR 10 01 => 11 => 3
+                ;[[7]]  (EQ 5 5)                   ;SSTORE[7] = 5==5 => 1
+                ;[[8]]  (AND (GT 7 5) (LT 7 10))   ;SSTORE[8] = (7>5)&&(7<10) => 1
+                ;[[9]]  (OR 6 1)                   ;SSTORE[9] = OR 110 001 => 111 => 7
+                ;[[10]] (MOD 3 2)                  ;SSTORE[10] = 3%2 = 1
+                ;[[11]] (SHR 1 4)                  ;SSTORE[11] = 4>>1 = 2
+                ;[[12]] (SHL 1 4)                  ;SSTORE[12] = 4<<1 = 8
+                ;[[13]] (NOT 1)                    ;SSTORE[13] = Flip all bits (1's complement)
+                ;[[14]] (ADD 5 (ADD (NOT 3) 1) )   ;SSTORE[14] = 5+(-3) = 2 (2's complement represents -3 with 1's complement + 1)
+                ;[[15]] (SUB (EXP 2 256) 1 )       ;SSTORE[15] = (2**256)-1 = uint MAX VALUE (256 BITS)!
+                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;IF PUT BACK IN, FAILS BECAUSE IT GOES PAST MAX uint! [[16]] (EXP 2 256)
+        }
+      nonce: '0'
+      storage: {}
+
+    a94f5374fce5edbc8e2a8697c15331677e6ebf0b: #User wallet which sends a Tx to the smart contract with MSG.VALUE=2 [].
+      balance: 60000000000000000000000
+      code: '0x'
+      nonce: '0'
+      storage: {}
+  transaction:
+    data:
+    - ''
+    gasLimit:
+    - '80000000'
+    gasPrice: 1000
+    nonce: '0'
+    to: 095e7baea6a6c7c4c2dfeb977efac326af552d87
+    value:
+    - '2'
+    secretKey: "45a915e4d060149eb4365960e6a7a45f334393093061116b197e3240065ff2d8"
+
+  expect: #Review test states.
+    - indexes:
+        data: !!int -1
+        gas:  !!int -1
+        value: !!int -1
+      network:
+        - '>=Istanbul'
+      result:
+        #a94f5374fce5edbc8e2a8697c15331677e6ebf0b: //User balance.
+          #balance: '59999999999999647176999' #Balance-(MSG.VALUE[2]+GasFees[vary])
+          #storage: {}
+        095e7baea6a6c7c4c2dfeb977efac326af552d87:
+          # balance: 10  #8 + 2 = 10
+          storage:       #CHECKS ALL STORAGE SLOTS TO SEE IF THEY LOOK CORRECT.
+            0x00: 0x02
+            # 0x01: 0x04
+            # 0x02: 0x06
+            # 0x03: 0x08
+            # 0x04: 0x0a
+            # 0x05: 0x03e8
+            # 0x06: 0x03
+            # 0x07: 0x01
+            # 0x08: 0x01
+            # 0x09: 0x07
+            # 0x0a: 0x01
+            # 0x0b: 0x02
+            # 0x0c: 0x08
+            # 0x0d: 0xfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe
+            # 0x0e: 0x02
+            # 0x0f: 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+            #IF PUT BACK IN, FAILS AS EXPECTED BECAUSE IT GOES PAST 256 BITS (32 BYTES, 64 HEX DIGITS) 0x0g: 0x10000000000000000000000000000000000000000000000000000000000000000
