@@ -4,11 +4,11 @@
             "comment" : "Math opcodes and MSG.VALUE (ETH) Tx from user to contract.",
             "filling-rpc-server" : "evm version 1.12.1-unstable-c2db667c-20230707",
             "filling-tool-version" : "retesteth-0.3.1-cancun+commit.eb1b09c9.Linux.g++",
-            "generatedTestHash" : "9f9ea6301c33c2bd44a2825a1f7c25715d3d587d627fdb7b398fdb0dc2975e7d",
+            "generatedTestHash" : "4cc4dfe309769ef423e5ad48bc932b0b5b8eb98eb559d0c37ec2feee31ddf4a4",
             "lllcversion" : "Version: 0.5.14-develop.2023.7.8+commit.b2b86751.Linux.g++",
             "solidity" : "Version: 0.8.17+commit.8df45f5f.Linux.g++",
             "source" : "src/GeneralStateTestsFiller/stExample/CalculatorFundingFiller.yml",
-            "sourceHash" : "0ec390190ff9801c45c99097db2574ca9dd65f172474508e64307548cf4bca0f"
+            "sourceHash" : "0d362dda54510ea104ed25f0c986b8e0cd5e3bd08900e97fd7833d4ffa31e257"
         },
         "env" : {
             "currentBaseFee" : "0x0a",
@@ -17,13 +17,13 @@
             "currentGasLimit" : "0x05f5e100",
             "currentNumber" : "0x01",
             "currentRandom" : "0x0000000000000000000000000000000000000000000000000000000000020000",
-            "currentTimestamp" : "0x03e8",
+            "currentTimestamp" : "0x64a9ee4e",
             "previousHash" : "0x5e20a0453cecd065ea59c37ac63e079ee08998b6045136a8ce6635c7912ec0b6"
         },
         "post" : {
             "Berlin" : [
                 {
-                    "hash" : "0xaae5fc7a6ed1a0aff35d9397be68b449abbf8e8844cca523925d1c574445707c",
+                    "hash" : "0xaa73c44680f718b6ab0c2996f52a17c75734c86fcd9b3e328a5fdd8d3f7719e6",
                     "indexes" : {
                         "data" : 0,
                         "gas" : 0,
@@ -35,7 +35,7 @@
             ],
             "Istanbul" : [
                 {
-                    "hash" : "0x3a057b3183a621ec53466996d022059e08662480e88646f2ea0c3d4fceb625bb",
+                    "hash" : "0x566d7070a84311b1f9af81c621afe31dba9e02fb6b3ae0b295c04fa5cfb7701a",
                     "indexes" : {
                         "data" : 0,
                         "gas" : 0,
@@ -47,7 +47,7 @@
             ],
             "London" : [
                 {
-                    "hash" : "0x82646d288376261a8b9e2cf5ce13120a5b420ef0b5e40b71a16560f11a2f6674",
+                    "hash" : "0x681022886c4af484c4c1c40c0737c27540505dee67bdd14409712b32e1245d9c",
                     "indexes" : {
                         "data" : 0,
                         "gas" : 0,
@@ -59,7 +59,7 @@
             ],
             "Merge" : [
                 {
-                    "hash" : "0x82646d288376261a8b9e2cf5ce13120a5b420ef0b5e40b71a16560f11a2f6674",
+                    "hash" : "0x681022886c4af484c4c1c40c0737c27540505dee67bdd14409712b32e1245d9c",
                     "indexes" : {
                         "data" : 0,
                         "gas" : 0,
@@ -71,7 +71,7 @@
             ],
             "Shanghai" : [
                 {
-                    "hash" : "0x82646d288376261a8b9e2cf5ce13120a5b420ef0b5e40b71a16560f11a2f6674",
+                    "hash" : "0x681022886c4af484c4c1c40c0737c27540505dee67bdd14409712b32e1245d9c",
                     "indexes" : {
                         "data" : 0,
                         "gas" : 0,
@@ -85,7 +85,7 @@
         "pre" : {
             "0x095e7baea6a6c7c4c2dfeb977efac326af552d87" : {
                 "balance" : "0x00",
-                "code" : "0x600160010160005500",
+                "code" : "0x426000553360015500",
                 "nonce" : "0x00",
                 "storage" : {
                 }

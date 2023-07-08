@@ -1,17 +1,7 @@
-[[0]]  (ADD 1 1)                  ;SSTORE[0] = 1+1 = 2
-;[[1]]  (SUB 6 2)                  ;SSTORE[1] = 6-2 = 4
-;[[2]]  (DIV 12 2)                 ;SSTORE[2] = 12/2 = 6
-;[[3]]  (MUL 4 2)                  ;SSTORE[3] = 4*2 = 8
-;[[4]]  (ADD 5 (ADD 3 2))          ;SSTORE[4] = 5+(3+2) = 10
-;[[5]]  (TIMESTAMP)                ;SSTORE[5] = 1000 => 0x03e8
-;[[6]]  (XOR 2 1)                  ;SSTORE[6] = XOR 10 01 => 11 => 3
-;[[7]]  (EQ 5 5)                   ;SSTORE[7] = 5==5 => 1
-;[[8]]  (AND (GT 7 5) (LT 7 10))   ;SSTORE[8] = (7>5)&&(7<10) => 1
-;[[9]]  (OR 6 1)                   ;SSTORE[9] = OR 110 001 => 111 => 7
-;[[10]] (MOD 3 2)                  ;SSTORE[10] = 3%2 = 1
-;[[11]] (SHR 1 4)                  ;SSTORE[11] = 4>>1 = 2
-;[[12]] (SHL 1 4)                  ;SSTORE[12] = 4<<1 = 8
-;[[13]] (NOT 1)                    ;SSTORE[13] = Flip all bits (1's complement)
-;[[14]] (ADD 5 (ADD (NOT 3) 1) )   ;SSTORE[14] = 5+(-3) = 2 (2's complement represents -3 with 1's complement + 1)
-;[[15]] (SUB (EXP 2 256) 1 )       ;SSTORE[15] = (2**256)-1 = uint MAX VALUE (256 BITS)!
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;IF PUT BACK IN, FAILS BECAUSE IT GOES PAST MAX uint! [[16]] (EXP 2 256)
+;Storage pointers.
+(def 'value   0x00)
+(def 'owner   0x01)
+
+;Record timestamp in value storage and msg.sender for owner at contract deployment. 
+[[value]]  (TIMESTAMP)
+[[owner]]  (CALLER)

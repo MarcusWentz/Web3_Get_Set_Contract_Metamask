@@ -4,8 +4,8 @@ CalculatorFunding:
     currentDifficulty: 0x20000
     currentGasLimit: 10_000_0000
     currentNumber: 1
-    currentTimestamp: 1000
-    previousHash: 5e20a0453cecd065ea59c37ac63e079eecode08998b6045136a8ce6635c7912ec0b6
+    currentTimestamp: 1688858190
+    previousHash: 0x5e20a0453cecd065ea59c37ac63e079ee08998b6045136a8ce6635c7912ec0b6
 
   _info:
     comment: "Math opcodes and MSG.VALUE (ETH) Tx from user to contract."
@@ -16,23 +16,32 @@ CalculatorFunding:
       balance: 0 #WEI the contract holds.
       code: | #EVM opcodes for the smart contract at this address. Language: Lisp Like Language (lll) [very low level EVM language].
         {
-                [[0]]  (ADD 1 1)                  ;SSTORE[0] = 1+1 = 2
-                ;[[1]]  (SUB 6 2)                  ;SSTORE[1] = 6-2 = 4
-                ;[[2]]  (DIV 12 2)                 ;SSTORE[2] = 12/2 = 6
-                ;[[3]]  (MUL 4 2)                  ;SSTORE[3] = 4*2 = 8
-                ;[[4]]  (ADD 5 (ADD 3 2))          ;SSTORE[4] = 5+(3+2) = 10
-                ;[[5]]  (TIMESTAMP)                ;SSTORE[5] = 1000 => 0x03e8
-                ;[[6]]  (XOR 2 1)                  ;SSTORE[6] = XOR 10 01 => 11 => 3
-                ;[[7]]  (EQ 5 5)                   ;SSTORE[7] = 5==5 => 1
-                ;[[8]]  (AND (GT 7 5) (LT 7 10))   ;SSTORE[8] = (7>5)&&(7<10) => 1
-                ;[[9]]  (OR 6 1)                   ;SSTORE[9] = OR 110 001 => 111 => 7
-                ;[[10]] (MOD 3 2)                  ;SSTORE[10] = 3%2 = 1
-                ;[[11]] (SHR 1 4)                  ;SSTORE[11] = 4>>1 = 2
-                ;[[12]] (SHL 1 4)                  ;SSTORE[12] = 4<<1 = 8
-                ;[[13]] (NOT 1)                    ;SSTORE[13] = Flip all bits (1's complement)
-                ;[[14]] (ADD 5 (ADD (NOT 3) 1) )   ;SSTORE[14] = 5+(-3) = 2 (2's complement represents -3 with 1's complement + 1)
-                ;[[15]] (SUB (EXP 2 256) 1 )       ;SSTORE[15] = (2**256)-1 = uint MAX VALUE (256 BITS)!
-                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;IF PUT BACK IN, FAILS BECAUSE IT GOES PAST MAX uint! [[16]] (EXP 2 256)
+
+          ;Storage pointers.
+          (def 'value   0x00)
+          (def 'owner   0x01)
+          
+          ;Record timestamp in value storage and msg.sender for owner at contract deployment. 
+          [[value]]  (TIMESTAMP)
+          [[owner]]  (CALLER)
+
+          ;[[1]]  (SUB 6 2)                  ;SSTORE[1] = 6-2 = 4
+          ;[[2]]  (DIV 12 2)                 ;SSTORE[2] = 12/2 = 6
+          ;[[3]]  (MUL 4 2)                  ;SSTORE[3] = 4*2 = 8
+          ;[[4]]  (ADD 5 (ADD 3 2))          ;SSTORE[4] = 5+(3+2) = 10
+          ;[[5]]  (TIMESTAMP)                ;SSTORE[5] = 1000 => 0x03e8
+          ;[[6]]  (XOR 2 1)                  ;SSTORE[6] = XOR 10 01 => 11 => 3
+          ;[[7]]  (EQ 5 5)                   ;SSTORE[7] = 5==5 => 1
+          ;[[8]]  (AND (GT 7 5) (LT 7 10))   ;SSTORE[8] = (7>5)&&(7<10) => 1
+          ;[[9]]  (OR 6 1)                   ;SSTORE[9] = OR 110 001 => 111 => 7
+          ;[[10]] (MOD 3 2)                  ;SSTORE[10] = 3%2 = 1
+          ;[[11]] (SHR 1 4)                  ;SSTORE[11] = 4>>1 = 2
+          ;[[12]] (SHL 1 4)                  ;SSTORE[12] = 4<<1 = 8
+          ;[[13]] (NOT 1)                    ;SSTORE[13] = Flip all bits (1's complement)
+          ;[[14]] (ADD 5 (ADD (NOT 3) 1) )   ;SSTORE[14] = 5+(-3) = 2 (2's complement represents -3 with 1's complement + 1)
+          ;[[15]] (SUB (EXP 2 256) 1 )       ;SSTORE[15] = (2**256)-1 = uint MAX VALUE (256 BITS)!
+          ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;IF PUT BACK IN, FAILS BECAUSE IT GOES PAST MAX uint! [[16]] (EXP 2 256)
+                
         }
       nonce: '0'
       storage: {}
@@ -66,10 +75,11 @@ CalculatorFunding:
           #balance: '59999999999999647176999' #Balance-(MSG.VALUE[2]+GasFees[vary])
           #storage: {}
         095e7baea6a6c7c4c2dfeb977efac326af552d87:
-          # balance: 10  #8 + 2 = 10
+          # balance: 0  #8 + 2 = 10
           storage:       #CHECKS ALL STORAGE SLOTS TO SEE IF THEY LOOK CORRECT.
-            0x00: 0x02
-            # 0x01: 0x04
+            0x00: 1688858190 # TIMESTAMP UNIX set to 1688858190 for this test.
+            0x01: 0xa94f5374fce5edbc8e2a8697c15331677e6ebf0b #CALLER is msg.sender.
+            # 0x02:  0x04
             # 0x02: 0x06
             # 0x03: 0x08
             # 0x04: 0x0a

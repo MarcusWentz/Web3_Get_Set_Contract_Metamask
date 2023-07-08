@@ -7,11 +7,11 @@ const signer = new ethers.Wallet(Buffer.from(process.env.devTestnetPrivateKey, '
 // const signer = new ethers.Wallet(Buffer.from(process.env.devTestnetPrivateKeyTwo, 'hex'), provider);
 // const signer = new ethers.Wallet(Buffer.from(process.env.anvilPrivateKey, 'hex'), provider);
 
-const contractAddress = '0x2210b11294c7C08d23D14ca433aD551629c0fC31'
+const contractAddress = '0x614974D4BCcfA585C1dbb645B4E518A3F3d51529'
 
 // createAndSendTx()
 getStoredData()
-// getOwner()
+getOwner()
 
 async function getStoredData() {  
 //   const response = await provider.send("eth_call", [
@@ -32,24 +32,24 @@ async function getStoredData() {
 
 }
 
-// async function getOwner() {  
-//   const response = await provider.send("eth_call", [
-//     {
-//       "to": contractAddress,
-//       "data": getFunctionSelectorHex("getOwner()"),
-//     },
-//     "latest",
-//   ]);
-//   console.log("getOwner() " + response)
+async function getOwner() {  
+  // const response = await provider.send("eth_call", [
+  //   {
+  //     "to": contractAddress,
+  //     "data": getFunctionSelectorHex("getOwner()"),
+  //   },
+  //   "latest",
+  // ]);
+  // console.log("getOwner() " + response)
 
-//   const storage_slot_1 = await provider.getStorageAt(
-//     contractAddress,
-//     "0x1",
-//     "latest"
-//   );
-//   console.log("storage_slot_1() " + storage_slot_1);
+  const storage_slot_1 = await provider.getStorageAt(
+    contractAddress,
+    "0x1",
+    "latest"
+  );
+  console.log("storage_slot_1() " + storage_slot_1);
 
-// }
+}
 
 // async function createAndSendTx() {
 
