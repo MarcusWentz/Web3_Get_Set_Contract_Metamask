@@ -16,7 +16,7 @@ CalculatorFunding:
       balance: 0 #WEI the contract holds.
       code: | #EVM opcodes for the smart contract at this address. Language: Lisp Like Language (lll) [very low level EVM language].
         {
-
+        
           ;Storage pointers.
           (def 'value   0x00)
           (def 'owner   0x01)
@@ -24,6 +24,31 @@ CalculatorFunding:
           ;Record timestamp in value storage and msg.sender for owner at contract deployment. 
           [[value]]  (TIMESTAMP)
           [[owner]]  (CALLER)
+          
+          ;; Event IDs
+          (def 'value-updated-id ; valueUpdated()
+            0xc5ab16f1bddb259b10fe689dea60d8cce8e149cda6275168becc5bc11b2fc354)
+            
+          ;; Emit event
+          (LOG0 0 0)
+          (LOG1 0 0 value-updated-id)
+
+          ;(event0)
+          ;(event1 value-updated-id)
+          ;(event3 transfer-event-id (caller) (caller) 0)))
+
+          ;; Event - Transfer(address,address,uint256)
+
+          ;(def 'get-decimals     0x313ce567) ; decimals()
+
+          ;(seq not-payable uses-functions)
+
+          ;(def 'token-decimals 18)
+  
+          ;(function get-decimals
+          ;(return token-decimals))
+
+
 
           ;[[1]]  (SUB 6 2)                  ;SSTORE[1] = 6-2 = 4
           ;[[2]]  (DIV 12 2)                 ;SSTORE[2] = 12/2 = 6

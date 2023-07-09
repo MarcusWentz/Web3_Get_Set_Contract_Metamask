@@ -7,7 +7,7 @@ const signer = new ethers.Wallet(Buffer.from(process.env.devTestnetPrivateKey, '
 // const signer = new ethers.Wallet(Buffer.from(process.env.devTestnetPrivateKeyTwo, 'hex'), provider);
 // const signer = new ethers.Wallet(Buffer.from(process.env.anvilPrivateKey, 'hex'), provider);
 
-const contractAddress = '0x614974D4BCcfA585C1dbb645B4E518A3F3d51529'
+const contractAddress = '0xB1DDC1A9Ba017719caD08175397EFBa211578F1b'
 
 // createAndSendTx()
 getStoredData()

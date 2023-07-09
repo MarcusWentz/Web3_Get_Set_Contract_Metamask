@@ -5,3 +5,11 @@
 ;Record timestamp in value storage and msg.sender for owner at contract deployment. 
 [[value]]  (TIMESTAMP)
 [[owner]]  (CALLER)
+
+;; Event IDs
+(def 'value-updated-id ; valueUpdated()
+0xc5ab16f1bddb259b10fe689dea60d8cce8e149cda6275168becc5bc11b2fc354)
+
+;; Emit event
+(LOG0 0 0)
+(LOG1 0 0 value-updated-id)
