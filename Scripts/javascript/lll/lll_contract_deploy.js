@@ -12,8 +12,8 @@ deploy_lll_contract()
 
 async function deploy_lll_contract(){
 
-    const contractBytecode = "0x426000553360015560006000a07fc5ab16f1bddb259b10fe689dea60d8cce8e149cda6275168becc5bc11b2fc35460006000a100";
-    const txData = contractBytecode;
+    const contractBytecode = "0x" + "3415600a5760006000fd5b42600055336001556052806100216000396000f300fe3415600a5760006000fd5b600060005260046000601c600001376320965255600051141560325760005460005260206000f35b63893d20e86000511415604b5760015460005260206000f35b60006000fd00";
+    const txData = contractBytecode; //No constructor arguments to keep bytecode simple.
 
     tx = await signer.sendTransaction({
         data: txData,
