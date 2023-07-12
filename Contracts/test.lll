@@ -67,9 +67,8 @@
   not-payable
 
   ;; Assign all tokens initially to the owner of the contract.
-  (sstore (timestamp) 0)
-  (sstore (caller) 1)
-  (event1 value-updated-id)
+  (sstore 0 (timestamp) )
+  (sstore 1 (caller) )
 
   ;; --------------------------------------------------------------------------
   ;; CONTRACT CODE
@@ -78,10 +77,10 @@
     (seq not-payable uses-functions
       
       (function get-value
-        (return 1))
+        (return (sload 0)))
       
       (function get-owner
-        (return 2))
+        (return (sload 1)))
 
       ;; ----------------------------------------------------------------------
       ;; Fallback: No functions matched the function ID provided.
