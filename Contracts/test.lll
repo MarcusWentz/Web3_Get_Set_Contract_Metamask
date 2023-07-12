@@ -1,15 +1,90 @@
-;Storage pointers.
-(def 'value   0x00)
-(def 'owner   0x01)
+;; SPDX-License-Identifier: MIT
+(seq
 
-;Record timestamp in value storage and msg.sender for owner at contract deployment. 
-[[value]]  (TIMESTAMP)
-[[owner]]  (CALLER)
+  ;; Memory layout.
+  ;(def 'mem-ret    0x00) ; Fixed due to compiler macro for return.
+  (def 'mem-func   0x00) ; No conflict with mem-ret, so re-use.
+  ;(def 'mem-keccak 0x00) ; No conflict with mem-func or mem-ret, so re-use.
+  ;(def 'scratch0   0x20)
+  ;(def 'scratch1   0x40)
+  
+  ;; Precomputed function IDs.
+  (def 'get-value         0x20965255) ; getValue()
+  (def 'set-value         0x55241077) ; setValue(uint256)()
+  (def 'get-owner         0x893d20e8) ; getOwner()
+  (def 'owner-set-time    0xc5da17db) ; ownerSetTime()
 
-;; Event IDs
-(def 'value-updated-id ; valueUpdated()
-0xc5ab16f1bddb259b10fe689dea60d8cce8e149cda6275168becc5bc11b2fc354)
+  ;; Event IDs
+  (def 'value-updated-id ; valueUpdated()
+    0xc5ab16f1bddb259b10fe689dea60d8cce8e149cda6275168becc5bc11b2fc354)
 
-;; Emit event
-(LOG0 0 0)
-(LOG1 0 0 value-updated-id)
+  ;; Convenience macro for raising Events
+  (def 'event1 (id)
+    (seq
+      (log1 0x00 0x00 id)))
+
+  ;; Useful macros
+
+  ;; Calldata (just the first argument, next argument would be at 0x24).
+  (def 'calldataArgument1 (calldataload 0x04))
+  
+  ;;
+  (def 'revert () (revert 0 0))
+  
+  ;; --------------------------------------------------------------------------
+  ;; Gets the function ID and stores it in memory for reference.
+  ;;   The function ID is in the leftmost four bytes of the call data.
+
+  (def 'uses-functions
+    (seq
+      (mstore mem-func 0)
+      (calldatacopy (+ mem-func 28) 0x00 4)))
+
+  ;; --------------------------------------------------------------------------
+  ;; Determines whether the stored function ID matches a known
+  ;;   function hash and executes <code-body> if so.
+  ;; @param function-hash The four-byte hash of a known function signature.
+  ;; @param code-body The code to run in the case of a match.
+
+  (def 'function (function-hash code-body)
+    (when (= (mload mem-func) function-hash)
+      code-body))
+
+  ;; --------------------------------------------------------------------------
+  ;; GUARDS
+  
+  ;; --------------------------------------------------------------------------
+  ;; Will revert if sent any Ether. We use the macro immediately so as
+  ;;   to abort if sent any Ether during contract deployment.
+
+  (def 'not-payable
+    (when (callvalue) (revert)))
+  
+  ;; --------------------------------------------------------------------------
+  ;; Constructor
+
+  ;; Do not accept Ether at contract deployment.
+  not-payable
+
+  ;; Assign all tokens initially to the owner of the contract.
+  (sstore (timestamp) 0)
+  (sstore (caller) 1)
+  (event1 value-updated-id)
+
+  ;; --------------------------------------------------------------------------
+  ;; CONTRACT CODE
+  
+  (returnlll
+    (seq not-payable uses-functions
+      
+      (function get-value
+        (return 1))
+      
+      (function get-owner
+        (return 2))
+
+      ;; ----------------------------------------------------------------------
+      ;; Fallback: No functions matched the function ID provided.
+
+      (revert)))
+  )
