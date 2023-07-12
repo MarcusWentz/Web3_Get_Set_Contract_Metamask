@@ -7,21 +7,21 @@ const signer = new ethers.Wallet(Buffer.from(process.env.devTestnetPrivateKey, '
 // const signer = new ethers.Wallet(Buffer.from(process.env.devTestnetPrivateKeyTwo, 'hex'), provider);
 // const signer = new ethers.Wallet(Buffer.from(process.env.anvilPrivateKey, 'hex'), provider);
 
-const contractAddress = '0xB1DDC1A9Ba017719caD08175397EFBa211578F1b'
+const contractAddress = '0xa80d5d2C8Cc0d06fBC1F1A89A05d76f86082C20e'
 
 // createAndSendTx()
 getStoredData()
 getOwner()
 
 async function getStoredData() {  
-//   const response = await provider.send("eth_call", [
-//     {
-//       "to": contractAddress,
-//       "data": getFunctionSelectorHex("getValue()"),
-//     },
-//     "latest",
-//   ]);
-//   console.log("getValue() " + response)
+  const response = await provider.send("eth_call", [
+    {
+      "to": contractAddress,
+      "data": getFunctionSelectorHex("getValue()"),
+    },
+    "latest",
+  ]);
+  console.log("getValue() " + response)
   
   const storage_slot_0 = await provider.getStorageAt(
     contractAddress,
@@ -33,14 +33,14 @@ async function getStoredData() {
 }
 
 async function getOwner() {  
-  // const response = await provider.send("eth_call", [
-  //   {
-  //     "to": contractAddress,
-  //     "data": getFunctionSelectorHex("getOwner()"),
-  //   },
-  //   "latest",
-  // ]);
-  // console.log("getOwner() " + response)
+  const response = await provider.send("eth_call", [
+    {
+      "to": contractAddress,
+      "data": getFunctionSelectorHex("getOwner()"),
+    },
+    "latest",
+  ]);
+  console.log("getOwner() " + response)
 
   const storage_slot_1 = await provider.getStorageAt(
     contractAddress,
@@ -51,30 +51,33 @@ async function getOwner() {
 
 }
 
-// async function createAndSendTx() {
+//0x0000000000000000000000000000000000000000000000000000000064ac3e08
 
-//   const connectedNetworkObject = await provider.getNetwork();
-//   const chainIdConnected = connectedNetworkObject.chainId;
-//   console.log("chainIdConnected: "+ chainIdConnected)
+async function createAndSendTx() {
 
-//   const unixTime = Math.floor(Date.now() / 1000);
-//   // console.log(unixTime)
-//   const timeBytes32 = ethers.utils.hexZeroPad(ethers.utils.hexlify(unixTime), 32)
-//   // const timeBytes32 = ethers.utils.hexZeroPad(ethers.utils.hexlify(0), 32)
-//   // const timeBytes32 = ethers.utils.hexZeroPad(ethers.utils.hexlify(5), 32)
-//   const txData = getFunctionSelectorHex("setValue(uint256)") + timeBytes32.slice(2,timeBytes32.length)
-//   // const txData = getFunctionSelectorHex("ownerSetTime()")
-//   console.log(txData)
+  const connectedNetworkObject = await provider.getNetwork();
+  const chainIdConnected = connectedNetworkObject.chainId;
+  console.log("chainIdConnected: "+ chainIdConnected)
 
-//   const txSigned = await signer.sendTransaction({
-//     to: contractAddress,
-//     // gasLimit: 500000,
-//     data: txData
-//   });
+  const unixTime = Math.floor(Date.now() / 1000);
+  // console.log(unixTime)
+  const timeBytes32 = ethers.utils.hexZeroPad(ethers.utils.hexlify(unixTime), 32)
+  // const timeBytes32 = ethers.utils.hexZeroPad(ethers.utils.hexlify(0), 32)
+  // const timeBytes32 = ethers.utils.hexZeroPad(ethers.utils.hexlify(5), 32)
+  // const txData = getFunctionSelectorHex("setValue(uint256)") + timeBytes32.slice(2,timeBytes32.length)
+  const txData = getFunctionSelectorHex("set")
+  // const txData = getFunctionSelectorHex("ownerSetTime()")
+  console.log(txData)
 
-//   console.log(txSigned)
+  const txSigned = await signer.sendTransaction({
+    to: contractAddress,
+    // gasLimit: 500000,
+    data: txData
+  });
 
-// }
+  console.log(txSigned)
+
+}
 
 // let eventNameTypeTopicHashed = ethers.utils.id("valueUpdated()");
 // console.log("Computed vs Etherscan eventNameTypeTopicHashed value:")
@@ -97,9 +100,9 @@ async function getOwner() {
 //     console.log("Listen for new events...")
 // })
 
-// function getFunctionSelectorHex(functionString) {
-//   const hexStringFunction = ethers.utils.toUtf8Bytes(functionString)
-//   const hexStringFunctionHashed = ethers.utils.keccak256(hexStringFunction)
-//   const functionSelector = hexStringFunctionHashed.slice(0,10);
-//   return functionSelector;
-// }
+function getFunctionSelectorHex(functionString) {
+  const hexStringFunction = ethers.utils.toUtf8Bytes(functionString)
+  const hexStringFunctionHashed = ethers.utils.keccak256(hexStringFunction)
+  const functionSelector = hexStringFunctionHashed.slice(0,10);
+  return functionSelector;
+}
