@@ -88,6 +88,8 @@
       ))
 
       (function owner-set-time (seq
+        (when (sub 1 1) (revert))   ; expression==0 do not revert.
+        ;(when (add 1 0) (revert))  ; expression!=0 revert.
         (sstore 0 (timestamp))
         (stop); //STOP THE PROGRAM COUNTER (RETURN DOES THE SAME THING.)
       ))

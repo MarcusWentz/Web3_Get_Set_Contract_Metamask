@@ -7,7 +7,7 @@ const signer = new ethers.Wallet(Buffer.from(process.env.devTestnetPrivateKey, '
 // const signer = new ethers.Wallet(Buffer.from(process.env.devTestnetPrivateKeyTwo, 'hex'), provider);
 // const signer = new ethers.Wallet(Buffer.from(process.env.anvilPrivateKey, 'hex'), provider);
 
-const contractAddress = '0x07A667Be398639461a8aB1b419cd9c043c2Fc458'
+const contractAddress = '0x51A436FB78a025c245B8Caf171662fe691608435'
 
 createAndSendTx()
 getStoredData()
@@ -64,8 +64,8 @@ async function createAndSendTx() {
   const timeBytes32 = ethers.utils.hexZeroPad(ethers.utils.hexlify(unixTime), 32)
   // const timeBytes32 = ethers.utils.hexZeroPad(ethers.utils.hexlify(0), 32)
   // const timeBytes32 = ethers.utils.hexZeroPad(ethers.utils.hexlify(5), 32)
-  const txData = getFunctionSelectorHex("setValue(uint256)") + timeBytes32.slice(2,timeBytes32.length)
-  // const txData = getFunctionSelectorHex("ownerSetTime()")
+  // const txData = getFunctionSelectorHex("setValue(uint256)") + timeBytes32.slice(2,timeBytes32.length)
+  const txData = getFunctionSelectorHex("ownerSetTime()")
   console.log(txData)
 
   const txSigned = await signer.sendTransaction({
