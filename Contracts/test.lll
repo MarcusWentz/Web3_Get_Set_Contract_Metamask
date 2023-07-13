@@ -82,15 +82,19 @@
       (function get-owner
         (return (sload 1)))
 
-      (function set-value (seq
+      (function set-value (seq      ; Ideally we duplicate the value in (calldataload 0x04) like Huff to save gas not having to push 0x04 on to the stack (dup not detected for some reason).
+        ;(when (sub 1 1) (revert))  ; expression==0 do not revert.
+        ;(when (add 1 0) (revert))  ; expression!=0 revert.
+        (when (eq (calldataload 0x04) (sload 0)) (revert))   ; Revert if calldata value and storage value are the same.
         (sstore 0 (calldataload 0x04)) ; Calldata (just the first argument, next argument would be at 0x24).
+        (event1 value-updated-id)     
         (stop); //STOP THE PROGRAM COUNTER (RETURN DOES THE SAME THING.)
       ))
 
-      (function owner-set-time (seq
-        (when (sub 1 1) (revert))   ; expression==0 do not revert.
-        ;(when (add 1 0) (revert))  ; expression!=0 revert.
+      (function owner-set-time (seq   ;Ideally we execute when caller and owner are equal but when seems to only except a single expression to execute. Could possibly work with a macro jump like Huff.
+        (when (!= (caller) (sload 1)) (revert))
         (sstore 0 (timestamp))
+        (event1 value-updated-id)
         (stop); //STOP THE PROGRAM COUNTER (RETURN DOES THE SAME THING.)
       ))
 
