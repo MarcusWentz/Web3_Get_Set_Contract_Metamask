@@ -10,7 +10,7 @@
   
   ;; Precomputed function IDs.
   (def 'get-value         0x20965255) ; getValue()
-  (def 'set-value         0x55241077) ; setValue(uint256)()
+  (def 'set-value         0x55241077) ; setValue(uint256)
   (def 'get-owner         0x893d20e8) ; getOwner()
   (def 'owner-set-time    0xc5da17db) ; ownerSetTime()
 
@@ -26,7 +26,7 @@
   ;; Useful macros
 
   ;; Calldata (just the first argument, next argument would be at 0x24).
-  (def 'calldataArgument1 (calldataload 0x04))
+  ;(def 'calldata-argument-one (calldataload 0x04))
   
   ;;
   (def 'revert () (revert 0 0))
@@ -81,6 +81,16 @@
       
       (function get-owner
         (return (sload 1)))
+
+      (function set-value (seq
+        (sstore 0 (calldataload 0x04)) ; Calldata (just the first argument, next argument would be at 0x24).
+        (stop); //STOP THE PROGRAM COUNTER (RETURN DOES THE SAME THING.)
+      ))
+
+      (function owner-set-time (seq
+        (sstore 0 (timestamp))
+        (stop); //STOP THE PROGRAM COUNTER (RETURN DOES THE SAME THING.)
+      ))
 
       ;; ----------------------------------------------------------------------
       ;; Fallback: No functions matched the function ID provided.
