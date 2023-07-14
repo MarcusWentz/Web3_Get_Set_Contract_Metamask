@@ -7,7 +7,7 @@ const signer = new ethers.Wallet(Buffer.from(process.env.devTestnetPrivateKey, '
 // const signer = new ethers.Wallet(Buffer.from(process.env.devTestnetPrivateKeyTwo, 'hex'), provider);
 // const signer = new ethers.Wallet(Buffer.from(process.env.anvilPrivateKey, 'hex'), provider);
 
-const contractAddress = '0x51A436FB78a025c245B8Caf171662fe691608435'
+const contractAddress = '0xFdc97b8F0970Cfe334D9ff2d7fA36Eb41C2c1F82'
 
 createAndSendTx()
 getStoredData()
@@ -64,8 +64,8 @@ async function createAndSendTx() {
   const timeBytes32 = ethers.utils.hexZeroPad(ethers.utils.hexlify(unixTime), 32)
   // const timeBytes32 = ethers.utils.hexZeroPad(ethers.utils.hexlify(0), 32)
   // const timeBytes32 = ethers.utils.hexZeroPad(ethers.utils.hexlify(5), 32)
-  // const txData = getFunctionSelectorHex("setValue(uint256)") + timeBytes32.slice(2,timeBytes32.length)
-  const txData = getFunctionSelectorHex("ownerSetTime()")
+  const txData = getFunctionSelectorHex("setValue(uint256)") + timeBytes32.slice(2,timeBytes32.length)
+  // const txData = getFunctionSelectorHex("ownerSetTime()")
   console.log(txData)
 
   const txSigned = await signer.sendTransaction({
@@ -78,26 +78,26 @@ async function createAndSendTx() {
 
 }
 
-// let eventNameTypeTopicHashed = ethers.utils.id("valueUpdated()");
-// console.log("Computed vs Etherscan eventNameTypeTopicHashed value:")
-// console.log(eventNameTypeTopicHashed)
-// console.log("0xc5ab16f1bddb259b10fe689dea60d8cce8e149cda6275168becc5bc11b2fc354")
+let eventNameTypeTopicHashed = ethers.utils.id("valueUpdated()");
+console.log("Computed vs Etherscan eventNameTypeTopicHashed value:")
+console.log(eventNameTypeTopicHashed)
+console.log("0xc5ab16f1bddb259b10fe689dea60d8cce8e149cda6275168becc5bc11b2fc354")
 
-// eventFilter = {
-//     address: contractAddress,
-//     topics: [
-//         eventNameTypeTopicHashed, //Event name with types hashed 32 bytes.
-//     ]
-// }
+eventFilter = {
+    address: contractAddress,
+    topics: [
+        eventNameTypeTopicHashed, //Event name with types hashed 32 bytes.
+    ]
+}
 
-// console.log("Listen for new events...")
+console.log("Listen for new events...")
 
-// provider.on(eventFilter, (eventDetected) => {
-//     console.log("EVENT DETECTED! NEW STATE VALUE:")
-//     console.log(eventDetected)
-//     getStoredData()
-//     console.log("Listen for new events...")
-// })
+provider.on(eventFilter, (eventDetected) => {
+    console.log("EVENT DETECTED! NEW STATE VALUE:")
+    console.log(eventDetected)
+    getStoredData()
+    console.log("Listen for new events...")
+})
 
 function getFunctionSelectorHex(functionString) {
   const hexStringFunction = ethers.utils.toUtf8Bytes(functionString)

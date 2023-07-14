@@ -62,8 +62,8 @@ async function createAndSendTx() {
   const timeBytes32 = ethers.utils.hexZeroPad(ethers.utils.hexlify(unixTime), 32)
   // const timeBytes32 = ethers.utils.hexZeroPad(ethers.utils.hexlify(0), 32)
   // const timeBytes32 = ethers.utils.hexZeroPad(ethers.utils.hexlify(5), 32)
-  const txData = getFunctionSelectorHex("setValue(uint256)") + timeBytes32.slice(2,timeBytes32.length)
-  // const txData = getFunctionSelectorHex("ownerSetTime()")
+  // const txData = getFunctionSelectorHex("setValue(uint256)") + timeBytes32.slice(2,timeBytes32.length)
+  const txData = getFunctionSelectorHex("ownerSetTime()")
   console.log(txData)
 
   const txSigned = await signer.sendTransaction({
