@@ -10,13 +10,9 @@ use eyre::Result;
 #[tokio::main]
 async fn main() -> Result<()> {
 
-    // let rpc_goerli_infura_https = env::var("goerliHTTPS_InfuraAPIKey").expect("$goerliHTTPS_InfuraAPIKey is not set");
+    let rpc_goerli_infura_https = env::var("goerliHTTPS_InfuraAPIKey").expect("$goerliHTTPS_InfuraAPIKey is not set");
 
-    // let provider = Provider::<Http>::try_from(rpc_goerli_infura_https).expect("could not instantiate HTTP Provider");
-
-    let rpc_shardeum_https = "https://liberty20.shardeum.org/";
-
-    let provider = Provider::<Http>::try_from(rpc_shardeum_https).expect("could not instantiate HTTP Provider");
+    let provider = Provider::<Http>::try_from(rpc_goerli_infura_https).expect("could not instantiate HTTP Provider");
 
     let chainid = provider.get_chainid().await?;
     println!("Got chainid: {}", chainid);
@@ -32,9 +28,6 @@ async fn main() -> Result<()> {
 
     let block_number = current_block_parameters.clone().unwrap().number.unwrap();
     println!("Got block_number: {:?}", block_number);
-
-    let cycle_number = current_block_parameters.clone().unwrap().number.unwrap()/10;
-    println!("Cycle number (Shardeum general rule: roundDown(blockNumber/10) ): {:?}", cycle_number);
 
     let block_gas = current_block_parameters.clone().unwrap().gas_used;
     println!("Got block_gas: {:?}", block_gas);
@@ -55,15 +48,6 @@ async fn main() -> Result<()> {
         let ens_balance = provider.get_balance("car.eth", None).await?;
         println!("ENS address balance: {}", ens_balance);
     }
-    if chainid == U256::from(8081) {//Shardeum Liberty 2.X
-        let tx_hash = "0xc0478ea8a26fa562ea8ff6640f2090ac8fa075704bb5f973ab0448a1f2ac22c3".parse::<H256>()?;
-        println!("tx_hash: {:?}", tx_hash);
-        let tx_parameters = provider.get_transaction(tx_hash).await?.unwrap();
-        println!("tx_parameters: {:?}", tx_parameters);
-        //Shardeum will not show transactions in bundles (blocks). 
-        //Use the Shardeum Explorer JSON URL view with filters to get transactions from cycle ranges: 
-        //https://docs.shardeum.org/smartContracts/events/pollEvents#reading-events-with-shardeum-cycles
-    }
 
     let other_address_hex = "0x0000000000000000000000000000000000000000";
     let other_address = "0x0000000000000000000000000000000000000000".parse::<Address>()?;
@@ -71,6 +55,6 @@ async fn main() -> Result<()> {
     println!("Balance for address {}: {}",other_address_hex, other_balance);
 
     Ok(())
-
+    
 }
 
