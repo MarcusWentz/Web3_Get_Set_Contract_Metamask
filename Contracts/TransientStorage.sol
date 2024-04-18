@@ -26,9 +26,11 @@ contract ReentrancyGuardTransient {
         uint256 bal = balances[msg.sender];
         require(bal > 0);
 
+        //REENTRANCY ATTACK VECTOR. NEED TO USE LOCK MODIFIER TO PREVENT CALLING MULTIPLE TIMES. OTHERWISE UPDATE BALANCES FIRST.
         (bool sent,) = msg.sender.call{value: bal}("");
         require(sent, "Failed to send Ether");
 
+        //SHOULD UPDATE BALANCES BEFORE SENDING ETHER BUT IT PLACED AFTER TO TEST LOCK MODIFIER. 
         balances[msg.sender] = 0;
     }
 
