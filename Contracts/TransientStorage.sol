@@ -1,35 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.25;
 
-// contract ReentrancyGuardTransientTest {
-//     uint256 public loopCounter;
-//     bytes32 constant SLOT = 0; 
-
-//     modifier lock() {
-//         assembly {
-//             if tload(SLOT) { revert(0, 0) }
-//             tstore(SLOT, 1)
-//         }
-//         _;
-//         assembly {
-//             tstore(SLOT, 0)
-//         }
-//     }
-
-//     function callOnce(uint256 loopValue) internal lock {
-//         loopCounter = loopValue;   
-//     }
-
-//     function loopCaller(uint256 loopCount) public{
-//         for (uint256 i = 0; i < loopCount;) {
-//             callOnce(i);
-//             unchecked { i += 1; }
-//         }
-//     }
-//
-// }
-
-
 contract ReentrancyGuardTransient {
 
     bytes32 constant SLOT = 0; 
