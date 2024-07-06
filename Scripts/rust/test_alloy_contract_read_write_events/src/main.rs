@@ -4,12 +4,15 @@ use std::time::{SystemTime};
 
 use alloy::{
     network::EthereumWallet,
-    providers::{Provider, ProviderBuilder},
+    providers::{Provider, ProviderBuilder, WsConnect},
     signers::local::PrivateKeySigner,
-    primitives::U256,
+    primitives::{U256,address},
+    rpc::types::{BlockNumberOrTag, Filter},
     sol,
 };
 use eyre::Result;
+use futures_util::stream::StreamExt;
+
 
 sol!(
     #[allow(missing_docs)]
@@ -32,21 +35,21 @@ async fn main() -> Result<()> {
     let signer: PrivateKeySigner = private_key_wallet_string.parse().expect("should parse private key");
     let wallet = EthereumWallet::from(signer.clone());
 
-    let rpc_url = Url::parse(&rpc_base_sepolia_infura_https).expect("RPC url string type covert error");
+    let rpc_url_http = Url::parse(&rpc_base_sepolia_infura_https).expect("RPC url string type covert error");
     
-    let provider = ProviderBuilder::new()
+    let provider_http = ProviderBuilder::new()
         .with_recommended_fillers()
         .wallet(wallet)
-        .on_http(rpc_url);
+        .on_http(rpc_url_http);
 
-    // println!("{:?}", provider);
+    // println!("{:?}", provider_http);
 
     // // https://docs.rs/alloy/latest/alloy/providers/fillers/struct.FillProvider.html
 
-    let chain_id_connected = provider.get_chain_id().await?;    // println!("{:?}", latest_block);
+    let chain_id_connected = provider_http.get_chain_id().await?;    // println!("{:?}", latest_block);
     println!("chainId {:?}", chain_id_connected);
 
-    let latest_block = provider.get_block_number().await?;
+    let latest_block = provider_http.get_block_number().await?;
     println!("latestBlock {:?}", latest_block);
 
     let base_sepolia_chain_id = 84532;
@@ -57,7 +60,7 @@ async fn main() -> Result<()> {
         return Ok(())
     }
 
-    let contract = SimpleStorage::new("0xeD62F27e9e886A27510Dc491F5530996719cEd3d".parse()?, provider);
+    let contract = SimpleStorage::new("0xeD62F27e9e886A27510Dc491F5530996719cEd3d".parse()?, provider_http);
 
     let stored_data_before = contract.storedData().call().await?._0;
     println!("stored_data_before {}", stored_data_before);
@@ -66,17 +69,54 @@ async fn main() -> Result<()> {
 
     let tv_sec = get_unix_time();
 
-    let tx_hash = contract
-        .set(U256::from(tv_sec))
-        .send().await?
-        .watch().await?;
-
-    println!("Sent transaction: {tx_hash}");
-
-    let stored_data_after = contract.storedData().call().await?._0;
-    println!("stored_data_after {}", stored_data_after);
+    // // Watch for tx before you continue.
+    // let tx_hash = contract
+    //     .set(U256::from(tv_sec))
+    //     .send().await?
+    //     .watch().await?;
     
+    // let stored_data_after = contract.storedData().call().await?._0;
+    // println!("stored_data_after {}", stored_data_after);
+    
+    // // Send tx without watching to quickly get to event listener.
+    let _tx_hash = contract
+        .set(U256::from(tv_sec))
+        .send().await?;
+
+    println!("Sent transaction...",);
+
+    //Set up WSS for event listener filter.
+    let rpc_base_sepolia_infura_wss = env::var("baseSepoliaWSS").expect("$baseSepoliaWSS is not set");
+    let rpc_url_wss = Url::parse(&rpc_base_sepolia_infura_wss).expect("RPC url string type covert error");
+    
+    let ws = WsConnect::new(rpc_url_wss);
+    let provider_wss = ProviderBuilder::new().on_ws(ws).await?;
+
+    let simple_storage_address = address!("eD62F27e9e886A27510Dc491F5530996719cEd3d");
+    let filter = Filter::new()
+        .address(simple_storage_address)
+        .event("setEvent()")
+        .from_block(BlockNumberOrTag::Latest);
+
+    // Subscribe to logs.
+    let sub = provider_wss.subscribe_logs(&filter).await?;
+    let mut stream = sub.into_stream();
+
+    println!("Start to listen to event stream...");
+
+    while let Some(log) = stream.next().await {
+
+        println!("setEvent() log detected: {log:?}");
+
+        let stored_data_after = contract.storedData().call().await?._0;
+        println!("stored_data_after {:?}", stored_data_after);
+     
+        println!("Start to listen to event stream...");
+
+    }
+
     Ok(())
+
 }
 
 fn get_unix_time() -> usize {
