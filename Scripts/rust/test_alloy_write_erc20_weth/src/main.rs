@@ -48,35 +48,48 @@ async fn main() -> Result<()> {
     let latest_block = provider.get_block_number().await?;
     println!("latestBlock {:?}", latest_block);
 
-    let baseSepoliaChainId = 84532;
+    let base_sepolia_chain_id = 84532;
 
-    if chain_id_connected != baseSepoliaChainId {
-        println!("RPC endpoint not connected to Base Sepolia (chainId {}).",baseSepoliaChainId);
+    if chain_id_connected != base_sepolia_chain_id {
+        println!("RPC endpoint not connected to Base Sepolia (chainId {}).",base_sepolia_chain_id);
         println!("Switch to Base Sepolia then try again.");
         return Ok(())
     }
 
     let contract = WETH9::new("0x4200000000000000000000000000000000000006".parse()?, provider);
 
-    let totalSupplyBefore = contract.totalSupply().call().await?._0;
-    println!("totalSupplyBefore {}", totalSupplyBefore);
-    let userBalanceBefore = contract.balanceOf(signer.address()).call().await?._0;
-    println!("userBalanceBefore {}", userBalanceBefore);
+    let total_supply_before = contract.totalSupply().call().await?._0;
+    println!("total_supply_before {}", total_supply_before);
+    let user_balance_before = contract.balanceOf(signer.address()).call().await?._0;
+    println!("user_balance_before {}", user_balance_before);
 
     println!("Waiting to deposit 1 WEI for WETH...");
 
+    // Deposit 1 WEI
     let tx_hash = contract
         .deposit()
         .value(U256::from(1))
         .send().await?
         .watch().await?;
 
+    // // Transfer 1 WEI to signer (self).
+    // let tx_hash = contract
+    //     .transfer(signer.address(),U256::from(1))
+    //     .send().await?
+    //     .watch().await?;
+
+    // // Withdraw 1 WEI.
+    // let tx_hash = contract
+    //     .withdraw(U256::from(1))
+    //     .send().await?
+    //     .watch().await?;
+
     println!("Sent transaction: {tx_hash}");
 
-    let totalSupplyAfter = contract.totalSupply().call().await?._0;
-    println!("totalSupplyAfter {}", totalSupplyAfter);
-    let userBalanceAfter = contract.balanceOf(signer.address()).call().await?._0;
-    println!("userBalanceAfter {:?}", userBalanceAfter);
+    let total_supply_after = contract.totalSupply().call().await?._0;
+    println!("total_supply_after {}", total_supply_after);
+    let user_balance_after = contract.balanceOf(signer.address()).call().await?._0;
+    println!("user_balance_after {:?}", user_balance_after);
     
     Ok(())
 }
