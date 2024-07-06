@@ -5,7 +5,7 @@ use alloy::{
     network::EthereumWallet,
     providers::ProviderBuilder, 
     signers::local::PrivateKeySigner,
-    // primitives::U256,
+    primitives::U256,
     sol
 };
 use eyre::Result;
@@ -33,29 +33,43 @@ async fn main() -> Result<()> {
         .on_http(rpc_url);
 
     println!("{:?}", provider);
-    //https://docs.rs/alloy/latest/alloy/providers/fillers/struct.FillProvider.html
-    // println!("{:?}", provider.get_receipt());
+    // // https://docs.rs/alloy/latest/alloy/providers/fillers/struct.FillProvider.html
     // let latest_block = provider.get_block_number().await?;
     // println!("{:?}", latest_block);
 
-    // // println!("{:?}", Provider::get_chain_id);
+    // println!("{:?}", Provider::get_chain_id);
 
-    // // let chain_id_connected = provider.chain_id();
+    // let chain_id_connected = provider.chain_id();
 
-    // // if chain_id_connected == U256::from(1) {
-    // //     println!("MAINNET");
+    // if chain_id_connected == U256::from(1) {
+    //     println!("MAINNET");
     
-    // // }
+    // }
 
+    // Create a contract instance.
+    let contract = WETH9::new("0x4200000000000000000000000000000000000006".parse()?, provider);
 
+    // Call the contract, retrieve the total supply.
+    let totalSupplyBefore = contract.totalSupply().call().await?._0;
+    println!("totalSupplyBefore {}", totalSupplyBefore);
+    let userBalanceBefore = contract.balanceOf(signer.address()).call().await?._0;
+    println!("userBalanceBefore {}", userBalanceBefore);
 
-    // // Create a contract instance.
-    // let contract = WETH9::new("0x4200000000000000000000000000000000000006".parse()?, provider);
+    println!("Waiting to deposit 1 WEI for WETH...");
+    // Transfer and wait for inclusion.
+    let tx_hash = contract
+        .deposit()
+        .value(U256::from(1))
+        .send().await?
+        .watch().await?;
 
-    // // Call the contract, retrieve the total supply.
-    // let WETH9::totalSupplyReturn { _0 } = contract.totalSupply().call().await?;
+    println!("Sent transaction: {tx_hash}");
 
-    // println!("WETH total supply is {_0}");
-
+    // Call the contract, retrieve the total supply.
+    let totalSupplyAfter = contract.totalSupply().call().await?._0;
+    println!("totalSupplyAfter {}", totalSupplyAfter);
+    let userBalanceAfter = contract.balanceOf(signer.address()).call().await?._0;
+    println!("userBalanceAfter {:?}", userBalanceAfter);
+    
     Ok(())
 }
