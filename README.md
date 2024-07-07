@@ -26,15 +26,17 @@ Try the project via GitHub pages:\
 Run locally for testing with:
 
 ⚠️ Node.js version v16.14.2 is recommended to avoid errors running the website locally. ⚠️
-
-       npm install http-server
+```shell
+npm install http-server
+```
 then
-
-       npx http-server
+```shell
+npx http-server
+```
 or
-
-       http-server
-
+```shell
+http-server
+```
 Note: this website example uses Vanilla Javascript.
 
 For a similar template in React with GitHub pages support as well:
