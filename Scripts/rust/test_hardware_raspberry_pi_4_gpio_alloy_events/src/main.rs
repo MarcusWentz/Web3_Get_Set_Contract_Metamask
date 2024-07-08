@@ -2,9 +2,9 @@ use std::env;
 use url::Url;
 
 use alloy::{
-    network::EthereumWallet,
+    // network::EthereumWallet,
     providers::{Provider, ProviderBuilder, WsConnect},
-    signers::local::PrivateKeySigner,
+    // signers::local::PrivateKeySigner,
     primitives::{U256,address},
     rpc::types::{BlockNumberOrTag, Filter},
     sol,
@@ -69,12 +69,12 @@ async fn main() -> Result<()> {
     let stored_data_value_start = contract.storedData().call().await?._0;
     println!("stored_data_value_start {}", stored_data_value_start);
 
-    // let led = LED::new(27);
+    let led = LED::new(27);
 
-    // update_gpio_states(
-    //     &led,
-	// stored_data_value
-    // );
+    update_gpio_states(
+        &led,
+        stored_data_value_start
+    );
 
 
     let simple_storage_address = address!("eD62F27e9e886A27510Dc491F5530996719cEd3d");
@@ -96,10 +96,10 @@ async fn main() -> Result<()> {
         let stored_data_value_event = contract.storedData().call().await?._0;
         println!("stored_data_value_event {:?}", stored_data_value_event);
      
-        // update_gpio_states(
-        //     led,
-        //     stored_data_value_event
-        //     );
+        update_gpio_states(
+            &led,
+            stored_data_value_event
+            );
 
         println!("Start to listen to event stream...");
 
