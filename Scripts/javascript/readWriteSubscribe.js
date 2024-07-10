@@ -11,7 +11,7 @@ const rpcURL = process.env.baseSepoliaWSS // Your RPC URL goes here
 const provider = new ethers.providers.WebSocketProvider(rpcURL)
 const signer = new ethers.Wallet(Buffer.from(process.env.devTestnetPrivateKey, 'hex'), provider);
 
-const contractAddress = 'eD62F27e9e886A27510Dc491F5530996719cEd3d'
+const contractAddress = '0xeD62F27e9e886A27510Dc491F5530996719cEd3d'
 const contractABI = [{"anonymous":false,"inputs":[],"name":"setEvent","type":"event"},{"inputs":[{"internalType":"uint256","name":"x","type":"uint256"}],"name":"set","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"storedData","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}]
 
 // const contractDeployed = new web3.eth.Contract(contractABI, contractAddress)

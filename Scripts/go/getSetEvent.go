@@ -1,8 +1,14 @@
-//Step 1: Create abi file by running: solc --abi Store.sol > store.abi
-//Step 2: Create bin file by running: solc --bin Store.sol > store.bin
-//Step 3: Remove comments above the abi and bin files.
-//Step 4: Generate Go contract interaction file by running:  abigen --bin=store.bin --abi=store.abi --pkg=store --out=store.go
-//Step 5: Run: getSetEvent.go
+//Step 1: Install Geth to get abigen
+// https://guides.quicknode.com/guides/infrastructure/node-setup/how-to-install-and-run-a-geth-node#installing-geth
+//Step 2: Create abi file by running: 
+// solc --abi Store.sol > store.abi
+//Step 3: Create bin file by running: 
+// solc --bin Store.sol > store.bin
+//Step 4: Remove comments above the abi and bin files.
+//Step 5: Generate Go contract interaction file by running:  
+// abigen --bin=store.bin --abi=store.abi --pkg=store --out=store.go
+//Step 6: Run: 
+// go run getSetEvent.go
 package main
 
 import (
@@ -32,11 +38,27 @@ func main() {
     // Use this endpoint when you are running your own node on a specific chain (events allowed)
     // client, chainID := clientSetup("ws://localhost:8546")
 
-    client, chainID := clientSetup(os.Getenv("sepoliaInfuraWSS"))
+    client, chainID := clientSetup(os.Getenv("baseSepoliaWSS"))
+    // client, chainID := clientSetup(os.Getenv("sepoliaInfuraWSS"))
 
     fmt.Println("chainID: ", chainID)
 
-    contractAddress := common.HexToAddress("0xBBE97Afb978E19033e0BDa692E6034F5b3B91312")
+    baseSepoliaChainId := big.NewInt(84532);
+
+    // fmt.Println("baseSepoliaChainId: ", baseSepoliaChainId)
+
+    // // WE CAN'T COMPARE TYPE *big.Int VALUES DIRECTLY! NEED TO USE A HELPER METHOD.
+    // fmt.Println(baseSepoliaChainId == chainID)
+
+    // https://stackoverflow.com/a/44697073
+    isClientChainIdCorrect := baseSepoliaChainId.Cmp(chainID) == 0;
+
+    if isClientChainIdCorrect == false {
+        fmt.Printf("RPC endpoint not connected to Base Sepolia (chainId: %s)\n", baseSepoliaChainId)
+        log.Fatal("Switch to Base Sepolia then try again.",  )
+     }
+
+    contractAddress := common.HexToAddress("0xeD62F27e9e886A27510Dc491F5530996719cEd3d")
     contract := connectContractAddress(client,contractAddress)
     fmt.Println("contract type object: ")
     fmt.Printf("%T",contract)
