@@ -137,8 +137,18 @@ async function getAccount() {
 async function enableMetamaskOnSepolia() {
   //Get account details from Metamask wallet.
   getAccount();
+
+  // Updated chainId request method suggested by Metamask.
+  let chainIdConnected = await window.ethereum.request({method: 'net_version'});
+
+  // // Outdated chainId request method which might get deprecated:
+  // //  https://github.com/MetaMask/metamask-improvement-proposals/discussions/23
+  // let chainIdConnected = window.ethereum.networkVersion;
+
+  console.log("chainIdConnected: " + chainIdConnected)
+
   //Check if user is on the Sepolia testnet. If not, alert them to change to Sepolia.
-  if(window.ethereum.networkVersion != baseSepoliaChainId){
+  if(chainIdConnected != baseSepoliaChainId){
     // alert("You are not on the Sepolia Testnet! Please switch to Sepolia and refresh page.")
     try{
       await window.ethereum.request({
