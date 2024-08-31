@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.26;
+pragma solidity 0.8.22;
 
 contract forLoopsUncheckedGasBenchmark {
 
@@ -23,6 +23,11 @@ contract forLoopsUncheckedGasBenchmark {
     }
 
     // Remix IDE gas transaction report forLoopsUncheckedGasBenchmark.newFunctionPrefixIncrement():
+    // Solidity 0.8.21 and below:
+    // gas	96720 gas
+    // transaction cost	84104 gas 
+    // execution cost	63040 gas 
+    // Solidity 0.8.22 and above:
     // gas	83150 gas
     // transaction cost	72304 gas 
     // execution cost	51240 gas 
