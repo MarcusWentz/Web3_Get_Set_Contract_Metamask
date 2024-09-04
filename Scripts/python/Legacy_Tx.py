@@ -43,4 +43,4 @@ tx = {
 }
 
 signed_tx = web3.eth.account.sign_transaction(tx, devTestnetPrivateKey)
-print(web3.to_hex(web3.eth.send_raw_transaction(signed_tx.rawTransaction)))
+print(web3.to_hex(web3.eth.send_raw_transaction(signed_tx.raw_transaction)))

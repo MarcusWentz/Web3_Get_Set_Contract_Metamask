@@ -46,10 +46,10 @@ tx = {
     'chainId': web3.eth.chain_id,
     'nonce':  web3.eth.get_transaction_count(userWallet),
     'to': Contract_At_Address, 
-    'data': contract_Call.encodeABI(fn_name='set', args=[currentUnixTime]),
+    'data': contract_Call.encode_abi(abi_element_identifier='set', args=[currentUnixTime]),
     'gas': 30000, 
     'gasPrice': web3.eth.gas_price # https://etherscan.io/gastracker
 }
 
 signed_tx = web3.eth.account.sign_transaction(tx, devTestnetPrivateKey)
-print(web3.to_hex(web3.eth.send_raw_transaction(signed_tx.rawTransaction)))
+print(web3.to_hex(web3.eth.send_raw_transaction(signed_tx.raw_transaction)))
