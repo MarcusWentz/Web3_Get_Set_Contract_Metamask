@@ -45,3 +45,11 @@ Note: this website example uses Vanilla Javascript.
 For a similar template in React with GitHub pages support as well:
 
 https://github.com/MarcusWentz/react-ethers-template
+
+## Testnet Bridges Sepolia to L2 EVM Rollups
+## Base Sepolia
+
+https://superbridge.app/base-sepolia
+### Optimism Sepolia
+
+https://superbridge.app/op-sepolia
