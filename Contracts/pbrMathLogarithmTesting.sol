@@ -17,7 +17,7 @@ contract pbrMathLogarithmTesting {
   function unsignedLog2WithTenEther() external pure returns (UD60x18 result) {
     UD60x18 x = ud(10 ether);
     // Returns 3.321928094887362334 ether, since: 
-    // 10 = (3.321928094887362334)**2
+    // 10 = 2**(3.321928094887362334)
     result = x.log2(); 
   }
 
@@ -25,16 +25,30 @@ contract pbrMathLogarithmTesting {
   function unsignedLog10WithTenEther() external pure returns (UD60x18 result) {
     UD60x18 x = ud(10 ether);
     // Returns 1 ether, since: 
-    // 10 = 1**(10).
+    // 10 = 10**(1).
     result = x.log10(); 
   }
 
-  /// @notice Calculates the binary logarithm of the given signed number.
+  function unsignedLnWithEulersNumber() external pure returns (UD60x18 result) {
+    UD60x18 x = ud(2718281828459045260);
+    // Returns 1 ether, since: 
+    // e = e**(1) 
+    // which is rougly about: 
+    // 2.718281828459045260**(1).
+    result = x.ln(); 
+  }
+
+  /// @notice Calculates the log base 2 for the given signed number.
   function unsignedLog2(UD60x18 x) external pure returns (UD60x18 result) {
     result = x.log2();
   }
 
-  /// @notice Calculates the binary logarithm of the given signed number.
+  /// @notice Calculates the log base 10 for the given signed number.
+  function unsignedLn(UD60x18 x) external pure returns (UD60x18 result) {
+    result = x.ln();
+  }
+
+  /// @notice Calculates the log base 10 for the given signed number.
   function unsignedLog10(UD60x18 x) external pure returns (UD60x18 result) {
     result = x.log10();
   }
