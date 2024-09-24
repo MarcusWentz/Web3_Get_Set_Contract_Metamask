@@ -8,9 +8,9 @@ import { UD60x18, ud } from "@prb/math/src/UD60x18.sol";
 
 contract pbrMathLogarithmTesting {
 
-  // For log2 and log10:
+  // For log10, ln and log2:
   // Min input value for ud(x) is = 1 ether = 1000000000000000000
-  // ud(1 ether) = x.log2() = x.log10() = 0
+  // ud(1 ether) =  x.log10() = x.ln() = x.log2() = 0
   // Reverts with 999999999999999999
 
   /// @notice Calculates the binary logarithm of the given signed number.
