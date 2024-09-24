@@ -6,7 +6,7 @@ import { UD60x18, ud } from "@prb/math/src/UD60x18.sol";
 // // Signed
 // import { SD59x18, sd } from "@prb/math/src/SD59x18.sol";
 
-contract pbrMathLogTesting {
+contract pbrMathLogarithmTesting {
 
   /// @notice Calculates the binary logarithm of the given signed number.
   /// @dev Try this with x = 128e18.
