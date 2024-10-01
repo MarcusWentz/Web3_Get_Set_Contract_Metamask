@@ -56,20 +56,20 @@ contract prbMathLogarithmTesting {
   }
 
   /// @notice Calculates the log base 10 for the given signed number.
-  // Slowest growth logarithm function in pbr-math.
+  // Slowest growth logarithm function in prb-math.
   function unsignedLog10(UD60x18 x) external pure returns (UD60x18 result) {
     result = x.log10();
   }
 
   /// @notice Calculates the log base e for the given signed number.
-  // Slower growth than log2 but faster than log10 in pbr-math.
+  // Slower growth than log2 but faster than log10 in prb-math.
   function unsignedLn(UD60x18 x) external pure returns (UD60x18 result) {
     result = x.ln();
   }
 
   /// @notice Calculates the log base 2 for the given signed number.
-  // Fastest growth logarithm function in pbr-math.
-  // Slower than the square root function in pbr-math.
+  // Fastest growth logarithm function in prb-math.
+  // Slower than the square root function in prb-math.
   function unsignedLog2(UD60x18 x) external pure returns (UD60x18 result) {
     result = x.log2();
   }
