@@ -6,7 +6,7 @@ import { UD60x18 } from "@prb/math/src/UD60x18.sol";
 // // Signed
 // import { SD59x18 } from "@prb/math/src/SD59x18.sol";
 
-contract pbrMathLogarithmTesting {
+contract prbMathLogarithmTesting {
 
   // For log10, ln and log2:
   // Min input value for ud(x) is = 1 ether = 1000000000000000000
