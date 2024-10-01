@@ -6,7 +6,7 @@ import { UD60x18 , convert } from "@prb/math/src/UD60x18.sol";
 // // Signed
 // import { SD59x18 } from "@prb/math/src/SD59x18.sol";
 
-contract pbrMathSquareRootTesting {
+contract prbMathSquareRootTesting {
 
   /// @notice Calculates the square root for the given signed number.
   function unsignedSquareRootTestSmallValueReturnRawValue() external pure returns (UD60x18 result) {
