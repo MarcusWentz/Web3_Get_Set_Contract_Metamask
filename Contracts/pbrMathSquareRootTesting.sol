@@ -12,7 +12,7 @@ contract pbrMathSquareRootTesting {
   function unsignedSquareRootTestSmallValueReturnRawValue() external pure returns (UD60x18 result) {
     // 1 wei in uint256 is actually 1 ether in UD60x18 fixed point types.
    
-    // //9 decimal places in precision.
+    // // 9 decimal places in precision.
     // UD60x18 x = UD60x18.wrap(1);
    
     // 18 decimal places in precision.
@@ -25,7 +25,7 @@ contract pbrMathSquareRootTesting {
   /// @notice Calculates the square root for the given signed number.
   function unsignedSquareRootTestReturnUint256() external pure returns (uint256 result) {
 
-    // //9 decimal places in precision.
+    // // 9 decimal places in precision.
     // UD60x18 x = UD60x18.wrap(1);
    
     // 18 decimal places in precision.
