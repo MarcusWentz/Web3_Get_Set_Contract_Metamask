@@ -4,10 +4,15 @@ const fs = require('fs');
 // const rpcURL = "https://sphinx.shardeum.org/"// Your RPC URL goes here
 // const addressUniswapV2Router02 = '0x61716e3E7b5A6f11bB985f76E4195Fc55d7FCE9c'
 
-const rpcURL = process.env.sepoliaInfuraHttps
-const UniswapV2LiquidityPairTokenAddress = "0x78d74109d9543f1900cb3842da3986F5fe14C2DA" //WETH and another ERC-20 token.
-const tokenERC20Address = "0x18e9437821bD2c69A5bCee1896eD18995E5a6A85"
-const addressUniswapV2Router02 = '0xd49d79d476215BEF1E5AC43c46eC9dB6E7906dbD'
+// const rpcURL = process.env.sepoliaInfuraHttps
+// const UniswapV2LiquidityPairTokenAddress = "0x78d74109d9543f1900cb3842da3986F5fe14C2DA" //WETH and another ERC-20 token.
+// const tokenERC20Address = "0x18e9437821bD2c69A5bCee1896eD18995E5a6A85"
+// const addressUniswapV2Router02 = '0xd49d79d476215BEF1E5AC43c46eC9dB6E7906dbD'
+
+const rpcURL = process.env.baseSepoliaHTTPS
+const UniswapV2LiquidityPairTokenAddress = "0xC9ae620655690E6334C412a74ecf30DF85FD8458" //WETH and another ERC-20 token.
+const tokenERC20Address = "0xE4aB69C077896252FAFBD49EFD26B5D171A32410"
+const addressUniswapV2Router02 = '0x794c842Ef3EE218464068F0FFC4Bc084453CDeDD'
 
 const provider = new ethers.providers.JsonRpcProvider(rpcURL)
 const signer = new ethers.Wallet(Buffer.from(process.env.devTestnetPrivateKey, 'hex'), provider);
@@ -62,9 +67,9 @@ async function UniswapV2RouterRemoveLiquidityETH() {
 
 	const txSigned = await contractUniswapV2Router02.removeLiquidityETH(
 		tokenERC20Address,
-		2000,
-		1000,
-		1000,
+		1000, // 2000,
+		500,  // 1000,
+		600,  // 1000,
 		signer.address,
 		"115792089237316195423570985008687907853269984665640564039457584007913129639935",
 		{

@@ -4,9 +4,13 @@ const fs = require('fs');
 // const rpcURL = "https://sphinx.shardeum.org/"// Your RPC URL goes here
 // const addressUniswapV2Router02 = '0x61716e3E7b5A6f11bB985f76E4195Fc55d7FCE9c'
 
-const rpcURL = process.env.sepoliaInfuraHttps
-const tokenERC20Address = "0x18e9437821bD2c69A5bCee1896eD18995E5a6A85"
-const addressUniswapV2Router02 = '0xd49d79d476215BEF1E5AC43c46eC9dB6E7906dbD'
+// const rpcURL = process.env.sepoliaInfuraHttps
+// const tokenERC20Address = "0x18e9437821bD2c69A5bCee1896eD18995E5a6A85"
+// const addressUniswapV2Router02 = '0xd49d79d476215BEF1E5AC43c46eC9dB6E7906dbD'
+
+const rpcURL = process.env.baseSepoliaHTTPS
+const tokenERC20Address = "0xE4aB69C077896252FAFBD49EFD26B5D171A32410"
+const addressUniswapV2Router02 = '0x794c842Ef3EE218464068F0FFC4Bc084453CDeDD'
 
 const provider = new ethers.providers.JsonRpcProvider(rpcURL)
 const signer = new ethers.Wallet(Buffer.from(process.env.devTestnetPrivateKey, 'hex'), provider);
