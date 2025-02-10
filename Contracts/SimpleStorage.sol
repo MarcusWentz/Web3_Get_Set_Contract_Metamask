@@ -6,7 +6,6 @@ contract SimpleStorage {
 
     event setEvent();
     
-
     function set(uint256 x) public {
         storedData = x;
         emit setEvent();
