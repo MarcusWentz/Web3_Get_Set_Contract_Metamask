@@ -21,8 +21,11 @@ fn main()   {
     let ln_result = num.ln(); // Calculates the natural logarithm of num
     println!("ln(100) = {}", ln_result); 
 
-    let log_result = num.log10(); // Calculates the base-10 logarithm of num
-    println!("log10(100) = {}", log_result); 
+    let log10_result = num.log10(); // Calculates the base-10 logarithm of num
+    println!("log10(100) = {}", log10_result); 
+
+    let log2_result = num.log2(); // Calculates the base-2 logarithm of num
+    println!("log2(100) = {}", log2_result); 
 
     let sqrt_result = num.sqrt(); // Calculates the square root of num
     println!("sqrt(100) = {}", sqrt_result); 
