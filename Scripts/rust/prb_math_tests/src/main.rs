@@ -14,19 +14,21 @@ fn main()   {
     // // i32 value types do not have methods for more complicated math operations.
     // let num: i32 = 100.0;
     
-    // f32 value types have methods for more complicated math operations.
-    let num: f32 = 100.0;
+    // f64 value types have methods for more complicated math operations.
+    let num: f64 = 100.0;
     println!("input value = {}", num); 
 
     let ln_result = num.ln(); // Calculates the natural logarithm of num
-    println!("ln(10) = {}", ln_result); 
+    println!("ln(100) = {}", ln_result); 
 
     let log_result = num.log10(); // Calculates the base-10 logarithm of num
-    println!("log10(10) = {}", log_result); 
+    println!("log10(100) = {}", log_result); 
 
     let sqrt_result = num.sqrt(); // Calculates the square root of num
-    println!("sqrt(10) = {}", sqrt_result); 
+    println!("sqrt(100) = {}", sqrt_result); 
 
+    let exp_result = num.exp(); // Calculates the exp (e^x) of num.
+    println!("exp(100) = {}", exp_result); 
 
     test(10); 
 
