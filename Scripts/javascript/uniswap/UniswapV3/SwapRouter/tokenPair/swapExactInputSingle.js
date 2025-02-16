@@ -121,13 +121,25 @@ async function main() {
 
   console.log(params)
 
+  // Tenderly:
+  // UniswapV3SwapRouter.computeAddress(
+  //   factory = 0x6e553ceedadefcd0fce6a220bc17814db8a193d0,
+  //   key = {
+  //     "token0":"0x4200000000000000000000000000000000000006",
+  //     "token1":"0xe4ab69c077896252fafbd49efd26b5d171a32410",
+  //     "fee":"500"}) => (
+  //   0xb8835e8c3769d00e90056db4957a399a342dfa5c
+  //   )
+  // computeAddress seems incorrect? Does SwapRouter depends on ???
+  // Maybe update POOL_INIT_CODE_HASH right after UniswapV3Factory is deployed.
+
   const tx = await swapRouterContract.exactInputSingle(
-    // params
-    params,
-    {
-      // gasLimit: ethers.utils.hexlify(1000000)
-      gasLimit: '100000'
-    }
+    params
+    // params,
+    // {
+    //   // gasLimit: ethers.utils.hexlify(1000000)
+    //   gasLimit: '100000'
+    // }
   )
   
   console.log(tx)
