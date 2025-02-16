@@ -1,7 +1,8 @@
 const ethers = require("ethers") // npm i ethers@5.7.2 https://github.com/smartcontractkit/full-blockchain-solidity-course-js/discussions/5139#discussioncomment-5444517
+
 const { abi: INonfungiblePositionManagerABI } = require('@uniswap/v3-periphery/artifacts/contracts/interfaces/INonfungiblePositionManager.sol/INonfungiblePositionManager.json')
 const { abi: UniswapV3PoolABI } = require('@uniswap/v3-core/artifacts/contracts/UniswapV3Pool.sol/UniswapV3Pool.json')
-const { Pool, Position, nearestUsableTick } = require('@uniswap/v3-sdk')
+const { Pool, Position, nearestUsableTick , computePoolAddress} = require('@uniswap/v3-sdk')
 const { Token } = require('@uniswap/sdk-core')
 
 // const rpcURL = process.env.sepoliaInfuraHttps // Your RPC URL goes here
@@ -15,6 +16,7 @@ const provider = new ethers.providers.JsonRpcProvider(rpcURL) // Ropsten
 let base_sepolia_chain_id = 84532;
 
 const positionManagerAddress = "0x25F94FD6B15504A556BEF182A646Ec2344DFaCFF" // NonfungiblePositionManager
+const uniswapV3FactoryAddress = "0x16D59bf09EF975Ea84883Eeb8d2A71dc4c739E2C";
 
 async function getPoolData(poolContract) {
   const [tickSpacing, fee, liquidity, slot0] = await Promise.all([
@@ -55,13 +57,13 @@ async function main() {
     signer
   )
 
-  // const wethAddres = "0x18e9437821bD2c69A5bCee1896eD18995E5a6A85";
+  // const wethAddress = "0x18e9437821bD2c69A5bCee1896eD18995E5a6A85";
   // const linkAddress = "0x779877A7B0D9E8603169DdbD7836e478b4624789";
 
-  const wethAddres = "0x4200000000000000000000000000000000000006";
+  const wethAddress = "0x4200000000000000000000000000000000000006";
   const linkAddress = "0xE4aB69C077896252FAFBD49EFD26B5D171A32410";
 
-  // const token0 =	wethAddres;
+  // const token0 =	wethAddress;
   // const token1 =	linkAddress;
   // const fee =	500;
   // const tickLower =	-20;
@@ -72,10 +74,20 @@ async function main() {
   // const amount1Min =	0;
   // const recipient =	signer.address;
   // const deadline = BigInt(115792089237316195423570985008687907853269984665640564039457584007913129639935);
-  
 
-  // Pool addresses
-  LINK_WETH_500= "0xe2774d552037652682cbac82f7d7a1f58fae8da2"
+
+  // Token type in @uniswap/sdk-core documented here
+  // https://github.com/Uniswap/sdks/blob/main/sdks/sdk-core/src/entities/token.ts
+  const token0 = new Token(chainIdConnected, wethAddress, 18, 'WETH', 'Wrapped Ether');
+  const token1 = new Token(chainIdConnected, linkAddress, 18, 'LINK', 'Chainlink');
+  const poolFee = 500;
+
+  const LINK_WETH_500 = computePoolAddress({
+    factoryAddress: uniswapV3FactoryAddress,
+    tokenA: token0,
+    tokenB: token1,
+    fee: poolFee,
+  })
 
   const poolContract = new ethers.Contract(
     LINK_WETH_500, 
@@ -83,34 +95,34 @@ async function main() {
     signer
   )
 
-  const poolData = await getPoolData(poolContract)
+  console.log(poolContract.address)
+  // 0x435Dd3450D5AeEf147486Da0Dca1A2C4a14958Fb
+
+  // Pool addresses
+  // const LINK_WETH_500= "0xe2774d552037652682cbac82f7d7a1f58fae8da2"
+
+  // const poolData = await getPoolData(poolContract)
 
   // console.log(poolData)
 
+  // const pool = new Pool(
+  //   token0,
+  //   token1,
+  //   poolData.fee,
+  //   poolData.sqrtPriceX96.toString(),
+  //   poolData.liquidity.toString(),
+  //   poolData.tick
+  // )
 
-  // Token type in @uniswap/sdk-core documented here
-  // https://github.com/Uniswap/sdks/blob/main/sdks/sdk-core/src/entities/token.ts
-  const WethToken = new Token(chainIdConnected, wethAddres, 18, 'WETH', 'Wrapped Ether')
-  const LinkToken = new Token(chainIdConnected, linkAddress, 18, 'LINK', 'Chainlink')
-
-  const pool = new Pool(
-    WethToken,
-    LinkToken,
-    poolData.fee,
-    poolData.sqrtPriceX96.toString(),
-    poolData.liquidity.toString(),
-    poolData.tick
-  )
-
-  const position = new Position({
-    pool: pool,
-    liquidity: ethers.utils.parseEther('1'),
-    tickLower: nearestUsableTick(poolData.tick, poolData.tickSpacing) - poolData.tickSpacing * 2,
-    tickUpper: nearestUsableTick(poolData.tick, poolData.tickSpacing) + poolData.tickSpacing * 2,
-  })
+  // const position = new Position({
+  //   pool: pool,
+  //   liquidity: ethers.utils.parseEther('1'),
+  //   tickLower: nearestUsableTick(poolData.tick, poolData.tickSpacing) - poolData.tickSpacing * 2,
+  //   tickUpper: nearestUsableTick(poolData.tick, poolData.tickSpacing) + poolData.tickSpacing * 2,
+  // })
 
 
-  const { amount0: amount0Desired, amount1: amount1Desired} = position.mintAmounts
+  // const { amount0: amount0Desired, amount1: amount1Desired} = position.mintAmounts
 
   // Uniswap V3 minting sqrtPriceX96 with pool.slot0()
   // https://docs.uniswap.org/sdk/v3/guides/liquidity/minting
@@ -118,28 +130,29 @@ async function main() {
   // (uint160 sqrtPriceX96, , , , , , ) = pool.slot0();
   // https://github.com/Uniswap/v3-periphery/blob/main/contracts/base/LiquidityManagement.sol#L67
 
-  params = {
-    token0: wethAddres,
-    token1: linkAddress,
-    fee: poolData.fee,
-    tickLower: nearestUsableTick(poolData.tick, poolData.tickSpacing) - poolData.tickSpacing * 2,
-    tickUpper: nearestUsableTick(poolData.tick, poolData.tickSpacing) + poolData.tickSpacing * 2,
-    amount0Desired: amount0Desired.toString(),
-    amount1Desired: amount1Desired.toString(),
-    amount0Min: 0,
-    amount1Min: 0,
-    recipient: signer.address,
-    deadline: BigInt(Math.floor(Date.now() / 1000) + (60 * 10))
-  }
+  // params = {
+  //   token0: wethAddress,
+  //   token1: linkAddress,
+  //   fee: poolData.fee,
+  //   tickLower: nearestUsableTick(poolData.tick, poolData.tickSpacing) - poolData.tickSpacing * 2,
+  //   tickUpper: nearestUsableTick(poolData.tick, poolData.tickSpacing) + poolData.tickSpacing * 2,
+  //   amount0Desired: amount0Desired.toString(),
+  //   amount1Desired: amount1Desired.toString(),
+  //   amount0Min: 0,
+  //   amount1Min: 0,
+  //   recipient: signer.address,
+  //   deadline: BigInt(Math.floor(Date.now() / 1000) + (60 * 10))
+  // }
 
-  console.log(params)
+  // console.log(params)
 
-  const tx = await nonFungiblePositionManagerContract.mint(
-    params
-    // { gasLimit: '1000000' }
-  )
+  // const tx = await nonFungiblePositionManagerContract.mint(
+  //   params
+  //   // params,
+  //   // { gasLimit: '1000000' }
+  // )
   
-  console.log(tx)  
+  // console.log(tx)  
   
 }
 
