@@ -82,50 +82,54 @@ async function main() {
   const token1 = new Token(chainIdConnected, linkAddress, 18, 'LINK', 'Chainlink');
   const poolFee = BigInt(500);
 
-  // Address looks different than what was deployed.
-  // Possible cause: POOL_INIT_CODE_HASH logic
-  // https://ethereum.stackexchange.com/a/167757
-  const LINK_WETH_500_ADDRESS = computePoolAddress({
-    factoryAddress: uniswapV3FactoryAddress,
-    tokenA: token0,
-    tokenB: token1,
-    fee: poolFee,
-  })
-
-  console.log(LINK_WETH_500_ADDRESS)
-  // // LINK_WETH_500_ADDRESS = 0x435Dd3450D5AeEf147486Da0Dca1A2C4a14958Fb
-
-  // // Pool addresses
-  // const LINK_WETH_500_ADDRESS = "0xe2774d552037652682cbac82f7d7a1f58fae8da2"
-
-  // const poolContract = new ethers.Contract(
-  //   LINK_WETH_500_ADDRESS, 
-  //   UniswapV3PoolABI, 
-  //   signer
-  // )
-
-  // const poolData = await getPoolData(poolContract)
-
-  // console.log(poolData)
-
-  // const pool = new Pool(
-  //   token0,
-  //   token1,
-  //   poolData.fee,
-  //   poolData.sqrtPriceX96.toString(),
-  //   poolData.liquidity.toString(),
-  //   poolData.tick
-  // )
-
-  // const position = new Position({
-  //   pool: pool,
-  //   liquidity: ethers.utils.parseEther('1'),
-  //   tickLower: nearestUsableTick(poolData.tick, poolData.tickSpacing) - poolData.tickSpacing * 2,
-  //   tickUpper: nearestUsableTick(poolData.tick, poolData.tickSpacing) + poolData.tickSpacing * 2,
+  // // Address looks different than what was deployed.
+  // // Possible cause: POOL_INIT_CODE_HASH logic
+  // // https://ethereum.stackexchange.com/a/167757
+  // const LINK_WETH_500_ADDRESS = computePoolAddress({
+  //   factoryAddress: uniswapV3FactoryAddress,
+  //   tokenA: token0,
+  //   tokenB: token1,
+  //   fee: poolFee,
   // })
 
+  // console.log(LINK_WETH_500_ADDRESS)
+  // // // LINK_WETH_500_ADDRESS = 0x435Dd3450D5AeEf147486Da0Dca1A2C4a14958Fb
 
-  // const { amount0: amount0Desired, amount1: amount1Desired} = position.mintAmounts
+  // Pool addresses
+  const LINK_WETH_500_ADDRESS = "0xe2774d552037652682cbac82f7d7a1f58fae8da2"
+
+  const poolContract = new ethers.Contract(
+    LINK_WETH_500_ADDRESS, 
+    UniswapV3PoolABI, 
+    signer
+  )
+
+  const poolData = await getPoolData(poolContract)
+
+  console.log(poolData)
+
+  const pool = new Pool(
+    token0,
+    token1,
+    poolData.fee,
+    poolData.sqrtPriceX96.toString(),
+    poolData.liquidity.toString(),
+    poolData.tick
+  )
+
+  // console.log(pool)
+
+  const position = new Position({
+    pool: pool,
+    liquidity: ethers.utils.parseEther('1'),
+    tickLower: nearestUsableTick(poolData.tick, poolData.tickSpacing) - poolData.tickSpacing * 2,
+    tickUpper: nearestUsableTick(poolData.tick, poolData.tickSpacing) + poolData.tickSpacing * 2,
+  })
+
+  // console.log(position)
+
+
+  const { amount0: amount0Desired, amount1: amount1Desired} = position.mintAmounts
 
   // Uniswap V3 minting sqrtPriceX96 with pool.slot0()
   // https://docs.uniswap.org/sdk/v3/guides/liquidity/minting
@@ -133,21 +137,35 @@ async function main() {
   // (uint160 sqrtPriceX96, , , , , , ) = pool.slot0();
   // https://github.com/Uniswap/v3-periphery/blob/main/contracts/base/LiquidityManagement.sol#L67
 
-  // params = {
-  //   token0: wethAddress,
-  //   token1: linkAddress,
-  //   fee: poolData.fee,
-  //   tickLower: nearestUsableTick(poolData.tick, poolData.tickSpacing) - poolData.tickSpacing * 2,
-  //   tickUpper: nearestUsableTick(poolData.tick, poolData.tickSpacing) + poolData.tickSpacing * 2,
-  //   amount0Desired: amount0Desired.toString(),
-  //   amount1Desired: amount1Desired.toString(),
-  //   amount0Min: 0,
-  //   amount1Min: 0,
-  //   recipient: signer.address,
-  //   deadline: BigInt(Math.floor(Date.now() / 1000) + (60 * 10))
-  // }
+  params = {
+    token0: wethAddress,
+    token1: linkAddress,
+    fee: poolData.fee,
+    tickLower: nearestUsableTick(poolData.tick, poolData.tickSpacing) - poolData.tickSpacing * 2,
+    tickUpper: nearestUsableTick(poolData.tick, poolData.tickSpacing) + poolData.tickSpacing * 2,
+    amount0Desired: amount0Desired.toString(),
+    amount1Desired: amount1Desired.toString(),
+    amount0Min: 0,
+    amount1Min: 0,
+    recipient: signer.address,
+    deadline: BigInt(Math.floor(Date.now() / 1000) + (60 * 10))
+  }
 
-  // console.log(params)
+  console.log(params)
+
+  // Tenderly execution trace:
+  // UniswapV3NonfungiblePositionManager.computeAddress(
+  //   factory = 0x1b1d4bda92058a1959628b090b632da935639dd7, 
+  //   key = {
+  //     "token0":"0x4200000000000000000000000000000000000006",
+  //     "token1":"0xe4ab69c077896252fafbd49efd26b5d171a32410",
+  //     "fee":"500"}) => 
+  //   (0xccc684334da7ac91f6e4943c184524ab39fbf480)
+
+  // The address looks different from the actual pool created.
+  // https://ethereum.stackexchange.com/questions/153231/addliquidity-to-pool-uniswap-v3-pool-deployer-and-pooladdress-computeaddress 
+  // Seems related to
+  // https://ethereum.stackexchange.com/a/153714
 
   // const tx = await nonFungiblePositionManagerContract.mint(
   //   params
