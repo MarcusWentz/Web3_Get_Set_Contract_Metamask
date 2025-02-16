@@ -12,6 +12,8 @@ const provider = new ethers.providers.JsonRpcProvider(rpcURL) // Ropsten
 
 // const positionManagerAddress = "0x49c389facbd26764946a3d61cdfe5db80f55a637" // NonfungiblePositionManager
 
+let base_sepolia_chain_id = 84532;
+
 const positionManagerAddress = "0x25F94FD6B15504A556BEF182A646Ec2344DFaCFF" // NonfungiblePositionManager
 
 async function getPoolData(poolContract) {
@@ -34,6 +36,16 @@ async function getPoolData(poolContract) {
 main()
 
 async function main() {
+
+  const connectedNetworkObject = await provider.getNetwork();
+  const chainIdConnected = connectedNetworkObject.chainId;
+  console.log("chainIdConnected: "+ chainIdConnected)
+
+  if(chainIdConnected != base_sepolia_chain_id){
+    console.log("RPC endpoint not connected to Base Sepolia (chainId: " + base_sepolia_chain_id + ").");
+    console.log("Switch to Base Sepolia then try again.");
+    return;
+  }
 
   const signer = new ethers.Wallet(Buffer.from(process.env.devTestnetPrivateKey, 'hex'), provider);  
   
@@ -75,8 +87,11 @@ async function main() {
 
   // console.log(poolData)
 
-  const WethToken = new Token(31337, wethAddres, 18, 'WETH', 'Wrapped Ether')
-  const LinkToken = new Token(31337, linkAddress, 18, 'LINK', 'Chainlink')
+
+  // Token type in @uniswap/sdk-core documented here
+  // https://github.com/Uniswap/sdks/blob/main/sdks/sdk-core/src/entities/token.ts
+  const WethToken = new Token(chainIdConnected, wethAddres, 18, 'WETH', 'Wrapped Ether')
+  const LinkToken = new Token(chainIdConnected, linkAddress, 18, 'LINK', 'Chainlink')
 
   const pool = new Pool(
     WethToken,
@@ -119,12 +134,12 @@ async function main() {
 
   console.log(params)
 
-  // const tx = await nonFungiblePositionManagerContract.mint(
-  //   params
-  //   // { gasLimit: '1000000' }
-  // )
+  const tx = await nonFungiblePositionManagerContract.mint(
+    params
+    // { gasLimit: '1000000' }
+  )
   
-  // console.log(tx)  
+  console.log(tx)  
   
 }
 
