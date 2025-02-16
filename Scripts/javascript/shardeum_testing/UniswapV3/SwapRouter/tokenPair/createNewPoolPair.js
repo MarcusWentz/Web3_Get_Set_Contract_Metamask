@@ -27,10 +27,10 @@ async function main() {
     signer
   )
 
-  // const wethAddres = "0x18e9437821bD2c69A5bCee1896eD18995E5a6A85";
+  // const wethAddress = "0x18e9437821bD2c69A5bCee1896eD18995E5a6A85";
   // const linkAddress = "0x779877A7B0D9E8603169DdbD7836e478b4624789";
 
-  const wethAddres = "0x4200000000000000000000000000000000000006";
+  const wethAddress = "0x4200000000000000000000000000000000000006";
   const linkAddress = "0xE4aB69C077896252FAFBD49EFD26B5D171A32410";
 
   const expectedOutput = BigInt(79228162514264337593543950336);
@@ -42,7 +42,7 @@ async function main() {
     return;
   }
 
-  const token0 =	wethAddres;
+  const token0 =	wethAddress;
   const token1 =	linkAddress;
   const fee =	500;
   const sqrtPriceX96 = expectedOutput;
