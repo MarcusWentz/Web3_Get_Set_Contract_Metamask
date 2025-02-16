@@ -15,7 +15,7 @@ const provider = new ethers.providers.JsonRpcProvider(rpcURL) // Ropsten
 
 let base_sepolia_chain_id = 84532;
 
-const positionManagerAddress = "0x25F94FD6B15504A556BEF182A646Ec2344DFaCFF" // NonfungiblePositionManager
+const positionManagerAddress = "0xdB98389CFC3658c92F84373d874Ea5BdD7695349" // NonfungiblePositionManager
 const uniswapV3FactoryAddress = "0x16D59bf09EF975Ea84883Eeb8d2A71dc4c739E2C";
 
 async function getPoolData(poolContract) {
@@ -82,21 +82,21 @@ async function main() {
   const token1 = new Token(chainIdConnected, linkAddress, 18, 'LINK', 'Chainlink');
   const poolFee = BigInt(500);
 
-  // // Address looks different than what was deployed.
-  // // Possible cause: POOL_INIT_CODE_HASH logic
-  // // https://ethereum.stackexchange.com/a/167757
-  // const LINK_WETH_500_ADDRESS = computePoolAddress({
-  //   factoryAddress: uniswapV3FactoryAddress,
-  //   tokenA: token0,
-  //   tokenB: token1,
-  //   fee: poolFee,
-  // })
+  // Address looks different than what was deployed.
+  // Possible cause: POOL_INIT_CODE_HASH logic
+  // https://ethereum.stackexchange.com/a/167757
+  const LINK_WETH_500_ADDRESS = computePoolAddress({
+    factoryAddress: uniswapV3FactoryAddress,
+    tokenA: token0,
+    tokenB: token1,
+    fee: poolFee,
+  })
 
-  // console.log(LINK_WETH_500_ADDRESS)
-  // // // LINK_WETH_500_ADDRESS = 0x435Dd3450D5AeEf147486Da0Dca1A2C4a14958Fb
+  console.log(LINK_WETH_500_ADDRESS)
+  // // // // LINK_WETH_500_ADDRESS = 0x5c632eb9f2e735f30e10038ae720ddcd545d2cf1
 
-  // Pool addresses
-  const LINK_WETH_500_ADDRESS = "0xe2774d552037652682cbac82f7d7a1f58fae8da2"
+  // // Pool addresses
+  // const LINK_WETH_500_ADDRESS = "0xe2774d552037652682cbac82f7d7a1f58fae8da2"
 
   const poolContract = new ethers.Contract(
     LINK_WETH_500_ADDRESS, 
@@ -166,6 +166,10 @@ async function main() {
   // https://ethereum.stackexchange.com/questions/153231/addliquidity-to-pool-uniswap-v3-pool-deployer-and-pooladdress-computeaddress 
   // Seems related to
   // https://ethereum.stackexchange.com/a/153714
+
+  // .PoolAddress.computeAddress uses POOL_INIT_CODE_HASH which we can set manually 
+  // https://github.com/uniswap/v3-periphery/blob/main/contracts/libraries/PoolAddress.sol#L33-L47
+  // on this line https://github.com/uniswap/v3-periphery/blob/main/contracts/libraries/PoolAddress.sol#L6
 
   // const tx = await nonFungiblePositionManagerContract.mint(
   //   params
