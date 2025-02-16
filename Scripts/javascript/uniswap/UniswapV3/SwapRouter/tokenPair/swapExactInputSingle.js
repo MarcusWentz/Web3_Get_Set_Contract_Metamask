@@ -32,8 +32,8 @@ const provider = new ethers.providers.JsonRpcProvider(rpcURL)
 // const decimals0 = 18
 // const address0 = '0x7AF17A48a6336F7dc1beF9D485139f7B6f4FB5C8'
 
-const poolAddress = "0x4245640558cac66ddd5fb4e47dcd000458a166f3" 
-const swapRouterAddress = '0x026f20FEF14108ED16a4c2Cd91a7EAf02359cB67'
+const poolAddress = "0x65fd564ab5fe8bc10695107a0096ab8ec7916dc2" 
+const swapRouterAddress = '0xE0F5DFdE6CC9770E2e45d91832CaE8D4FeE20526'
 
 const name1 = 'Wrapped Ether'
 const symbol1 = 'WETH'
