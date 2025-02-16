@@ -9,7 +9,7 @@ const provider = new ethers.providers.JsonRpcProvider(rpcURL) // Ropsten
 
 // const positionManagerAddress = "0x49c389facbd26764946a3d61cdfe5db80f55a637" // NonfungiblePositionManager
 
-const positionManagerAddress = "0x93c7430178ea1b082e151338930c6732f34ea69b" // NonfungiblePositionManager
+const positionManagerAddress = "0x8e83df10fbf319ff7344009a78b5bf2e89a5e4df" // NonfungiblePositionManager
 
 function encodePriceSqrt(reserve0, reserve1) {
   return BigInt(Math.sqrt(reserve1 / reserve0) * Math.pow(2, 96));

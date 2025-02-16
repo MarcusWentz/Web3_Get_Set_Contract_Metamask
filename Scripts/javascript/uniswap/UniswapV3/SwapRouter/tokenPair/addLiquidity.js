@@ -15,7 +15,7 @@ const provider = new ethers.providers.JsonRpcProvider(rpcURL) // Ropsten
 
 let base_sepolia_chain_id = 84532;
 
-const positionManagerAddress = "0x93c7430178ea1b082e151338930c6732f34ea69b" // NonfungiblePositionManager
+const positionManagerAddress = "0x8e83df10fbf319ff7344009a78b5bf2e89a5e4df" // NonfungiblePositionManager
 
 // const uniswapV3FactoryAddress = "0x6e553ceedadefcd0fce6a220bc17814db8a193d0";
 
@@ -97,7 +97,7 @@ async function main() {
   // // // // // LINK_WETH_500_ADDRESS = 0xb8835E8c3769D00E90056db4957A399a342dfA5c
 
   // Pool addresses
-  const LINK_WETH_500_ADDRESS = "0x4245640558cac66ddd5fb4e47dcd000458a166f3"
+  const LINK_WETH_500_ADDRESS = "0x65fd564ab5fe8bc10695107a0096ab8ec7916dc2"
   console.log(LINK_WETH_500_ADDRESS)
  
   const poolContract = new ethers.Contract(
