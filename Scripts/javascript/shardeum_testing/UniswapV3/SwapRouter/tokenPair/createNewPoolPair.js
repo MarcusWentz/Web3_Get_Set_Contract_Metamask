@@ -1,10 +1,15 @@
 const ethers = require("ethers") // npm i ethers@5.7.2 https://github.com/smartcontractkit/full-blockchain-solidity-course-js/discussions/5139#discussioncomment-5444517
 const { abi: INonfungiblePositionManagerABI } = require('@uniswap/v3-periphery/artifacts/contracts/interfaces/INonfungiblePositionManager.sol/INonfungiblePositionManager.json')
 
-const rpcURL = process.env.sepoliaInfuraHttps // Your RPC URL goes here
+// const rpcURL = process.env.sepoliaInfuraHttps // Your RPC URL goes here
+
+const rpcURL = process.env.baseSepoliaHTTPS // Your RPC URL goes here
 
 const provider = new ethers.providers.JsonRpcProvider(rpcURL) // Ropsten
-const positionManagerAddress = "0x49c389facbd26764946a3d61cdfe5db80f55a637" // NonfungiblePositionManager
+
+// const positionManagerAddress = "0x49c389facbd26764946a3d61cdfe5db80f55a637" // NonfungiblePositionManager
+
+const positionManagerAddress = "0x25F94FD6B15504A556BEF182A646Ec2344DFaCFF" // NonfungiblePositionManager
 
 function encodePriceSqrt(reserve0, reserve1) {
   return BigInt(Math.sqrt(reserve1 / reserve0) * Math.pow(2, 96));
@@ -22,8 +27,11 @@ async function main() {
     signer
   )
 
-  const wethAddres = 0x18e9437821bD2c69A5bCee1896eD18995E5a6A85;
-  const linkAddress = 0x779877A7B0D9E8603169DdbD7836e478b4624789;
+  // const wethAddres = "0x18e9437821bD2c69A5bCee1896eD18995E5a6A85";
+  // const linkAddress = "0x779877A7B0D9E8603169DdbD7836e478b4624789";
+
+  const wethAddres = "0x4200000000000000000000000000000000000006";
+  const linkAddress = "0xE4aB69C077896252FAFBD49EFD26B5D171A32410";
 
   const expectedOutput = BigInt(79228162514264337593543950336);
   const sqrtEncodeTest = encodePriceSqrt(1, 1);
@@ -34,18 +42,19 @@ async function main() {
     return;
   }
 
-  params = {
-    token0:	wethAddres,
-    token1:	linkAddress,
-    fee:	500,
-    sqrtPriceX96:	79228162514264337593543950336,
-  }
+  const token0 =	wethAddres;
+  const token1 =	linkAddress;
+  const fee =	500;
+  const sqrtPriceX96 = expectedOutput;
   
-  // const transaction = await nonFungiblePositionManagerContract.createAndInitializePoolIfNecessary(
-  //   params
-  // )
+  const tx = await nonFungiblePositionManagerContract.createAndInitializePoolIfNecessary(
+    token0,
+    token1,
+    fee,
+    sqrtPriceX96
+  )
   
-  // console.log(transaction)  
+  console.log(tx)  
   
 }
 
