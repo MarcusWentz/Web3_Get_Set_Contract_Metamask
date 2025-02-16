@@ -80,26 +80,29 @@ async function main() {
   // https://github.com/Uniswap/sdks/blob/main/sdks/sdk-core/src/entities/token.ts
   const token0 = new Token(chainIdConnected, wethAddress, 18, 'WETH', 'Wrapped Ether');
   const token1 = new Token(chainIdConnected, linkAddress, 18, 'LINK', 'Chainlink');
-  const poolFee = 500;
+  const poolFee = BigInt(500);
 
-  const LINK_WETH_500 = computePoolAddress({
+  // Address looks different than what was deployed.
+  // Possible cause: POOL_INIT_CODE_HASH logic
+  // https://ethereum.stackexchange.com/a/167757
+  const LINK_WETH_500_ADDRESS = computePoolAddress({
     factoryAddress: uniswapV3FactoryAddress,
     tokenA: token0,
     tokenB: token1,
     fee: poolFee,
   })
 
-  const poolContract = new ethers.Contract(
-    LINK_WETH_500, 
-    UniswapV3PoolABI, 
-    signer
-  )
+  console.log(LINK_WETH_500_ADDRESS)
+  // // LINK_WETH_500_ADDRESS = 0x435Dd3450D5AeEf147486Da0Dca1A2C4a14958Fb
 
-  console.log(poolContract.address)
-  // 0x435Dd3450D5AeEf147486Da0Dca1A2C4a14958Fb
+  // // Pool addresses
+  // const LINK_WETH_500_ADDRESS = "0xe2774d552037652682cbac82f7d7a1f58fae8da2"
 
-  // Pool addresses
-  // const LINK_WETH_500= "0xe2774d552037652682cbac82f7d7a1f58fae8da2"
+  // const poolContract = new ethers.Contract(
+  //   LINK_WETH_500_ADDRESS, 
+  //   UniswapV3PoolABI, 
+  //   signer
+  // )
 
   // const poolData = await getPoolData(poolContract)
 
