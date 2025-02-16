@@ -16,7 +16,8 @@ const provider = new ethers.providers.JsonRpcProvider(rpcURL) // Ropsten
 let base_sepolia_chain_id = 84532;
 
 const positionManagerAddress = "0x93c7430178ea1b082e151338930c6732f34ea69b" // NonfungiblePositionManager
-const uniswapV3FactoryAddress = "0x6e553ceedadefcd0fce6a220bc17814db8a193d0";
+
+// const uniswapV3FactoryAddress = "0x6e553ceedadefcd0fce6a220bc17814db8a193d0";
 
 async function getPoolData(poolContract) {
   const [tickSpacing, fee, liquidity, slot0] = await Promise.all([

@@ -3,7 +3,7 @@ const { abi: INonfungiblePositionManagerABI } = require('@uniswap/v3-periphery/a
 
 const rpcURL = process.env.sepoliaInfuraHttps // Your RPC URL goes here
 
-const provider = new ethers.providers.JsonRpcProvider(rpcURL) // Ropsten
+const provider = new ethers.providers.JsonRpcProvider(rpcURL)
 const positionManagerAddress = "0x49c389facbd26764946a3d61cdfe5db80f55a637" // NonfungiblePositionManager
 
 main()
