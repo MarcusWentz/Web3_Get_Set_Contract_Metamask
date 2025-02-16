@@ -173,9 +173,9 @@ async function main() {
   // on this line https://github.com/uniswap/v3-periphery/blob/main/contracts/libraries/PoolAddress.sol#L6
 
   const tx = await nonFungiblePositionManagerContract.mint(
-    // params
-    params,
-    { gasLimit: '1000000' }
+    params
+    // params,
+    // { gasLimit: '1000000' }
   )
   
   console.log(tx)  
