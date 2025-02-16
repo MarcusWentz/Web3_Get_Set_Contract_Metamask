@@ -15,8 +15,8 @@ const provider = new ethers.providers.JsonRpcProvider(rpcURL) // Ropsten
 
 let base_sepolia_chain_id = 84532;
 
-const positionManagerAddress = "0xdB98389CFC3658c92F84373d874Ea5BdD7695349" // NonfungiblePositionManager
-const uniswapV3FactoryAddress = "0x16D59bf09EF975Ea84883Eeb8d2A71dc4c739E2C";
+const positionManagerAddress = "0x93c7430178ea1b082e151338930c6732f34ea69b" // NonfungiblePositionManager
+const uniswapV3FactoryAddress = "0x6e553ceedadefcd0fce6a220bc17814db8a193d0";
 
 async function getPoolData(poolContract) {
   const [tickSpacing, fee, liquidity, slot0] = await Promise.all([
@@ -82,22 +82,23 @@ async function main() {
   const token1 = new Token(chainIdConnected, linkAddress, 18, 'LINK', 'Chainlink');
   const poolFee = BigInt(500);
 
-  // Address looks different than what was deployed.
-  // Possible cause: POOL_INIT_CODE_HASH logic
-  // https://ethereum.stackexchange.com/a/167757
-  const LINK_WETH_500_ADDRESS = computePoolAddress({
-    factoryAddress: uniswapV3FactoryAddress,
-    tokenA: token0,
-    tokenB: token1,
-    fee: poolFee,
-  })
+  // // Address looks different than what was deployed.
+  // // Possible cause: POOL_INIT_CODE_HASH logic
+  // // https://ethereum.stackexchange.com/a/167757
+  // const LINK_WETH_500_ADDRESS = computePoolAddress({
+  //   factoryAddress: uniswapV3FactoryAddress,
+  //   tokenA: token0,
+  //   tokenB: token1,
+  //   fee: poolFee,
+  // })
 
+  // console.log(LINK_WETH_500_ADDRESS)
+  // // // // // LINK_WETH_500_ADDRESS = 0xb8835E8c3769D00E90056db4957A399a342dfA5c
+
+  // Pool addresses
+  const LINK_WETH_500_ADDRESS = "0x4245640558cac66ddd5fb4e47dcd000458a166f3"
   console.log(LINK_WETH_500_ADDRESS)
-  // // // // LINK_WETH_500_ADDRESS = 0x5c632eb9f2e735f30e10038ae720ddcd545d2cf1
-
-  // // Pool addresses
-  // const LINK_WETH_500_ADDRESS = "0xe2774d552037652682cbac82f7d7a1f58fae8da2"
-
+ 
   const poolContract = new ethers.Contract(
     LINK_WETH_500_ADDRESS, 
     UniswapV3PoolABI, 
@@ -131,11 +132,11 @@ async function main() {
 
   const { amount0: amount0Desired, amount1: amount1Desired} = position.mintAmounts
 
-  // Uniswap V3 minting sqrtPriceX96 with pool.slot0()
-  // https://docs.uniswap.org/sdk/v3/guides/liquidity/minting
-  // Revert with 
-  // (uint160 sqrtPriceX96, , , , , , ) = pool.slot0();
-  // https://github.com/Uniswap/v3-periphery/blob/main/contracts/base/LiquidityManagement.sol#L67
+  // // Uniswap V3 minting sqrtPriceX96 with pool.slot0()
+  // // https://docs.uniswap.org/sdk/v3/guides/liquidity/minting
+  // // Revert with 
+  // // (uint160 sqrtPriceX96, , , , , , ) = pool.slot0();
+  // // https://github.com/Uniswap/v3-periphery/blob/main/contracts/base/LiquidityManagement.sol#L67
 
   params = {
     token0: wethAddress,
@@ -171,13 +172,13 @@ async function main() {
   // https://github.com/uniswap/v3-periphery/blob/main/contracts/libraries/PoolAddress.sol#L33-L47
   // on this line https://github.com/uniswap/v3-periphery/blob/main/contracts/libraries/PoolAddress.sol#L6
 
-  // const tx = await nonFungiblePositionManagerContract.mint(
-  //   params
-  //   // params,
-  //   // { gasLimit: '1000000' }
-  // )
+  const tx = await nonFungiblePositionManagerContract.mint(
+    // params
+    params,
+    { gasLimit: '1000000' }
+  )
   
-  // console.log(tx)  
+  console.log(tx)  
   
 }
 
