@@ -97,6 +97,12 @@ async function main() {
 
   const { amount0: amount0Desired, amount1: amount1Desired} = position.mintAmounts
 
+  // Uniswap V3 minting sqrtPriceX96 with pool.slot0()
+  // https://docs.uniswap.org/sdk/v3/guides/liquidity/minting
+  // Revert with 
+  // (uint160 sqrtPriceX96, , , , , , ) = pool.slot0();
+  // https://github.com/Uniswap/v3-periphery/blob/main/contracts/base/LiquidityManagement.sol#L67
+
   params = {
     token0: wethAddres,
     token1: linkAddress,
