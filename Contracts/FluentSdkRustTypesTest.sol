@@ -8,7 +8,7 @@ interface IFluentRust {
     // function rustInt256() external view returns (int256);
     function rustAddress() external view returns (address);
     function rustBytes() external view returns (bytes memory);
-    function rustBytes256() external view returns (bytes32);
+    function rustBytes32() external view returns (bytes32);
     function rustBool() external view returns (bool);
 }
 
@@ -45,9 +45,9 @@ contract FluentSdkRustTypesTest {
         return rustBytes;
     }
 
-    function getRustBytes256() external view returns (bytes32) {
-        bytes32 rustBytes256 = fluentRust.rustBytes256();
-        return rustBytes256;
+    function getRustBytes32() external view returns (bytes32) {
+        bytes32 rustBytes32 = fluentRust.rustBytes32();
+        return rustBytes32;
     }
 
     function getRustBool() external view returns (bool) {

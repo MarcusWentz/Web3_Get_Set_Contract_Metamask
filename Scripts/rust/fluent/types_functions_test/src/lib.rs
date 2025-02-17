@@ -26,7 +26,7 @@ pub trait RouterAPI {
     // fn rustInt256(&self) -> I256;
     fn rustAddress(&self) -> Address;
     fn rustBytes(&self) -> Bytes;
-    fn rustBytes256(&self) -> B256;
+    fn rustBytes32(&self) -> B256;
     fn rustBool(&self) -> bool;
 }
 
@@ -65,9 +65,9 @@ impl<SDK: SharedAPI> RouterAPI for ROUTER<SDK> {
         return bytes_test;
     }
 
-    #[function_id("rustBytes256()")]
-    fn rustBytes256(&self) -> B256 {
-        let bytes256_test = b256!("0x0000000000000000000000000000000000000000000000000000000000000000");
+    #[function_id("rustBytes32()")]
+    fn rustBytes32(&self) -> B256 {
+        let bytes256_test = b256!("0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
         return bytes256_test;
     }
 
