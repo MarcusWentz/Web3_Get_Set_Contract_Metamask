@@ -6,12 +6,12 @@ use fluentbase_sdk::{
     basic_entrypoint,
     derive::{function_id, router, Contract},
     SharedAPI,
-    U256, // alloy Solidity type
-    address, // alloy Solidity marco
-    Address, // alloy Solidity type
-    Bytes, // alloy Solidity type
-    B256, // alloy Solidity type
-    b256 // alloy Solidity marco
+    U256,    // alloy Solidity type for uint256
+    Address, // alloy Solidity type for address
+    address, // alloy Solidity marco to define values for type Address
+    Bytes,   // alloy Solidity type for bytes
+    B256,    // alloy Solidity type for bytes32
+    b256     // alloy Solidity marco to define values for type B256
 };
 
 #[derive(Contract)]
@@ -27,6 +27,7 @@ pub trait RouterAPI {
     fn rustAddress(&self) -> Address;
     fn rustBytes(&self) -> Bytes;
     fn rustBytes256(&self) -> B256;
+    fn rustBool(&self) -> bool;
 }
 
 #[router(mode = "solidity")]
@@ -68,6 +69,12 @@ impl<SDK: SharedAPI> RouterAPI for ROUTER<SDK> {
     fn rustBytes256(&self) -> B256 {
         let bytes256_test = b256!("0x0000000000000000000000000000000000000000000000000000000000000000");
         return bytes256_test;
+    }
+
+    #[function_id("rustBool()")]
+    fn rustBool(&self) -> bool {
+        let bool_test = true;
+        return bool_test;
     }
 
 }
