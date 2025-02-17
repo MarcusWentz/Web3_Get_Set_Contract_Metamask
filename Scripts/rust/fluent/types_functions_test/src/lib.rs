@@ -9,8 +9,9 @@ use fluentbase_sdk::{
     U256, // alloy Solidity type
     address, // alloy Solidity marco
     Address, // alloy Solidity type
-    // B256,
-    Bytes
+    Bytes, // alloy Solidity type
+    B256, // alloy Solidity type
+    b256 // alloy Solidity marco
 };
 
 #[derive(Contract)]
@@ -25,6 +26,7 @@ pub trait RouterAPI {
     // fn rustInt256(&self) -> I256;
     fn rustAddress(&self) -> Address;
     fn rustBytes(&self) -> Bytes;
+    fn rustBytes256(&self) -> B256;
 }
 
 #[router(mode = "solidity")]
@@ -58,8 +60,14 @@ impl<SDK: SharedAPI> RouterAPI for ROUTER<SDK> {
     
     #[function_id("rustBytes()")]
     fn rustBytes(&self) -> Bytes {
-        let bytes_test = Bytes::from("TOK");
+        let bytes_test = Bytes::from("FLUENT");
         return bytes_test;
+    }
+
+    #[function_id("rustBytes256()")]
+    fn rustBytes256(&self) -> B256 {
+        let bytes256_test = b256!("0x0000000000000000000000000000000000000000000000000000000000000000");
+        return bytes256_test;
     }
 
 }
