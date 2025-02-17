@@ -8,7 +8,9 @@ use fluentbase_sdk::{
     SharedAPI,
     U256, // alloy Solidity type
     address, // alloy Solidity marco
-    Address // alloy Solidity type
+    Address, // alloy Solidity type
+    // B256,
+    Bytes
 };
 
 #[derive(Contract)]
@@ -20,7 +22,9 @@ pub trait RouterAPI {
     // Make sure type interfaces are defined here or else there will be a compiler error.
     fn rustString(&self) -> String;
     fn rustUint256(&self) -> U256;
+    // fn rustInt256(&self) -> I256;
     fn rustAddress(&self) -> Address;
+    fn rustBytes(&self) -> Bytes;
 }
 
 #[router(mode = "solidity")]
@@ -31,18 +35,31 @@ impl<SDK: SharedAPI> RouterAPI for ROUTER<SDK> {
 
     #[function_id("rustString()")]
     fn rustString(&self) -> String {
-        return "Hello".to_string()
+        let string_test = "Hello".to_string();
+        return string_test;
     }
 
     #[function_id("rustUint256()")]
     fn rustUint256(&self) -> U256 {
-        return U256::from(10)
+        let uint256_test = U256::from(10);
+        return uint256_test;
     }
+
+    // #[function_id("rustInt256()")]
+    // fn rustInt256(&self) -> I256 {
+    //     return I256::from(-10)
+    // }
 
     #[function_id("rustAddress()")]
     fn rustAddress(&self) -> Address {
         let address_test: Address = address!("d8da6bf26964af9d7eed9e03e53415d37aa96045"); // vitalik.eth 0xd8da6bf26964af9d7eed9e03e53415d37aa96045
         return address_test;
+    }
+    
+    #[function_id("rustBytes()")]
+    fn rustBytes(&self) -> Bytes {
+        let bytes_test = Bytes::from("TOK");
+        return bytes_test;
     }
 
 }
