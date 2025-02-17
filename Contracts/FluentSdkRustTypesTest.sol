@@ -16,8 +16,8 @@ contract FluentSdkRustTypesTest {
     
     IFluentRust public fluentRust;
 
-    constructor(address _fluentGreetingContractAddress) {
-        fluentRust = IFluentRust(_fluentGreetingContractAddress);
+    constructor(address FluentRustAddress) {
+        fluentRust = IFluentRust(FluentRustAddress);
     }
 
     function getRustString() external view returns (string memory) {
