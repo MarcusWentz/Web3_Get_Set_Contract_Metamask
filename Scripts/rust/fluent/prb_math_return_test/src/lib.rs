@@ -6,17 +6,17 @@ extern crate alloc;
 // since we do not have access to the Rust standard library (std) with setting "no_std" with the wasm32 target file.
 use libm;
 
-use alloc::string::{String, ToString};
+// use alloc::string::{String, ToString};
 use fluentbase_sdk::{
     basic_entrypoint,
     derive::{function_id, router, Contract},
     SharedAPI,
     U256,    // alloy Solidity type for uint256
-    Address, // alloy Solidity type for address
-    address, // alloy Solidity marco to define values for type Address
-    Bytes,   // alloy Solidity type for bytes
-    B256,    // alloy Solidity type for bytes32
-    b256     // alloy Solidity marco to define values for type B256
+    // Address, // alloy Solidity type for address
+    // address, // alloy Solidity marco to define values for type Address
+    // Bytes,   // alloy Solidity type for bytes
+    // B256,    // alloy Solidity type for bytes32
+    // b256     // alloy Solidity marco to define values for type B256
 };
 
 #[derive(Contract)]
@@ -45,9 +45,10 @@ impl<SDK: SharedAPI> RouterAPI for ROUTER<SDK> {
         // // f64 value types have methods for more complicated math operations.
         let input: f64 = 100.0;
 
-        let ln_result = libm::log(input); // Natural log (ln)
-
-        let uint256_test = U256::from(10);
+        let ln_result_float: f64 = libm::log(input); // Natural log (ln)
+        let ln_result_uint : u32 = libm::round(ln_result_float) as u32;
+        // let uint256_test = U256::from(10);
+        let uint256_test = U256::from(ln_result_uint);
         return uint256_test;
     }
 
