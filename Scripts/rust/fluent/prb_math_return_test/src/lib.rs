@@ -39,6 +39,8 @@ impl<SDK: SharedAPI> RouterAPI for ROUTER<SDK> {
     // ERC-20 with Fluent SDK example:
     // https://github.com/fluentlabs-xyz/fluentbase/blob/devel/examples/erc20/lib.rs
 
+    // println!("Note: Max value of u32 is 4294967295."); 
+
     #[function_id("rustLnUint256()")]
     fn rustLnUint256(&self) -> U256 {
 
@@ -58,9 +60,13 @@ impl<SDK: SharedAPI> RouterAPI for ROUTER<SDK> {
         // // f64 value types have methods for more complicated math operations.
         let input: f64 = 100.0;
 
-        let log10_result = libm::log10(input); // Calculates the base-10 logarithm of input
-
-        let uint256_test = U256::from(10);
+        let log10_result_float: f64 = libm::log10(input); // Natural log (ln)
+        // println!("log10(100) = {}",log10_result_float); 
+        let log10_result_uint : u32 = libm::round(log10_result_float) as u32;
+        // println!("{}",log10_result_uint); 
+    
+        
+        let uint256_test = U256::from(log10_result_uint);
         return uint256_test;
     }
 
@@ -70,8 +76,11 @@ impl<SDK: SharedAPI> RouterAPI for ROUTER<SDK> {
         // // f64 value types have methods for more complicated math operations.
         let input: f64 = 100.0;
 
-        let log2_result = libm::log2(input); // Calculates the base-2 logarithm of input
-
+        let log2_result_float: f64 = libm::log2(input); // Natural log (ln)
+        // println!("log2(100) = {}",log2_result_float); 
+        let log2_result_uint : u32 = libm::round(log2_result_float) as u32;
+        // println!("{}",log2_result_uint); 
+        
         let uint256_test = U256::from(10);
         return uint256_test;
     }
@@ -82,9 +91,12 @@ impl<SDK: SharedAPI> RouterAPI for ROUTER<SDK> {
         // // f64 value types have methods for more complicated math operations.
         let input: f64 = 100.0;
 
-        let sqrt_result = libm::sqrt(input); // Calculates the square root of input
-
-        let uint256_test = U256::from(10);
+        let sqrt_result_float: f64 = libm::sqrt(input); // Natural log (ln)
+        // println!("sqrt(100) = {}",sqrt_result_float); 
+        let sqrt_result_uint : u32 = libm::round(sqrt_result_float) as u32;
+        // println!("{}",sqrt_result_uint); 
+        
+        let uint256_test = U256::from(sqrt_result_uint);
         return uint256_test;
     }
 
@@ -92,11 +104,16 @@ impl<SDK: SharedAPI> RouterAPI for ROUTER<SDK> {
     fn rustExpUint256(&self) -> U256 {
 
         // // f64 value types have methods for more complicated math operations.
-        let input: f64 = 100.0;
+        let input_exp: f64 = 10.0;
+        // println!("input_exp value = {}", input_exp); 
+    
+        let exp_result_float: f64 = libm::exp(input_exp); // Natural log (ln)
+        // println!("exp(100) = {}",exp_result_float); 
+        // Max value of u32 is 4294967295.
+        let exp_result_uint : u32 = libm::round(exp_result_float) as u32;
+        // println!("{}",exp_result_uint); 
 
-        let exp_result = libm::exp(input); // Calculates the exp (e^x) of input
-
-        let uint256_test = U256::from(10);
+        let uint256_test = U256::from(exp_result_uint);
         return uint256_test;
     }
 
