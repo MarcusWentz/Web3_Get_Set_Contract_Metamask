@@ -25,8 +25,12 @@ fn main()   {
 
     let ln_result_float: f64 = libm::log(input); // Natural log (ln)
     println!("ln(100) = {}",ln_result_float); 
-    let ln_result_uint : u32 = libm::round(ln_result_float) as u32;
-    println!("{}",ln_result_uint); 
+
+    let ln_result_round_uint : u32 = libm::round(ln_result_float) as u32;
+    println!("ln(100) round = {}",ln_result_round_uint); 
+    
+    let ln_result_floor_uint : u32 = libm::floor(ln_result_float) as u32;
+    println!("ln(100) floor = {}",ln_result_floor_uint); 
 
     let log10_result_float: f64 = libm::log10(input); // Natural log (ln)
     println!("log10(100) = {}",log10_result_float); 
