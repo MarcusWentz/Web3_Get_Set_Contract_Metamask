@@ -49,8 +49,11 @@ impl<SDK: SharedAPI> RouterAPI for ROUTER<SDK> {
 
         let ln_result_float: f64 = libm::log(input); // Natural log (ln)
         let ln_result_uint : u32 = libm::round(ln_result_float) as u32;
+
         // let uint256_test = U256::from(10);
+        
         let uint256_test = U256::from(ln_result_uint);
+        
         return uint256_test;
     }
 
@@ -81,7 +84,7 @@ impl<SDK: SharedAPI> RouterAPI for ROUTER<SDK> {
         let log2_result_uint : u32 = libm::round(log2_result_float) as u32;
         // println!("{}",log2_result_uint); 
         
-        let uint256_test = U256::from(10);
+        let uint256_test = U256::from(log2_result_uint);
         return uint256_test;
     }
 
