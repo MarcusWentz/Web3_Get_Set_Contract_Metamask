@@ -7,6 +7,7 @@ use fluentbase_sdk::{
     derive::{function_id, router, Contract},
     SharedAPI,
     U256,    // alloy Solidity type for uint256
+    I256,
     Address, // alloy Solidity type for address
     address, // alloy Solidity marco to define values for type Address
     Bytes,   // alloy Solidity type for bytes
@@ -23,7 +24,7 @@ pub trait RouterAPI {
     // Make sure type interfaces are defined here or else there will be a compiler error.
     fn rustString(&self) -> String;
     fn rustUint256(&self) -> U256;
-    // fn rustInt256(&self) -> I256;
+    fn rustInt256(&self) -> I256;
     fn rustAddress(&self) -> Address;
     fn rustBytes(&self) -> Bytes;
     fn rustBytes32(&self) -> B256;
@@ -48,10 +49,13 @@ impl<SDK: SharedAPI> RouterAPI for ROUTER<SDK> {
         return uint256_test;
     }
 
-    // #[function_id("rustInt256()")]
-    // fn rustInt256(&self) -> I256 {
-    //     return I256::from(-10)
-    // }
+    #[function_id("rustInt256()")]
+    fn rustInt256(&self) -> I256 {
+        // Declare Signed variables in alloy.rs:
+        // https://docs.rs/alloy-primitives/latest/alloy_primitives/struct.Signed.html#method.from_dec_str
+        let int256_test = I256::unchecked_from(-10);
+        return int256_test;
+    }
 
     #[function_id("rustAddress()")]
     fn rustAddress(&self) -> Address {

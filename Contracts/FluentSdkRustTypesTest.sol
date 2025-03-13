@@ -5,7 +5,7 @@ interface IFluentRust {
     // Make sure type interfaces are defined here or else there will be a compiler error.
     function rustString() external view returns (string memory);
     function rustUint256() external view returns (uint256);    
-    // function rustInt256() external view returns (int256);
+    function rustInt256() external view returns (int256);
     function rustAddress() external view returns (address);
     function rustBytes() external view returns (bytes memory);
     function rustBytes32() external view returns (bytes32);
@@ -30,10 +30,10 @@ contract FluentSdkRustTypesTest {
         return rustUint256;
     }
 
-    // function getRustInt256() external view returns (int256) {
-    //     int256 rustInt256 = fluentRust.rustInt256();
-    //     return rustInt256;
-    // }
+    function getRustInt256() external view returns (int256) {
+        int256 rustInt256 = fluentRust.rustInt256();
+        return rustInt256;
+    }
 
     function getRustAddress() external view returns (address) {
         address rustAddress = fluentRust.rustAddress();
