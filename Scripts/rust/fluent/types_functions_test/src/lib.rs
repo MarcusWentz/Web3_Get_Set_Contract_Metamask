@@ -7,7 +7,7 @@ use fluentbase_sdk::{
     derive::{function_id, router, Contract},
     SharedAPI,
     U256,    // alloy Solidity type for uint256
-    I256,
+    I256,    // alloy Solidity type for int256
     Address, // alloy Solidity type for address
     address, // alloy Solidity marco to define values for type Address
     Bytes,   // alloy Solidity type for bytes
