@@ -55,7 +55,7 @@ func main() {
         log.Fatal("Switch to Fluent Sepolia then try again.",  )
      }
 
-    contractAddress := common.HexToAddress("0x7FeA70871E575CE3069aCCE0D25725ec0840dD8E")
+    contractAddress := common.HexToAddress("0xd810284B98f41681477D89888Ce81f1b63690568")
     contract := connectContractAddress(client,contractAddress)
     fmt.Println("contract type object: ")
     fmt.Printf("%T",contract)

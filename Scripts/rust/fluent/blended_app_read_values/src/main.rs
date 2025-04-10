@@ -1,18 +1,10 @@
-use std::env;
 use url::Url;
-use std::time::{SystemTime};
 
 use alloy::{
-    network::EthereumWallet,
-    providers::{Provider, ProviderBuilder, WsConnect},
-    signers::local::PrivateKeySigner,
-    primitives::{U256,address},
-    rpc::types::{BlockNumberOrTag, Filter},
+    providers::{Provider, ProviderBuilder},
     sol,
 };
 use eyre::Result;
-use futures_util::stream::StreamExt;
-
 
 sol!(
     #[allow(missing_docs)]
@@ -29,8 +21,6 @@ async fn main() -> Result<()> {
    
     // // Fail RPC (Any network that is not Base Sepolia)
     // let rpc_base_sepolia_infura_https = env::var("optimismSepoliaHTTPS").expect("$baseSepoliaHTTPS is not set");
-
-    let private_key_wallet_string = env::var("devTestnetPrivateKey").expect("$devTestnetPrivateKey is not set");
 
     let rpc_url_http = Url::parse(&rpc_base_sepolia_infura_https).expect("RPC url string type covert error");
     
@@ -56,7 +46,7 @@ async fn main() -> Result<()> {
         return Ok(())
     }
 
-    let contract = SimpleStorage::new("0x7FeA70871E575CE3069aCCE0D25725ec0840dD8E".parse()?, provider_http);
+    let contract = SimpleStorage::new("0xd810284B98f41681477D89888Ce81f1b63690568".parse()?, provider_http);
 
     let stored_data_before = contract.getRustUint256().call().await?._0;
     println!("stored_data_before {}", stored_data_before);
