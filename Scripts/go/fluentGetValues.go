@@ -6,7 +6,7 @@
 // solc --bin Store.sol > store.bin
 //Step 4: Remove comments above the abi and bin files.
 //Step 5: Generate Go contract interaction file by running:  
-// abigen --bin=store.bin --abi=store.abi --pkg=store --out=store.go
+// abigen --bin=fluent.bin --abi=fluent.abi --pkg=fluent --out=fluent.go
 //Step 6: Run: 
 // go run fluentGetValues.go
 package main
@@ -17,7 +17,7 @@ import (
     "context"
     "math/big"
 
-    store "storeProject/contracts" //LOOK AT "go.mod" FOR YOUR RELATIVE PROJECT PATH TO FIND CONTRACT INTERFACE!
+    fluent "storeProject/contracts/fluent" //LOOK AT "go.mod" FOR YOUR RELATIVE PROJECT PATH TO FIND CONTRACT INTERFACE!
 
     // "github.com/ethereum/go-ethereum"
     "github.com/ethereum/go-ethereum/accounts/abi/bind"
@@ -51,11 +51,11 @@ func main() {
     isClientChainIdCorrect := baseSepoliaChainId.Cmp(chainID) == 0;
 
     if isClientChainIdCorrect == false {
-        fmt.Printf("RPC endpoint not connected to Base Sepolia (chainId: %s)\n", baseSepoliaChainId)
-        log.Fatal("Switch to Base Sepolia then try again.",  )
+        fmt.Printf("RPC endpoint not connected to Fluent Sepolia (chainId: %s)\n", baseSepoliaChainId)
+        log.Fatal("Switch to Fluent Sepolia then try again.",  )
      }
 
-    contractAddress := common.HexToAddress("0x9db7a0fED154db6562933EE6BED41363F174770D")
+    contractAddress := common.HexToAddress("0x7FeA70871E575CE3069aCCE0D25725ec0840dD8E")
     contract := connectContractAddress(client,contractAddress)
     fmt.Println("contract type object: ")
     fmt.Printf("%T",contract)
@@ -80,18 +80,18 @@ func clientSetup(wssConnectionURL string) (client *ethclient.Client, chainID *bi
   return
 }
 
-func connectContractAddress(client *ethclient.Client, contractAddress common.Address) (contract *store.Store) {
+func connectContractAddress(client *ethclient.Client, contractAddress common.Address) (contract *fluent.Fluent) {
 
-  contract, err := store.NewStore(contractAddress, client)
+  contract, err := fluent.NewFluent(contractAddress, client)
   if err != nil {
       log.Fatal(err)
   }
   return
 }
 
-func getstoredData(contract *store.Store) (storedData *big.Int) {
+func getstoredData(contract *fluent.Fluent) (storedData *big.Int) {
 
-  storedData, err := contract.StoredData(&bind.CallOpts{})
+  storedData, err := contract.GetRustUint256(&bind.CallOpts{})
   if err != nil {
         log.Fatal(err)
   }

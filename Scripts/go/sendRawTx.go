@@ -2,7 +2,7 @@
 //Step 2: Create bin file by running: solc --bin Store.sol > store.bin
 //Step 3: Remove comments above the abi and bin files.
 //Step 4: Generate Go contract interaction file by running:  abigen --bin=store.bin --abi=store.abi --pkg=store --out=store.go
-//Step 5: Run: getSetEvent.go
+//Step 5: Run: go run getSetEvent.go
 package main
 
 import (
@@ -14,7 +14,7 @@ import (
     "math/big"
     "golang.org/x/crypto/sha3"
 
-    store "storeProject/contracts" //LOOK AT "go.mod" FOR YOUR RELATIVE PROJECT PATH TO FIND CONTRACT INTERFACE!
+    store "storeProject/contracts/store" //LOOK AT "go.mod" FOR YOUR RELATIVE PROJECT PATH TO FIND CONTRACT INTERFACE!
 
     "github.com/ethereum/go-ethereum/accounts/abi/bind"
     "github.com/ethereum/go-ethereum/common"
