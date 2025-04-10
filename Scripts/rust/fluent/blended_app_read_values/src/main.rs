@@ -48,8 +48,29 @@ async fn main() -> Result<()> {
 
     let contract = SimpleStorage::new("0xd810284B98f41681477D89888Ce81f1b63690568".parse()?, provider_http);
 
-    let stored_data_before = contract.getRustUint256().call().await?._0;
-    println!("stored_data_before {}", stored_data_before);
+    let fluent_rust_contract_address = contract.fluentRust().call().await?._0;
+    println!("fluent_rust_contract_address {}", fluent_rust_contract_address);
+
+    let get_rust_string = contract.getRustString().call().await?._0;
+    println!("get_rust_string {}", get_rust_string);
+
+    let get_rust_uint256 = contract.getRustUint256().call().await?._0;
+    println!("get_rust_uint256 {}", get_rust_uint256);
+
+    let get_rust_int256 = contract.getRustInt256().call().await?._0;
+    println!("get_rust_int256 {}", get_rust_int256);
+
+    let get_rust_address = contract.getRustAddress().call().await?._0;
+    println!("get_rust_address {}", get_rust_address);
+
+    let get_rust_bytes = contract.getRustBytes().call().await?._0;
+    println!("get_rust_bytes {}", get_rust_bytes);
+
+    let get_rust_bytes32 = contract.getRustBytes32().call().await?._0;
+    println!("get_rust_bytes32 {}", get_rust_bytes32);
+
+    let get_rust_bool = contract.getRustBool().call().await?._0;
+    println!("get_rust_bool {}", get_rust_bool);
     
     Ok(())
 
