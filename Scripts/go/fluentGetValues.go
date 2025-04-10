@@ -79,7 +79,7 @@ func main() {
 
     get_rust_bytes_array := getRustBytes(contract)
     get_rust_bytes_hex_string := "0x" + hex.EncodeToString(get_rust_bytes_array) // bytes array to hex string
-    fmt.Println("get_rust_bytes: ", get_rust_bytes_hex_string)
+    fmt.Println("get_rust_bytes_hex_string: ", get_rust_bytes_hex_string)
 
     get_rust_bytes32_array := getRustBytes32(contract)
     get_rust_bytes32_hex_string := "0x" + hex.EncodeToString(get_rust_bytes32_array[:]) // bytes array to hex string
