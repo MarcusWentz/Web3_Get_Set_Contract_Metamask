@@ -61,8 +61,29 @@ func main() {
     fmt.Printf("%T",contract)
     fmt.Println("")
 
-    storedData := getstoredData(contract)
-    fmt.Println("storedData:", storedData)
+    fluent_rust_contract_address := getFluentRustContractAddress(contract)
+    fmt.Println("fluent_rust_contract_address:", fluent_rust_contract_address)
+
+    get_rust_string := getRustString(contract)
+    fmt.Println("get_rust_string:", get_rust_string)
+
+    get_rust_uint256 := getRustUint256(contract)
+    fmt.Println("get_rust_uint256:", get_rust_uint256)
+
+    get_rust_int256 := getRustInt256(contract)
+    fmt.Println("get_rust_int256:", get_rust_int256)
+
+    // let get_rust_address = contract.getRustAddress().call().await?._0;
+    // println!("get_rust_address {}", get_rust_address);
+
+    // let get_rust_bytes = contract.getRustBytes().call().await?._0;
+    // println!("get_rust_bytes {}", get_rust_bytes);
+
+    // let get_rust_bytes32 = contract.getRustBytes32().call().await?._0;
+    // println!("get_rust_bytes32 {}", get_rust_bytes32);
+
+    get_rust_bool := getRustBool(contract)
+    fmt.Println("get_rust_bool:", get_rust_bool)
     
 }
 
@@ -89,7 +110,7 @@ func connectContractAddress(client *ethclient.Client, contractAddress common.Add
   return
 }
 
-func getstoredData(contract *fluent.Fluent) (storedData *big.Int) {
+func getRustUint256(contract *fluent.Fluent) (storedData *big.Int) {
 
   storedData, err := contract.GetRustUint256(&bind.CallOpts{})
   if err != nil {
@@ -99,3 +120,42 @@ func getstoredData(contract *fluent.Fluent) (storedData *big.Int) {
 
 }
 
+func getRustInt256(contract *fluent.Fluent) (storedData *big.Int) {
+
+  storedData, err := contract.GetRustInt256(&bind.CallOpts{})
+  if err != nil {
+        log.Fatal(err)
+  }
+  return
+
+}
+
+func getRustBool(contract *fluent.Fluent) (storedData bool) {
+
+  storedData, err := contract.GetRustBool(&bind.CallOpts{})
+  if err != nil {
+        log.Fatal(err)
+  }
+  return
+
+}
+
+func getFluentRustContractAddress(contract *fluent.Fluent) (storedData common.Address) {
+
+  storedData, err := contract.FluentRust(&bind.CallOpts{})
+  if err != nil {
+        log.Fatal(err)
+  }
+  return
+
+}
+
+func getRustString(contract *fluent.Fluent) (storedData string) {
+
+  storedData, err := contract.GetRustString(&bind.CallOpts{})
+  if err != nil {
+        log.Fatal(err)
+  }
+  return
+
+}
