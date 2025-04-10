@@ -16,6 +16,7 @@ import (
     "log"
     "context"
     "math/big"
+    "encoding/hex"
 
     fluent "storeProject/contracts/fluent" //LOOK AT "go.mod" FOR YOUR RELATIVE PROJECT PATH TO FIND CONTRACT INTERFACE!
 
@@ -73,14 +74,16 @@ func main() {
     get_rust_int256 := getRustInt256(contract)
     fmt.Println("get_rust_int256:", get_rust_int256)
 
-    // let get_rust_address = contract.getRustAddress().call().await?._0;
-    // println!("get_rust_address {}", get_rust_address);
+    get_rust_address := getRustAddress(contract)
+    fmt.Println("get_rust_address:", get_rust_address)
 
-    // let get_rust_bytes = contract.getRustBytes().call().await?._0;
-    // println!("get_rust_bytes {}", get_rust_bytes);
+    get_rust_bytes_array := getRustBytes(contract)
+    get_rust_bytes_hex_string := "0x" + hex.EncodeToString(get_rust_bytes_array) // bytes array to hex string
+    fmt.Println("get_rust_bytes: ", get_rust_bytes_hex_string)
 
-    // let get_rust_bytes32 = contract.getRustBytes32().call().await?._0;
-    // println!("get_rust_bytes32 {}", get_rust_bytes32);
+    get_rust_bytes32_array := getRustBytes32(contract)
+    get_rust_bytes32_hex_string := "0x" + hex.EncodeToString(get_rust_bytes32_array[:]) // bytes array to hex string
+    fmt.Println("get_rust_bytes32_hex_string: ", get_rust_bytes32_hex_string)
 
     get_rust_bool := getRustBool(contract)
     fmt.Println("get_rust_bool:", get_rust_bool)
@@ -153,6 +156,36 @@ func getFluentRustContractAddress(contract *fluent.Fluent) (storedData common.Ad
 func getRustString(contract *fluent.Fluent) (storedData string) {
 
   storedData, err := contract.GetRustString(&bind.CallOpts{})
+  if err != nil {
+        log.Fatal(err)
+  }
+  return
+
+}
+
+func getRustAddress(contract *fluent.Fluent) (storedData common.Address) {
+
+  storedData, err := contract.GetRustAddress(&bind.CallOpts{})
+  if err != nil {
+        log.Fatal(err)
+  }
+  return
+
+}
+
+func getRustBytes(contract *fluent.Fluent) (storedData []byte) {
+
+  storedData, err := contract.GetRustBytes(&bind.CallOpts{})
+  if err != nil {
+        log.Fatal(err)
+  }
+  return
+
+}
+
+func getRustBytes32(contract *fluent.Fluent) (storedData [32]byte) {
+
+  storedData, err := contract.GetRustBytes32(&bind.CallOpts{})
   if err != nil {
         log.Fatal(err)
   }
