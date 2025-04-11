@@ -26,11 +26,11 @@ struct ROUTER<SDK> {
 
 pub trait RouterAPI {
     // Make sure type interfaces are defined here 
-    fn rustLnUint256(&self) -> U256;
-    fn rustLog10Uint256(&self) -> U256;
-    fn rustLog2Uint256(&self) -> U256;
-    fn rustSqrtUint256(&self) -> U256;
-    fn rustExpUint256(&self) -> U256;
+    fn rust_ln_uint256(&self) -> U256;
+    fn rust_log10_uint256(&self) -> U256;
+    fn rust_log2_uint256(&self) -> U256;
+    fn rust_sqrt_uint256(&self) -> U256;
+    fn rust_exp_uint256(&self) -> U256;
 }
 
 #[router(mode = "solidity")]
@@ -42,7 +42,7 @@ impl<SDK: SharedAPI> RouterAPI for ROUTER<SDK> {
     // println!("Note: Max value of u32 is 4294967295."); 
 
     #[function_id("rustLnUint256()")]
-    fn rustLnUint256(&self) -> U256 {
+    fn rust_ln_uint256(&self) -> U256 {
 
         // // f64 value types have methods for more complicated math operations.
         let input: f64 = 100.0;
@@ -58,7 +58,7 @@ impl<SDK: SharedAPI> RouterAPI for ROUTER<SDK> {
     }
 
     #[function_id("rustLog10Uint256()")]
-    fn rustLog10Uint256(&self) -> U256 {
+    fn rust_log10_uint256(&self) -> U256 {
 
         // // f64 value types have methods for more complicated math operations.
         let input: f64 = 100.0;
@@ -74,7 +74,7 @@ impl<SDK: SharedAPI> RouterAPI for ROUTER<SDK> {
     }
 
     #[function_id("rustLog2Uint256()")]
-    fn rustLog2Uint256(&self) -> U256 {
+    fn rust_log2_uint256(&self) -> U256 {
 
         // // f64 value types have methods for more complicated math operations.
         let input: f64 = 100.0;
@@ -89,7 +89,7 @@ impl<SDK: SharedAPI> RouterAPI for ROUTER<SDK> {
     }
 
     #[function_id("rustSqrtUint256()")]
-    fn rustSqrtUint256(&self) -> U256 {
+    fn rust_sqrt_uint256(&self) -> U256 {
 
         // // f64 value types have methods for more complicated math operations.
         let input: f64 = 100.0;
@@ -104,7 +104,7 @@ impl<SDK: SharedAPI> RouterAPI for ROUTER<SDK> {
     }
 
     #[function_id("rustExpUint256()")]
-    fn rustExpUint256(&self) -> U256 {
+    fn rust_exp_uint256(&self) -> U256 {
 
         // // f64 value types have methods for more complicated math operations.
         let input_exp: f64 = 10.0;

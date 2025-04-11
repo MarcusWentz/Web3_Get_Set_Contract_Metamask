@@ -22,13 +22,13 @@ struct ROUTER<SDK> {
 
 pub trait RouterAPI {
     // Make sure type interfaces are defined here or else there will be a compiler error.
-    fn rustString(&self) -> String;
-    fn rustUint256(&self) -> U256;
-    fn rustInt256(&self) -> I256;
-    fn rustAddress(&self) -> Address;
-    fn rustBytes(&self) -> Bytes;
-    fn rustBytes32(&self) -> B256;
-    fn rustBool(&self) -> bool;
+    fn rust_string(&self) -> String;
+    fn rust_uint256(&self) -> U256;
+    fn rust_int256(&self) -> I256;
+    fn rust_address(&self) -> Address;
+    fn rust_bytes(&self) -> Bytes;
+    fn rust_bytes32(&self) -> B256;
+    fn rust_bool(&self) -> bool;
 }
 
 #[router(mode = "solidity")]
@@ -38,19 +38,19 @@ impl<SDK: SharedAPI> RouterAPI for ROUTER<SDK> {
     // https://github.com/fluentlabs-xyz/fluentbase/blob/devel/examples/erc20/lib.rs
 
     #[function_id("rustString()")]
-    fn rustString(&self) -> String {
+    fn rust_string(&self) -> String {
         let string_test = "Hello".to_string();
         return string_test;
     }
 
     #[function_id("rustUint256()")]
-    fn rustUint256(&self) -> U256 {
+    fn rust_uint256(&self) -> U256 {
         let uint256_test = U256::from(10);
         return uint256_test;
     }
 
     #[function_id("rustInt256()")]
-    fn rustInt256(&self) -> I256 {
+    fn rust_int256(&self) -> I256 {
         // Declare Signed variables in alloy.rs:
         // https://docs.rs/alloy-primitives/latest/alloy_primitives/struct.Signed.html#method.from_dec_str
         let int256_test = I256::unchecked_from(-10);
@@ -58,25 +58,25 @@ impl<SDK: SharedAPI> RouterAPI for ROUTER<SDK> {
     }
 
     #[function_id("rustAddress()")]
-    fn rustAddress(&self) -> Address {
+    fn rust_address(&self) -> Address {
         let address_test: Address = address!("d8da6bf26964af9d7eed9e03e53415d37aa96045"); // vitalik.eth 0xd8da6bf26964af9d7eed9e03e53415d37aa96045
         return address_test;
     }
     
     #[function_id("rustBytes()")]
-    fn rustBytes(&self) -> Bytes {
+    fn rust_bytes(&self) -> Bytes {
         let bytes_test = Bytes::from("FLUENT");
         return bytes_test;
     }
 
     #[function_id("rustBytes32()")]
-    fn rustBytes32(&self) -> B256 {
+    fn rust_bytes32(&self) -> B256 {
         let bytes256_test = b256!("0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
         return bytes256_test;
     }
 
     #[function_id("rustBool()")]
-    fn rustBool(&self) -> bool {
+    fn rust_bool(&self) -> bool {
         let bool_test = true;
         return bool_test;
     }
