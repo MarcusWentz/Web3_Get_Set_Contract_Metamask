@@ -5,6 +5,7 @@ Javascript
 Golang
 Rust
 C#
+C
 Python
 Nim
 Java
