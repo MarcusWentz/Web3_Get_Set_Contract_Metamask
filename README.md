@@ -1,17 +1,37 @@
-Test website with Metamask which also has some sample contracts and interaction scripts
+# Overview
+
+Test website with Metamask with backend test scripts.
+
+## Website Demo Using GitHub Pages
+
+https://marcuswentz.github.io/Web3_Get_Set_Contract_Metamask/ 
+
+## Web3 Programming Languages
+
+### Recommended for web3 development:
 
 ```
-Javascript
-Golang
-Rust
-C#
-C++
+Javascript (ethers.js)
+Rust (alloy.rs)
+Golang (Geth)
+```
+
+### Other languages:
+```
+C# (Nethermind)
 C
 Python
-Nim
-Java
 Typescript
+C++ (Silkworm)
+Nim (Nimbus)
+Java (Besu)
 ```
+
+### Ethereum Clients
+
+https://clientdiversity.org/
+
+## Backend Test Scripts 
 
 Scripts used to control frontend and backend smart contract logic:
 ```
@@ -19,39 +39,52 @@ Scripts used to control frontend and backend smart contract logic:
 -Get value from a contract with Metamask as Web3 client provider
 -Set custom uint value for a contract [negative values forced to absolute value]
 ```
-Try the project via GitHub pages:\
-https://marcuswentz.github.io/Web3_Get_Set_Contract_Metamask/ \
-Try the project via IPFS [deployed using Fleek]:\
-https://aged-cake-4557.on.fleek.co/ 
+
+## Testnet Smart Contract Deployments
 
 Contract deployed and verified on Base Sepolia testnet: 
 
 https://sepolia.basescan.org/address/0xed62f27e9e886a27510dc491f5530996719ced3d#code
 
+## Test Frontend Website Locally
+
 Run locally for testing with:
 
-⚠️ Node.js version v16.14.2 is recommended to avoid errors running the website locally. ⚠️
 ```shell
 npm install http-server
 ```
+
 then
+
 ```shell
 npx http-server
 ```
+
 or
+
 ```shell
 http-server
 ```
-Note: this website example uses Vanilla Javascript.
 
-For a similar template in React with GitHub pages support as well:
+## React Templates
 
-https://github.com/MarcusWentz/react-ethers-template
+This website example uses Vanilla Javascript.
+Here are some links to other templates using React.
+
+### Vite
+
+https://github.com/MarcusWentz/react-vite-ethers-template
+
+### Next.js
+
+https://github.com/MarcusWentz/react-nextjs-ethers-template
 
 ## Testnet Bridges Sepolia to L2 EVM Rollups
-## Base Sepolia
+
+### Base Sepolia
 
 https://superbridge.app/base-sepolia
+
 ### Optimism Sepolia
 
 https://superbridge.app/op-sepolia
