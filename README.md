@@ -12,7 +12,7 @@ https://marcuswentz.github.io/Web3_Get_Set_Contract_Metamask/
 
 ```
 Javascript (ethers.js)
-Rust (alloy.rs)
+Rust (alloy.rs + Reth)
 Golang (Geth)
 ```
 
