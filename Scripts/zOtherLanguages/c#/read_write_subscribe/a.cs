@@ -4,6 +4,10 @@
 // dotnet run
 // Note: if you get an error running the program about project files missing run: 
 // dotnet new console --force
+// Note: if you get errors about packages missing, 
+// install the packages by using the commands in the comments next to them.
+// C# package manager search website for reference:
+// https://www.nuget.org/
 
 using System; 
 using System.Threading.Tasks; 
