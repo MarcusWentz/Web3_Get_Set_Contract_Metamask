@@ -1,5 +1,12 @@
-﻿using System; //Will need to install dotnet: https://stackoverflow.com/a/70334945 
-using System.Threading.Tasks; //Run with: dotnet run
+﻿// Install package dotnet to run C# programs: 
+// https://formulae.brew.sh/formula/dotnet
+// Run program with: 
+// dotnet run
+// Note: if you get an error running the program about project files missing run: 
+// dotnet new console --force
+
+using System; 
+using System.Threading.Tasks; 
 using Nethereum.Web3; // Install with: dotnet add package Nethereum.Web3
 using Nethereum.Web3.Accounts; 
 using Nethereum.Contracts; // dotnet add package Nethereum.Contracts
@@ -16,15 +23,15 @@ namespace nethereumapp { //Guide: https://www.quicknode.com/guides/ethereum-deve
         }
 
         static async Task GetBlockNumber() {
-            string rpcSepoliaHttps = Environment.GetEnvironmentVariable("sepoliaInfuraHttps") ?? throw new InvalidOperationException();
+            string rpcBaseSepoliaHttps = Environment.GetEnvironmentVariable("baseSepoliaHTTPS") ?? throw new InvalidOperationException();
             var privateKey = Environment.GetEnvironmentVariable("devTestnetPrivateKey") ?? throw new InvalidOperationException();
           
             var account = new Account(privateKey);
-            var web3 = new Web3(account,rpcSepoliaHttps);
+            var web3 = new Web3(account,rpcBaseSepoliaHttps);
             var networkId = await web3.Net.Version.SendRequestAsync(); // OK
             Console.WriteLine($"networkId: {networkId}");
 
-            var contractAddress = "0xbbe97afb978e19033e0bda692e6034f5b3b91312"; //Convert double quotes to single quotes for the ABI object to handle C# syntax errors: https://tools.knowledgewalls.com/convert-double-quotes-to-single-quotes-online
+            var contractAddress = "0xeD62F27e9e886A27510Dc491F5530996719cEd3d"; //Convert double quotes to single quotes for the ABI object to handle C# syntax errors: https://tools.knowledgewalls.com/convert-double-quotes-to-single-quotes-online
             var contractAbi = @"[{'anonymous':false,'inputs':[],'name':'setEvent','type':'event'},{'inputs':[{'internalType':'uint256','name':'x','type':'uint256'}],'name':'set','outputs':[],'stateMutability':'nonpayable','type':'function'},{'inputs':[],'name':'storedData','outputs':[{'internalType':'uint256','name':'','type':'uint256'}],'stateMutability':'view','type':'function'}]";
             var contractDeployed = web3.Eth.GetContract(contractAbi, contractAddress);
 
@@ -50,10 +57,10 @@ namespace nethereumapp { //Guide: https://www.quicknode.com/guides/ethereum-deve
             );
             Console.WriteLine("tx: {0}", tx);
 
-            string rpcSepoliaWss = Environment.GetEnvironmentVariable("sepoliaInfuraWSS") ?? throw new InvalidOperationException(); //https://stackoverflow.com/questions/66660102/subscribe-to-contract-events-using-nethereum
+            string rpcBaseSepoliaWss = Environment.GetEnvironmentVariable("baseSepoliaWSS") ?? throw new InvalidOperationException(); //https://stackoverflow.com/questions/66660102/subscribe-to-contract-events-using-nethereum
             var eventSubscriptionAddressFilter  =  web3.Eth.GetEvent<SetEventObjectEventDTO>(contractAddress).CreateFilterInput();
         
-            using (var client = new StreamingWebSocketClient(rpcSepoliaWss))
+            using (var client = new StreamingWebSocketClient(rpcBaseSepoliaWss))
             {
                 var subscription = new EthLogsObservableSubscription(client);
                 subscription.GetSubscriptionDataResponsesAsObservable().
