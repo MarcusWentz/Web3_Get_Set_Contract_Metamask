@@ -9,9 +9,10 @@ use libm;
 // use alloc::string::{String, ToString};
 use fluentbase_sdk::{
     basic_entrypoint,
-    derive::{function_id, router, Contract},
+    derive::{router, Contract},
     SharedAPI,
-    U256,    // alloy Solidity type for uint256
+    U64,
+    // U256,    // alloy Solidity type for uint256
     // Address, // alloy Solidity type for address
     // address, // alloy Solidity marco to define values for type Address
     // Bytes,   // alloy Solidity type for bytes
@@ -26,11 +27,12 @@ struct ROUTER<SDK> {
 
 pub trait RouterAPI {
     // Make sure type interfaces are defined here 
-    fn rust_ln_uint256(&self) -> U256;
-    fn rust_log10_uint256(&self) -> U256;
-    fn rust_log2_uint256(&self) -> U256;
-    fn rust_sqrt_uint256(&self) -> U256;
-    fn rust_exp_uint256(&self) -> U256;
+    // fn rust_ln_uint256(&self,  value: U256) -> U256;
+    fn rust_ln_uint256(&self,  value: U64) -> U64;
+    // fn rust_log10_uint256(&self,  value: U256) -> U256;
+    // fn rust_log2_uint256(&self,  value: U256) -> U256;
+    // fn rust_sqrt_uint256(&self,  value: U256) -> U256;
+    // fn rust_exp_uint256(&self,  value: U256) -> U256;
 }
 
 #[router(mode = "solidity")]
@@ -41,84 +43,90 @@ impl<SDK: SharedAPI> RouterAPI for ROUTER<SDK> {
 
     // println!("Note: Max value of u32 is 4294967295."); 
 
-    #[function_id("rustLnUint256()")]
-    fn rust_ln_uint256(&self) -> U256 {
+    #[function_id("rustLnUint256(uint64)")]
+    fn rust_ln_uint256(&self, value: U64) -> U64 {
+
+        // U256 IS TOO BIG FOR RUST TYPE F64 AND WILL LOSE PRECISION.
+        // U64 IS THE MAXIMUM SIZE FOR RUST TYPE F64.
 
         // // f64 value types have methods for more complicated math operations.
-        let input: f64 = 100.0;
+        let input: f64 = value.to::<u64>() as f64;
+        // let input: f64 = value.to_f64();
+        // let input: f64 = 100.0;
 
         let ln_result_float: f64 = libm::log(input); // Natural log (ln)
         let ln_result_uint : u32 = libm::round(ln_result_float) as u32;
 
         // let uint256_test = U256::from(10);
         
-        let uint256_test = U256::from(ln_result_uint);
+        // let uint256_test : U256 = U256::from(ln_result_uint);
+        let uint64_test : U64 = U64::from(ln_result_uint);
         
-        return uint256_test;
+        return uint64_test;
     }
 
-    #[function_id("rustLog10Uint256()")]
-    fn rust_log10_uint256(&self) -> U256 {
+    // #[function_id("rustLog10Uint256(uint256)")]
+    // fn rust_log10_uint256(&self, value: U256) -> U256 {
 
-        // // f64 value types have methods for more complicated math operations.
-        let input: f64 = 100.0;
+    //     // // f64 value types have methods for more complicated math operations.
+    //     let input: f64 = 100.0;
 
-        let log10_result_float: f64 = libm::log10(input); // Natural log (ln)
-        // println!("log10(100) = {}",log10_result_float); 
-        let log10_result_uint : u32 = libm::round(log10_result_float) as u32;
-        // println!("{}",log10_result_uint); 
+    //     let log10_result_float: f64 = libm::log10(input); // Natural log (ln)
+    //     // println!("log10(100) = {}",log10_result_float); 
+    //     let log10_result_uint : u32 = libm::round(log10_result_float) as u32;
+    //     // println!("{}",log10_result_uint); 
     
         
-        let uint256_test = U256::from(log10_result_uint);
-        return uint256_test;
-    }
+    //     let uint256_test = U256::from(log10_result_uint);
+    //     return uint256_test;
+    // }
 
-    #[function_id("rustLog2Uint256()")]
-    fn rust_log2_uint256(&self) -> U256 {
+    // #[function_id("rustLog2Uint256(uint256)")]
+    // fn rust_log2_uint256(&self) -> U256 {
 
-        // // f64 value types have methods for more complicated math operations.
-        let input: f64 = 100.0;
+    //     // // f64 value types have methods for more complicated math operations.
+    //     let input: f64 = 100.0;
 
-        let log2_result_float: f64 = libm::log2(input); // Natural log (ln)
-        // println!("log2(100) = {}",log2_result_float); 
-        let log2_result_uint : u32 = libm::round(log2_result_float) as u32;
-        // println!("{}",log2_result_uint); 
+    //     let log2_result_float: f64 = libm::log2(input); // Natural log (ln)
+    //     // println!("log2(100) = {}",log2_result_float); 
+    //     let log2_result_uint : u32 = libm::round(log2_result_float) as u32;
+    //     // println!("{}",log2_result_uint); 
         
-        let uint256_test = U256::from(log2_result_uint);
-        return uint256_test;
-    }
+    //     let uint256_test = U256::from(log2_result_uint);
+    //     return uint256_test;
+    // }
 
-    #[function_id("rustSqrtUint256()")]
-    fn rust_sqrt_uint256(&self) -> U256 {
+    // #[function_id("rustSqrtUint256(uint256)")]
+    // fn rust_sqrt_uint256(&self) -> U256 {
 
-        // // f64 value types have methods for more complicated math operations.
-        let input: f64 = 100.0;
+    //     // // f64 value types have methods for more complicated math operations.
+    //     let input: f64 = 100.0;
 
-        let sqrt_result_float: f64 = libm::sqrt(input); // Natural log (ln)
-        // println!("sqrt(100) = {}",sqrt_result_float); 
-        let sqrt_result_uint : u32 = libm::round(sqrt_result_float) as u32;
-        // println!("{}",sqrt_result_uint); 
+    //     let sqrt_result_float: f64 = libm::sqrt(input); // Natural log (ln)
+    //     // println!("sqrt(100) = {}",sqrt_result_float); 
+    //     let sqrt_result_uint : u32 = libm::round(sqrt_result_float) as u32;
+    //     // println!("{}",sqrt_result_uint); 
         
-        let uint256_test = U256::from(sqrt_result_uint);
-        return uint256_test;
-    }
+    //     let uint256_test = U256::from(sqrt_result_uint);
+    //     return uint256_test;
+    // }
 
-    #[function_id("rustExpUint256()")]
-    fn rust_exp_uint256(&self) -> U256 {
+    // #[function_id("rustExpUint256()")]
+    // fn rust_exp_uint256(&self) -> U256 {
 
-        // // f64 value types have methods for more complicated math operations.
-        let input_exp: f64 = 10.0;
-        // println!("input_exp value = {}", input_exp); 
+    //     // // f64 value types have methods for more complicated math operations.
+    //     let input_exp: f64 = 10.0;
+    //     // println!("input_exp value = {}", input_exp); 
     
-        let exp_result_float: f64 = libm::exp(input_exp); // Natural log (ln)
-        // println!("exp(100) = {}",exp_result_float); 
-        // Max value of u32 is 4294967295.
-        let exp_result_uint : u32 = libm::round(exp_result_float) as u32;
-        // println!("{}",exp_result_uint); 
+    //     let exp_result_float: f64 = libm::exp(input_exp); // Natural log (ln)
+    //     // println!("exp(100) = {}",exp_result_float); 
+    //     // Max value of u32 is 4294967295.
+    //     let exp_result_uint : u32 = libm::round(exp_result_float) as u32;
+    //     // println!("{}",exp_result_uint); 
 
-        let uint256_test = U256::from(exp_result_uint);
-        return uint256_test;
-    }
+    //     let uint256_test = U256::from(exp_result_uint);
+    //     return uint256_test;
+    // }
 
 
 }
