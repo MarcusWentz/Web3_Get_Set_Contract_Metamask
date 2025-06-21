@@ -9,7 +9,7 @@ use libm;
 // use alloc::string::{String, ToString};
 use fluentbase_sdk::{
     basic_entrypoint,
-    derive::{function_id, router, Contract},
+    derive::{router, Contract},
     SharedAPI,
     U256,    // alloy Solidity type for uint256
     // Address, // alloy Solidity type for address
