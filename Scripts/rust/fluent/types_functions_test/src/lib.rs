@@ -4,7 +4,7 @@ extern crate alloc;
 use alloc::string::{String, ToString};
 use fluentbase_sdk::{
     basic_entrypoint,
-    derive::{function_id, router, Contract},
+    derive::{router, Contract},
     SharedAPI,
     U256,    // alloy Solidity type for uint256
     I256,    // alloy Solidity type for int256
