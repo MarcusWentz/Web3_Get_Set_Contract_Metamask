@@ -4,7 +4,8 @@ extern crate alloc;
 // float64 and float32 methods library for complex math functions :
 // (ln,log10,log2,sqrt,exp)
 // since we do not have access to the Rust standard library (std) with setting "no_std" with the wasm32 target file.
-use rust_decimal;
+use rust_decimal_macros::dec;
+use rust_decimal::prelude::*;
 
 // use alloc::string::{String, ToString};
 use fluentbase_sdk::{
@@ -91,17 +92,25 @@ impl<SDK: SharedAPI> RouterAPI for ROUTER<SDK> {
     #[function_id("rustSqrtUint256()")]
     fn rust_sqrt_uint256(&self) -> U256 {
 
+        let input = dec!(4);
+        let sqrt_dec = input.sqrt();
+        let sqrt_u32 = sqrt_dec
+            .map(   
+                |d| d.trunc()
+                .to_u32()
+                .expect("Too big for u32"))
+            .unwrap_or(0); // fallback if sqrt is None
+
         // // // f64 value types have methods for more complicated math operations.
         // let input: f64 = 100.0;
 
-        // let sqrt_result_float: f64 = rust_decimal::sqrt(input); // Natural log (ln)
+        // let sqrt_result_float: f64 = Decimal::sqrt(input); // Natural log (ln)
         // // println!("sqrt(100) = {}",sqrt_result_float); 
-        // let sqrt_result_uint : u32 = rust_decimal::round(sqrt_result_float) as u32;
+        // let sqrt_result_uint : u32 = Decimal::round(sqrt_result_float) as u32;
         // // println!("{}",sqrt_result_uint); 
         
-        // let uint256_test = U256::from(sqrt_result_uint);
-        // return uint256_test;
-        return U256::from(1);
+        let uint256_test = U256::from(sqrt_u32);
+        return uint256_test;
     }
 
     // #[function_id("rustExpUint256()")]
