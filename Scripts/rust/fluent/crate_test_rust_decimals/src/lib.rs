@@ -92,7 +92,7 @@ impl<SDK: SharedAPI> RouterAPI for ROUTER<SDK> {
     #[function_id("rustSqrtUint256()")]
     fn rust_sqrt_uint256(&self) -> U256 {
 
-        let input = dec!(4);
+        let input = dec!(64);
         let sqrt_dec = input.sqrt();
         let sqrt_u32 = sqrt_dec
             .map(   
