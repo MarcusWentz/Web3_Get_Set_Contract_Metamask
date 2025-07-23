@@ -4,7 +4,8 @@ extern crate alloc;
 // float64 and float32 methods library for complex math functions :
 // (ln,log10,log2,sqrt,exp)
 // since we do not have access to the Rust standard library (std) with setting "no_std" with the wasm32 target file.
-use rust_decimal_macros::dec;
+
+// use rust_decimal_macros::dec;
 use rust_decimal::prelude::*;
 
 // use alloc::string::{String, ToString};
@@ -12,7 +13,8 @@ use fluentbase_sdk::{
     basic_entrypoint,
     derive::{router, Contract},
     SharedAPI,
-    U256,    // alloy Solidity type for uint256
+    // U256,    // alloy Solidity type for uint256
+    U128,    // alloy Solidity type for uint128
     // Address, // alloy Solidity type for address
     // address, // alloy Solidity marco to define values for type Address
     // Bytes,   // alloy Solidity type for bytes
@@ -30,7 +32,7 @@ pub trait RouterAPI {
     // fn rust_ln_uint256(&self) -> U256;
     // fn rust_log10_uint256(&self) -> U256;
     // fn rust_log2_uint256(&self) -> U256;
-    fn rust_sqrt_uint256(&self) -> U256;
+    fn rust_sqrt_uint256(&self, input: U128) -> U128;
     // fn rust_exp_uint256(&self) -> U256;
 }
 
@@ -89,11 +91,12 @@ impl<SDK: SharedAPI> RouterAPI for ROUTER<SDK> {
     //     return uint256_test;
     // }
 
-    #[function_id("rustSqrtUint256()")]
-    fn rust_sqrt_uint256(&self) -> U256 {
+    #[function_id("rustSqrtUint256(uint256 input)")]
+    fn rust_sqrt_uint256(&self, input: U128) -> U128 {
 
-        let input = dec!(64);
-        let sqrt_dec = input.sqrt();
+        let u128_input : u128 = input.to();
+        let decimal_input = Decimal::from(u128_input);
+        let sqrt_dec = decimal_input.sqrt();
         let sqrt_u32 = sqrt_dec
             .map(   
                 |d| d.trunc()
@@ -109,7 +112,7 @@ impl<SDK: SharedAPI> RouterAPI for ROUTER<SDK> {
         // let sqrt_result_uint : u32 = Decimal::round(sqrt_result_float) as u32;
         // // println!("{}",sqrt_result_uint); 
         
-        let uint256_test = U256::from(sqrt_u32);
+        let uint256_test = U128::from(sqrt_u32);
         return uint256_test;
     }
 
