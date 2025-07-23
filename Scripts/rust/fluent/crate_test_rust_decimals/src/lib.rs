@@ -99,12 +99,8 @@ impl<SDK: SharedAPI> RouterAPI for ROUTER<SDK> {
         let u128_input : u128 = input.to();
         let decimal_input = Decimal::from(u128_input);
         let sqrt_dec = decimal_input.sqrt();
-        let sqrt_u32 = sqrt_dec
-            .map(   
-                |d| d.trunc()
-                .to_u32()
-                .expect("Too big for u32"))
-            .unwrap_or(0); // fallback if sqrt is None
+        // let sqrt_u32 = sqrt_dec
+        let sqrt_u128 = sqrt_dec.and_then(|d| d.trunc().to_u128()).unwrap_or(0);
 
         // // // f64 value types have methods for more complicated math operations.
         // let input: f64 = 100.0;
@@ -114,8 +110,8 @@ impl<SDK: SharedAPI> RouterAPI for ROUTER<SDK> {
         // let sqrt_result_uint : u32 = Decimal::round(sqrt_result_float) as u32;
         // // println!("{}",sqrt_result_uint); 
         
-        let uint256_test = U128::from(sqrt_u32);
-        return uint256_test;
+        let uint128_test = U128::from(sqrt_u128);
+        return uint128_test;
     }
 
     // #[function_id("rustExpUint256()")]
