@@ -91,7 +91,9 @@ impl<SDK: SharedAPI> RouterAPI for ROUTER<SDK> {
     //     return uint256_test;
     // }
 
-    #[function_id("rustSqrtUint128(uint128 input)")]
+    // #[function_id("rustSqrtUint128(uint128 input)")]
+    // Raw selector for "rustSqrtUint128(uint128)" is "("0xe904a073")"
+    #[function_id("0xe904a073")] 
     fn rust_sqrt_uint128(&self, input: U128) -> U128 {
 
         let u128_input : u128 = input.to();
