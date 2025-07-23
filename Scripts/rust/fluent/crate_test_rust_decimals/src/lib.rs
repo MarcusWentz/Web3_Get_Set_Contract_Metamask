@@ -32,7 +32,7 @@ pub trait RouterAPI {
     // fn rust_ln_uint256(&self) -> U256;
     // fn rust_log10_uint256(&self) -> U256;
     // fn rust_log2_uint256(&self) -> U256;
-    fn rust_sqrt_uint256(&self, input: U128) -> U128;
+    fn rust_sqrt_uint128(&self, input: U128) -> U128;
     // fn rust_exp_uint256(&self) -> U256;
 }
 
@@ -91,8 +91,8 @@ impl<SDK: SharedAPI> RouterAPI for ROUTER<SDK> {
     //     return uint256_test;
     // }
 
-    #[function_id("rustSqrtUint256(uint256 input)")]
-    fn rust_sqrt_uint256(&self, input: U128) -> U128 {
+    #[function_id("rustSqrtUint128(uint128 input)")]
+    fn rust_sqrt_uint128(&self, input: U128) -> U128 {
 
         let u128_input : u128 = input.to();
         let decimal_input = Decimal::from(u128_input);
