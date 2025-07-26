@@ -2,8 +2,11 @@ use std::thread;
 use std::time::Duration;
 
 // OS threads from thread::spawn are simple, but are more expensive than green threads with async/await in Rust.
+// YouTube:
+// https://www.youtube.com/watch?v=6VMJOmNBubg
 // Example from:
 // https://doc.rust-lang.org/book/ch16-01-threads.html
+
 fn main() {
     thread::spawn(|| {
         for i in 1..10 {
