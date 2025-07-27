@@ -1,5 +1,7 @@
 // Green threads with async/await in Rust are less expensive than thread::spawn OS threads.
-// Example from:
+// YouTube more examples and theory:
+// https://www.youtube.com/watch?v=6VMJOmNBubg
+// Rust documentation:
 // https://tokio.rs/tokio/tutorial/spawning
 
 #[tokio::main]
