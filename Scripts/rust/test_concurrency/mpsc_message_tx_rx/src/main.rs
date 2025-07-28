@@ -22,6 +22,7 @@ fn main() {
         tx.send(val).unwrap();
     });
 
+    // For MPSC, rx acts as join for handling joining threads.
     let received = rx.recv().unwrap();
     println!("Got: {received}");
 }
